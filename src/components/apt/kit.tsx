@@ -2,7 +2,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-import agentMark from "@/assets/agent-mark.png";
+
 
 /* ---------- wordmark ---------- */
 
@@ -28,22 +28,48 @@ export function Wordmark({
 export function AgentMark({
   className,
   size = 24,
+  active = true,
 }: {
   className?: string;
   size?: number;
+  active?: boolean;
 }) {
   return (
-    <img
-      src={agentMark}
-      alt=""
-      aria-hidden="true"
+    <svg
+      viewBox="0 0 100 100"
       width={size}
       height={size}
+      aria-hidden="true"
       className={cn("shrink-0 select-none", className)}
       style={{ width: size, height: size }}
-    />
+    >
+      {/* tip */}
+      <path
+        d="M50 12 L57 40 L50 54 L43 40 Z"
+        className={active ? "fill-signal" : "fill-grey-5"}
+      />
+      {/* outer A */}
+      <path
+        d="M8 92 L44 26 M56 26 L92 92"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      {/* inner chevron */}
+      <path
+        d="M20 92 L50 64 L80 92"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
+
 
 /* ---------- button ---------- */
 
