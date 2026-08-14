@@ -247,7 +247,7 @@ function FittingRoomScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
           </div>
         ))}
       </div>
-      <TabBar active={0} onSelect={onTab} />
+      <TabBar active={1} onSelect={onTab} />
     </Phone>
   );
 }
@@ -362,7 +362,7 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
           </div>
         </div>
       </div>
-      <TabBar active={1} onSelect={onTab} />
+      <TabBar active={0} onSelect={onTab} />
     </Phone>
   );
 }
