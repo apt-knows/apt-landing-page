@@ -370,9 +370,9 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
 
 function ProfileScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
   const photos = [
-    { src: aModel1, alt: "A photo the shopper uploaded of themselves" },
-    { src: aModel2, alt: "A second uploaded photo, side angle" },
-    { src: cModel1, alt: "A third uploaded photo in a black coat" },
+    { src: aModel1, alt: "A photo Maya uploaded of herself, facing forward" },
+    { src: aModel2, alt: "A second photo of Maya, side angle" },
+    { src: cModel1, alt: "A third photo of Maya in a black coat" },
   ];
   const styles = [
     { label: "Quiet luxury", on: true },
