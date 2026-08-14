@@ -1,6 +1,40 @@
-import { team } from "@/content/site";
+import { Instagram, Linkedin, Mail, Twitter } from "lucide-react";
+
+import { team, type ContactLink } from "@/content/site";
 
 import { Eyebrow, Section, Wordmark } from "./kit";
+
+const contactIcon = (label: string) => {
+  switch (label) {
+    case "Instagram":
+      return Instagram;
+    case "LinkedIn":
+      return Linkedin;
+    case "X":
+      return Twitter;
+    case "Email":
+      return Mail;
+    default:
+      return Mail;
+  }
+};
+
+function ContactRow({ c }: { c: ContactLink }) {
+  const Icon = contactIcon(c.label);
+  return (
+    <a
+      href={c.url}
+      target={c.url.startsWith("mailto:") ? undefined : "_blank"}
+      rel={c.url.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+      className="group flex items-center gap-2.5 text-[14px] leading-[1.4]"
+    >
+      <Icon size={15} className="shrink-0 text-secondary-foreground transition-colors group-hover:text-signal" />
+      <span className="font-medium text-foreground transition-colors group-hover:text-signal">
+        {c.handle}
+      </span>
+    </a>
+  );
+}
 
 /** People come from `src/content/site.ts`; portraits from `src/content/assets.ts`. */
 
