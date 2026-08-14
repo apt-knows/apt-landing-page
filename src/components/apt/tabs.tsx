@@ -357,48 +357,65 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
 
 
 function ProfileScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
+  const photos = [
+    { src: aModel1, alt: "A photo the shopper uploaded of themselves" },
+    { src: aModel2, alt: "A second uploaded photo, side angle" },
+    { src: cModel1, alt: "A third uploaded photo in a black coat" },
+  ];
+  const styles = [
+    { label: "Quiet luxury", on: true },
+    { label: "Workwear", on: true },
+    { label: "Neutrals", on: true },
+    { label: "Streetwear", on: false },
+    { label: "Tailored", on: false },
+  ];
+  const boards = [
+    { src: boardLook, name: "Puerto Rico trip", count: "14 saved" },
+    { src: bModel1, name: "Everyday rotation", count: "26 saved" },
+  ];
+
   return (
     <Phone>
-      <div className="flex h-full flex-col overflow-hidden bg-card pb-11">
+      <div className="flex h-full flex-col overflow-y-auto bg-card pb-11 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className="flex items-center gap-3 px-4 pt-8 pb-3">
           <img
-            src={boardLook}
+            src={cModel1}
             alt=""
             aria-hidden="true"
             loading="lazy"
-            className="h-11 w-11 rounded-full object-cover"
+            className="h-11 w-11 rounded-full object-cover object-top"
           />
           <div className="min-w-0">
-            <p className="truncate text-[14px] font-medium">Your profile</p>
+            <p className="truncate text-[14px] font-medium">Maya R.</p>
             <p className="text-[11px] text-muted-foreground">
-              6 photos · 3 boards
+              6 photos · 3 boards · 128 saved
             </p>
           </div>
+          <span className="ml-auto rounded-full border border-border-strong px-2.5 py-1 text-[10px] font-medium text-secondary-foreground">
+            Edit
+          </span>
         </div>
 
         <div className="border-t border-border px-4 py-3">
-          <p className="eyebrow">Your photos</p>
+          <div className="flex items-baseline justify-between">
+            <p className="eyebrow">Your photos</p>
+            <span className="text-[10px] text-signal">Fit model ready</span>
+          </div>
           <p className="mt-1 text-[11px] leading-[1.35] text-muted-foreground">
             So try-on looks like you.
           </p>
           <div className="mt-2 grid grid-cols-4 gap-1.5">
-            <img
-              src={aModel1}
-              alt="A photo the shopper uploaded of themselves"
-              width={896}
-              height={1152}
-              loading="lazy"
-              className="aspect-square w-full rounded-md object-cover"
-            />
-            <img
-              src={agentLook}
-              alt="A second uploaded photo of the shopper"
-              width={896}
-              height={1152}
-              loading="lazy"
-              className="aspect-square w-full rounded-md object-cover"
-            />
-            <div className="aspect-square rounded-md bg-sunken" />
+            {photos.map((p) => (
+              <img
+                key={p.src}
+                src={p.src}
+                alt={p.alt}
+                width={768}
+                height={1152}
+                loading="lazy"
+                className="aspect-square w-full rounded-md object-cover object-top"
+              />
+            ))}
             <div className="flex aspect-square flex-col items-center justify-center rounded-md border border-dashed border-border-strong text-[16px] leading-none text-signal">
               +
               <span className="mt-0.5 text-[8px] text-muted-foreground">
@@ -411,39 +428,75 @@ function ProfileScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
         <div className="border-t border-border px-4 py-3">
           <p className="eyebrow">Your style</p>
           <div className="mt-2 flex flex-wrap gap-1.5">
-            <span className="rounded-full bg-grey-10 px-2.5 py-1 text-[11px] font-medium text-inverse-foreground">
-              Quiet luxury
-            </span>
-            <span className="rounded-full border border-border-strong px-2.5 py-1 text-[11px] font-medium text-secondary-foreground">
-              Workwear
-            </span>
+            {styles.map((s) => (
+              <span
+                key={s.label}
+                className={
+                  s.on
+                    ? "rounded-full bg-grey-10 px-2.5 py-1 text-[11px] font-medium text-inverse-foreground"
+                    : "rounded-full border border-border-strong px-2.5 py-1 text-[11px] font-medium text-muted-foreground"
+                }
+              >
+                {s.label}
+              </span>
+            ))}
+          </div>
+          <div className="mt-2.5 flex gap-3 text-[10px] text-muted-foreground">
+            <span>Sizes · M / 9</span>
+            <span>Budget · $80–$300</span>
           </div>
         </div>
 
         <div className="border-t border-border px-4 py-3">
-          <p className="eyebrow">Boards</p>
-          <div className="mt-2 grid grid-cols-2 gap-2">
-            <img
-              src={boardLook}
-              alt="A linen outfit saved to a Puerto Rico trip board"
-              width={896}
-              height={1152}
-              loading="lazy"
-              className="h-20 w-full rounded-md object-cover"
-            />
-            <div className="flex h-20 items-end rounded-md bg-sunken p-2 text-[11px] text-muted-foreground">
+          <div className="flex items-baseline justify-between">
+            <p className="eyebrow">Boards</p>
+            <span className="text-[10px] text-muted-foreground">See all</span>
+          </div>
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            {boards.map((b) => (
+              <figure key={b.name} className="space-y-1">
+                <img
+                  src={b.src}
+                  alt={`Items saved to the ${b.name} board`}
+                  width={768}
+                  height={1152}
+                  loading="lazy"
+                  className="h-20 w-full rounded-md object-cover object-top"
+                />
+                <figcaption className="text-[10px] leading-tight text-secondary-foreground">
+                  {b.name}
+                  <span className="block text-muted-foreground">{b.count}</span>
+                </figcaption>
+              </figure>
+            ))}
+            <div className="flex h-20 items-end rounded-md border border-dashed border-border-strong p-2 text-[10px] text-muted-foreground">
               + New board
             </div>
           </div>
-          <p className="mt-2 text-[12px] text-secondary-foreground">
-            Puerto Rico trip · 14 saved
-          </p>
+        </div>
+
+        <div className="border-t border-border px-4 py-3">
+          <p className="eyebrow">Settings</p>
+          <div className="mt-2 space-y-1.5 text-[11px] text-secondary-foreground">
+            <p className="flex justify-between">
+              Try-on generation <span className="text-signal">On</span>
+            </p>
+            <p className="flex justify-between">
+              Orders & returns{" "}
+              <span className="text-muted-foreground">2 active</span>
+            </p>
+            <p className="flex justify-between">
+              Notifications{" "}
+              <span className="text-muted-foreground">Drops only</span>
+            </p>
+          </div>
         </div>
       </div>
       <TabBar active={2} onSelect={onTab} />
     </Phone>
   );
 }
+
 
 type TabKey = 0 | 1 | 2;
 
