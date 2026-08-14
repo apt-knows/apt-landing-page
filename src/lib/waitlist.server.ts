@@ -62,10 +62,15 @@ async function resend(apiKey: string, path: string, body: unknown) {
 }
 
 export async function addToWaitlist(email: string): Promise<void> {
-  const { apiKey, from, notify, audienceId } = readEnv();
+  const { apiKey, from, notify, audienceId, segmentId } = readEnv();
+
+  /** Tags let Resend filter/segment signups by source. */
+  const tags = segmentId ? [{ name: "segment", value: segmentId }] : undefined;
 
   if (!apiKey) {
-    console.info(`[waitlist] would register ${email} (RESEND_API_KEY not set)`);
+    console.info(
+      `[waitlist] would register ${email}${segmentId ? ` (segment: ${segmentId})` : ""} (RESEND_API_KEY not set)`,
+    );
     return;
   }
 
@@ -73,6 +78,7 @@ export async function addToWaitlist(email: string): Promise<void> {
     await resend(apiKey, `/audiences/${audienceId}/contacts`, {
       email,
       unsubscribed: false,
+      ...(segmentId ? { first_name: undefined, segment_id: segmentId } : {}),
     });
   }
 
@@ -80,6 +86,7 @@ export async function addToWaitlist(email: string): Promise<void> {
     from,
     to: [email],
     ...templates.confirmation,
+    ...(tags ? { tags } : {}),
   });
 
   if (notify) {
@@ -87,6 +94,7 @@ export async function addToWaitlist(email: string): Promise<void> {
       from,
       to: [notify],
       ...templates.notification(email),
+      ...(tags ? { tags } : {}),
     });
   }
 }
