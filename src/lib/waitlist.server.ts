@@ -14,11 +14,12 @@
 const RESEND_API = "https://api.resend.com";
 
 type Env = {
-  apiKey?: string;
-  from?: string;
-  notify?: string;
-  audienceId?: string;
+  apiKey: string | undefined;
+  from: string | undefined;
+  notify: string | undefined;
+  audienceId: string | undefined;
 };
+
 
 function readEnv(): Env {
   return {
