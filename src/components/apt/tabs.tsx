@@ -183,7 +183,7 @@ function FittingRoomScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
 }
 
 
-function AgentScreen() {
+function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
   return (
     <Phone>
       <div className="flex h-full flex-col bg-card pb-11">
@@ -217,12 +217,12 @@ function AgentScreen() {
           </div>
         </div>
       </div>
-      <TabBar active={1} />
+      <TabBar active={1} onSelect={onTab} />
     </Phone>
   );
 }
 
-function ProfileScreen() {
+function ProfileScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
   return (
     <Phone>
       <div className="flex h-full flex-col overflow-hidden bg-card pb-11">
@@ -306,7 +306,7 @@ function ProfileScreen() {
           </p>
         </div>
       </div>
-      <TabBar active={2} />
+      <TabBar active={2} onSelect={onTab} />
     </Phone>
   );
 }
