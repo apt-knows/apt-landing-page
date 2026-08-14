@@ -6,7 +6,13 @@ import agentMark from "@/assets/agent-mark.png";
 
 /* ---------- wordmark ---------- */
 
-export function Wordmark({ className }: { className?: string }) {
+export function Wordmark({
+  className,
+  dot = true,
+}: {
+  className?: string;
+  dot?: boolean;
+}) {
   return (
     <span
       className={cn(
@@ -14,7 +20,7 @@ export function Wordmark({ className }: { className?: string }) {
         className,
       )}
     >
-      apt<span className="text-signal">.</span>
+      apt{dot ? <span className="text-signal">.</span> : null}
     </span>
   );
 }
