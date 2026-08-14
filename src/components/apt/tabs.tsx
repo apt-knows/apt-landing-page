@@ -29,12 +29,13 @@ function FittingRoomScreen() {
           />
         ))}
       </div>
-      <div className="absolute inset-x-0 bottom-0 space-y-2 bg-gradient-to-t from-grey-10/70 to-transparent p-4 pt-16">
+      <div className="absolute inset-x-0 bottom-11 space-y-2 bg-gradient-to-t from-grey-10/80 to-transparent p-4 pt-16">
         <Tag tone="agent">On you · frame 2 of 4</Tag>
         <p className="text-[15px] font-medium text-inverse-foreground">
           Ribbed knit crewneck
         </p>
       </div>
+      <TabBar active={0} />
     </Phone>
   );
 }
@@ -42,7 +43,7 @@ function FittingRoomScreen() {
 function AgentScreen() {
   return (
     <Phone>
-      <div className="flex h-full flex-col bg-card">
+      <div className="flex h-full flex-col bg-card pb-11">
         <div className="flex items-center gap-2 border-b border-border px-4 py-3 pt-6">
           <AgentMark size={18} />
           <span className="text-[14px] font-medium lowercase">apt</span>
@@ -68,6 +69,7 @@ function AgentScreen() {
           </AgentNote>
         </div>
       </div>
+      <TabBar active={1} />
     </Phone>
   );
 }
@@ -75,7 +77,7 @@ function AgentScreen() {
 function ProfileScreen() {
   return (
     <Phone>
-      <div className="flex h-full flex-col bg-card">
+      <div className="flex h-full flex-col bg-card pb-11">
         <div className="px-4 pt-8 pb-3">
           <div className="h-12 w-12 rounded-full bg-sunken" />
           <p className="mt-3 text-[15px] font-medium">Your style</p>
@@ -104,6 +106,7 @@ function ProfileScreen() {
           </p>
         </div>
       </div>
+      <TabBar active={2} />
     </Phone>
   );
 }
