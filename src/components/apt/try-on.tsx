@@ -1,5 +1,4 @@
-import aModel1 from "@/assets/feed/a-model-1.jpg";
-import aProduct from "@/assets/feed/a-product.jpg";
+import { assets } from "@/content/assets";
 import { useReveal } from "@/hooks/use-reveal";
 
 import { Eyebrow, Section } from "./kit";
@@ -30,7 +29,7 @@ export function TryOn() {
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <figure className="overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-card)]">
             <img
-              src={aProduct}
+              src={assets.product.knit}
               alt="A cream ribbed knit crewneck photographed on its own"
               width={768}
               height={1152}
@@ -43,7 +42,7 @@ export function TryOn() {
           </figure>
           <figure className="overflow-hidden rounded-lg border border-border-agent bg-card shadow-[var(--shadow-raise)]">
             <img
-              src={aModel1}
+              src={assets.onYou.knit1}
               alt="The same crewneck rendered on Maya by apt"
               width={768}
               height={1152}

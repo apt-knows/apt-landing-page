@@ -27,3 +27,47 @@ npm run dev
 - TypeScript
 - React
 - Tailwind CSS
+
+## Project structure
+
+```
+src/
+  assets/           raw image files (jpg/png)
+  content/
+    assets.ts       single asset registry — swap placeholders here
+    site.ts         product name, urls, team members
+    app-demo.ts     all mock data inside the phone mockups
+  components/apt/
+    screens/        the three in-app phone screens (apt, fitting room, you)
+    *.tsx           landing page sections
+  lib/
+    waitlist.ts             client entry for the signup form
+    waitlist.functions.ts   server function (RPC)
+    waitlist.server.ts      Resend delivery, env-driven
+```
+
+Swapping a placeholder image: drop the file in `src/assets/` and change the
+matching import in `src/content/assets.ts`. Editing in-app copy, prices,
+boards or the demo user: `src/content/app-demo.ts`.
+
+## Environment variables
+
+Copy `.env.example` to `.env` and fill in what you need. `VITE_*` values are
+public (bundled into the client); everything else is server-only.
+
+| Variable | Purpose |
+| --- | --- |
+| `VITE_SITE_URL` | Absolute site origin, used for canonical/OG URLs |
+| `VITE_CONTACT_EMAIL` | Public contact address |
+| `RESEND_API_KEY` | Resend key; without it signups log instead of sending |
+| `WAITLIST_FROM_EMAIL` | Verified sender for waitlist email |
+| `WAITLIST_NOTIFY_EMAIL` | Internal inbox notified on each signup |
+| `RESEND_AUDIENCE_ID` | Optional Resend audience for contacts |
+
+## Deploying to Vercel
+
+1. Push this repo to GitHub and import it in Vercel.
+2. `vercel.json` is already configured — Vercel runs `npm run build:vercel`
+   (`NITRO_PRESET=vercel vite build`) and serves the `.vercel/output` build.
+3. Add the environment variables above under Project Settings →
+   Environment Variables, then redeploy.

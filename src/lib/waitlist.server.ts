@@ -1,34 +1,47 @@
 /**
- * Resend hookup for waitlist signups.
+ * WAITLIST DELIVERY (server only)
+ * ------------------------------------------------------------------
+ * Sends signups through Resend. All configuration is env-driven — see
+ * `.env.example` for the full list and `README.md` for the Vercel setup.
  *
- * Configure these environment variables (secrets) when the domain is ready:
- *   RESEND_API_KEY        — API key from resend.com
+ *   RESEND_API_KEY        — API key from resend.com (required to send)
  *   WAITLIST_FROM_EMAIL   — verified sender, e.g. "apt <hello@yourdomain.com>"
  *   WAITLIST_NOTIFY_EMAIL — internal inbox that gets a copy of each signup
- *   RESEND_AUDIENCE_ID    — optional: add the address to a Resend audience
+ *   RESEND_AUDIENCE_ID    — optional Resend audience to add the contact to
  *
- * Until RESEND_API_KEY exists the signup still succeeds locally, so the UI can
- * be developed and demoed without credentials.
+ * Without RESEND_API_KEY the signup still succeeds (placeholder mode) so the
+ * UI can be developed and demoed with no credentials.
  */
 
 const RESEND_API = "https://api.resend.com";
 
-type Env = {
-  apiKey: string | undefined;
-  from: string | undefined;
-  notify: string | undefined;
-  audienceId: string | undefined;
-};
+const DEFAULT_FROM = "apt <onboarding@resend.dev>";
 
-
-function readEnv(): Env {
+/** Read at call time — env is injected per request, not at module scope. */
+function readEnv() {
   return {
     apiKey: process.env["RESEND_API_KEY"],
-    from: process.env["WAITLIST_FROM_EMAIL"],
+    from: process.env["WAITLIST_FROM_EMAIL"] ?? DEFAULT_FROM,
     notify: process.env["WAITLIST_NOTIFY_EMAIL"],
     audienceId: process.env["RESEND_AUDIENCE_ID"],
   };
 }
+
+/** Email copy lives here so it can be edited without touching transport code. */
+const templates = {
+  confirmation: {
+    subject: "You're on the apt waitlist",
+    html: `<p>Thanks for joining the apt waitlist.</p>
+<p>apt is a personal shopping agent that learns your taste and shows you how
+every piece looks on you before you buy. We're letting people in slowly — we'll
+email you when your invite is ready.</p>
+<p>— the apt team</p>`,
+  },
+  notification: (email: string) => ({
+    subject: `New apt waitlist signup: ${email}`,
+    html: `<p>${email} joined the apt waitlist.</p>`,
+  }),
+};
 
 async function resend(apiKey: string, path: string, body: unknown) {
   const res = await fetch(`${RESEND_API}${path}`, {
@@ -40,7 +53,9 @@ async function resend(apiKey: string, path: string, body: unknown) {
     body: JSON.stringify(body),
   });
   if (!res.ok) {
-    throw new Error(`Resend ${path} failed (${res.status}): ${await res.text()}`);
+    throw new Error(
+      `Resend ${path} failed (${res.status}): ${await res.text()}`,
+    );
   }
   return res.json();
 }
@@ -49,7 +64,6 @@ export async function addToWaitlist(email: string): Promise<void> {
   const { apiKey, from, notify, audienceId } = readEnv();
 
   if (!apiKey) {
-    // Placeholder mode — no credentials configured yet.
     console.info(`[waitlist] would register ${email} (RESEND_API_KEY not set)`);
     return;
   }
@@ -61,27 +75,17 @@ export async function addToWaitlist(email: string): Promise<void> {
     });
   }
 
-  const sender = from ?? "apt <onboarding@resend.dev>";
-
-  // Confirmation to the person signing up.
   await resend(apiKey, "/emails", {
-    from: sender,
+    from,
     to: [email],
-    subject: "You're on the apt waitlist",
-    html: `<p>Thanks for joining the apt waitlist.</p>
-<p>apt is a personal shopping agent that learns your taste and shows you how
-every piece looks on you before you buy. We're letting people in slowly — we'll
-email you when your invite is ready.</p>
-<p>— the apt team</p>`,
+    ...templates.confirmation,
   });
 
-  // Internal notification.
   if (notify) {
     await resend(apiKey, "/emails", {
-      from: sender,
+      from,
       to: [notify],
-      subject: `New apt waitlist signup: ${email}`,
-      html: `<p>${email} joined the apt waitlist.</p>`,
+      ...templates.notification(email),
     });
   }
 }
