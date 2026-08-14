@@ -1,6 +1,6 @@
 import { useReveal } from "@/hooks/use-reveal";
 
-import { AgentNote, Eyebrow, Section } from "./kit";
+import { Eyebrow, Section } from "./kit";
 
 export function Principle() {
   const { ref, shown } = useReveal<HTMLDivElement>();
