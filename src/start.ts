@@ -1,4 +1,5 @@
-import { createStart, createCsrfMiddleware, createMiddleware } from "@tanstack/react-start";
+import * as startPkg from "@tanstack/react-start";
+import { createStart, createMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
 
@@ -17,13 +18,21 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
   }
 });
 
-// Start installs this automatically when src/start.ts is absent; defining the
-// file opts out, so re-add it explicitly to keep server functions protected
-// from cross-site requests.
-const csrfMiddleware = createCsrfMiddleware({
-  filter: (ctx) => ctx.handlerType === "serverFn",
-});
+// Defining src/start.ts opts out of Start's automatic CSRF middleware, so we
+// re-add it. Older @tanstack/start-client-core builds don't export the factory,
+// so resolve it defensively — a missing export must not crash the SSR bundle.
+type CsrfFactory = (options: {
+  filter: (ctx: { handlerType: string }) => boolean;
+}) => ReturnType<typeof createMiddleware>;
+
+const createCsrf = (startPkg as unknown as { createCsrfMiddleware?: CsrfFactory })
+  .createCsrfMiddleware;
+
+const csrfMiddleware =
+  typeof createCsrf === "function"
+    ? createCsrf({ filter: (ctx) => ctx.handlerType === "serverFn" })
+    : undefined;
 
 export const startInstance = createStart(() => ({
-  requestMiddleware: [errorMiddleware, csrfMiddleware],
+  requestMiddleware: csrfMiddleware ? [errorMiddleware, csrfMiddleware] : [errorMiddleware],
 }));
