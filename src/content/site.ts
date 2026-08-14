@@ -4,8 +4,8 @@
  * Names, links and people. Anything here is safe to edit without
  * touching component code.
  *
- * `siteUrl` comes from the `VITE_SITE_URL` env var (see `.env.example`) so
- * the same build works on preview, staging and the production domain.
+ * The canonical production origin is intentionally explicit. Preview hosts
+ * should still publish production canonical/OG URLs.
  */
 
 import { assets } from "./assets";
@@ -16,15 +16,8 @@ export const site = {
   tagline: "Shopping that's about you.",
   description:
     "apt is a personal shopping agent that learns your taste and shows you how every piece looks on you before you buy.",
-  /** Absolute origin, no trailing slash. */
-  url: (import.meta.env["VITE_SITE_URL"] as string | undefined)?.replace(
-    /\/$/,
-    "",
-  ) ?? "https://apt.app",
-  /** Public contact address shown in the footer and legal pages. */
-  contactEmail:
-    (import.meta.env["VITE_CONTACT_EMAIL"] as string | undefined) ??
-    "hello@apt.app",
+  /** Absolute production origin, no trailing slash. */
+  url: "https://aptknows.com",
 } as const;
 
 export type ContactLink = {

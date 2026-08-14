@@ -52,15 +52,13 @@ boards or the demo user: `src/content/app-demo.ts`.
 
 ## Environment variables
 
-Copy `.env.example` to `.env` and fill in what you need. `VITE_*` values are
-public (bundled into the client); everything else is server-only.
+No `.env` is needed for ordinary local development. To exercise real waitlist
+email delivery, copy `.env.example` to `.env`; these values are server-only.
 
 | Variable | Purpose |
 | --- | --- |
-| `VITE_SITE_URL` | Absolute site origin, used for canonical/OG URLs |
-| `VITE_CONTACT_EMAIL` | Public contact address |
 | `RESEND_API_KEY` | Resend key; without it signups log instead of sending |
-| `WAITLIST_FROM_EMAIL` | Verified sender for waitlist email |
+| `WAITLIST_FROM_EMAIL` | Verified sender; required when a Resend key is set |
 | `WAITLIST_NOTIFY_EMAIL` | Internal inbox notified on each signup |
 | `RESEND_AUDIENCE_ID` | Optional Resend audience for contacts |
 
