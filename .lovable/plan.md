@@ -15,24 +15,30 @@ The name is always lowercase — `apt`, never "Apt" — everywhere in copy, meta
 
 ## Page structure (one route, `/`)
 
-1. **Header** — wordmark, anchor links, "Get early access" button that scrolls to the form.
-2. **Hero** — "Products should find you, not the other way around." Short subline on the try-it-on idea, inline email capture, and a phone mockup showing the feed carousel.
+1. **Header** — `apt.` wordmark, anchor links, pill "Get early access" button that scrolls to the form.
+2. **Hero** — H1 reads **apt, where shopping is about you**, with `apt` set in the wordmark treatment. Short subline on the try-it-on idea, inline email capture, and a phone mockup showing the feed carousel.
 3. **The problem / principle** — a short editorial band: don't centralize the marketplace, centralize the shopper.
 4. **How it works** — the real-life shopping loop as four beats: walk in (open the feed) → see it → try it on you → keep it or scroll away.
 5. **Three tabs** — one card per tab with a phone mockup:
    - **Fitting Room** — a scrollable feed of product carousels where image one is the product and the rest are you wearing it, ranked by a For You algorithm.
-   - **Apt** — your personal shopping agent. Feminine, visual-first: she answers with pictures of products on you, not paragraphs.
+   - **apt** — your personal shopping agent, shown with her own agent mark (see Marks below). Feminine, visual-first: she answers with pictures of products on you, not paragraphs.
    - **Profile** — interests, your photos to sharpen try-on, and situational boards (e.g. a Puerto Rico trip board) you fill and buy from later.
 6. **How it looks on you** — a dedicated band on the try-on system with a before/after style pair of images.
-7. **Team** — Robel Bruk (CEO), Robel Kebede (CTO).
+7. **Team** — image cards: portrait photo, name, role. Robel Bruk (CEO), Robel Kebede (CTO). Placeholder portraits ship now, sourced from a single `team` data array with an image path per member so real photos are a one-file swap.
 8. **Signup** — email capture with client-side validation and a success state. Nothing is stored yet; the submit handler is isolated in one place so Resend can be wired in later without touching the UI.
-9. **Footer** — wordmark, anchors, privacy and terms links, copyright.
+9. **Footer** — `apt.` wordmark, anchors, privacy and terms links, copyright.
 
 Plus `/privacy` and `/terms` as plain, short legal stubs.
 
+## Marks
+
+- **App wordmark**: `apt.` — typeset, lowercase, tight tracking, the period in cyan signal. No image file needed; also drives the favicon.
+- **Agent mark**: a distinct symbol for apt-the-agent — a soft, feminine cyan glyph (a rounded four-point spark/petal form in the signal ramp) used wherever she speaks: the agent tab card, the agent notes, and the AI section. Generated as a transparent PNG so it can sit on any surface.
+
 ## Imagery
 
-AI-generated editorial imagery: a hero try-on frame, three mockup images (one per tab), and a product/on-you pair for the try-on band. Muted, editorial, natural light — the imagery carries all the color.
+AI-generated editorial imagery: a hero try-on frame, three mockup images (one per tab), a product/on-you pair for the try-on band, and two neutral team portraits. Muted, editorial, natural light — the imagery carries all the color.
+
 
 ## Technical notes
 
