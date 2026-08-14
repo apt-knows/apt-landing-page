@@ -59,12 +59,12 @@ export function AppTabs() {
       <div
         ref={ref}
         data-shown={shown}
-        className="reveal mt-8 grid items-center gap-8 rounded-2xl border border-border bg-sunken/40 p-4 sm:mt-10 sm:rounded-3xl sm:p-8 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-12 lg:p-10 xl:gap-16"
+        className="reveal mt-8 grid grid-cols-1 items-center gap-8 rounded-2xl border border-border bg-sunken/40 p-4 sm:mt-10 sm:rounded-3xl sm:p-8 lg:gap-12 lg:p-10 xl:gap-16"
       >
-        <div className="flex justify-center">
+        <div className="flex w-full justify-center">
           <Screen onTab={setActive} />
         </div>
-        <div className="min-w-0">
+        <div className="w-full min-w-0">
           <span className="eyebrow">Tab {active + 1}</span>
           <h3 className="mt-3 text-[clamp(1.375rem,1.15rem+1vw,2rem)] font-semibold tracking-[var(--tracking-heading)] lowercase">
             {tab.name}
