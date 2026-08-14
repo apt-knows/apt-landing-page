@@ -1,7 +1,7 @@
 import heroTryOn from "@/assets/hero-tryon.jpg";
 import tryOnProduct from "@/assets/tryon-product.jpg";
 
-import { AgentMark, Chip, Tag, Wordmark } from "./kit";
+import { AgentMark, Tag, Wordmark } from "./kit";
 import { Phone } from "./phone";
 import { WaitlistForm } from "./waitlist-form";
 
