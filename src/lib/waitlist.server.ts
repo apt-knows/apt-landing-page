@@ -8,6 +8,7 @@
  *   WAITLIST_FROM_EMAIL   — verified sender, e.g. "apt <hello@yourdomain.com>"
  *   WAITLIST_NOTIFY_EMAIL — internal inbox that gets a copy of each signup
  *   RESEND_AUDIENCE_ID    — optional Resend audience to add the contact to
+ *   WAITLIST_SEGMENT_ID   — optional segment id tagged on contacts + emails
  *
  * Without RESEND_API_KEY the signup still succeeds (placeholder mode) so the
  * UI can be developed and demoed with no credentials.
@@ -24,6 +25,7 @@ function readEnv() {
     from: process.env["WAITLIST_FROM_EMAIL"] ?? DEFAULT_FROM,
     notify: process.env["WAITLIST_NOTIFY_EMAIL"],
     audienceId: process.env["RESEND_AUDIENCE_ID"],
+    segmentId: process.env["WAITLIST_SEGMENT_ID"],
   };
 }
 
@@ -61,10 +63,15 @@ async function resend(apiKey: string, path: string, body: unknown) {
 }
 
 export async function addToWaitlist(email: string): Promise<void> {
-  const { apiKey, from, notify, audienceId } = readEnv();
+  const { apiKey, from, notify, audienceId, segmentId } = readEnv();
+
+  /** Tags let Resend filter/segment signups by source. */
+  const tags = segmentId ? [{ name: "segment", value: segmentId }] : undefined;
 
   if (!apiKey) {
-    console.info(`[waitlist] would register ${email} (RESEND_API_KEY not set)`);
+    console.info(
+      `[waitlist] would register ${email}${segmentId ? ` (segment: ${segmentId})` : ""} (RESEND_API_KEY not set)`,
+    );
     return;
   }
 
@@ -72,6 +79,7 @@ export async function addToWaitlist(email: string): Promise<void> {
     await resend(apiKey, `/audiences/${audienceId}/contacts`, {
       email,
       unsubscribed: false,
+      ...(segmentId ? { segment_id: segmentId } : {}),
     });
   }
 
@@ -79,6 +87,7 @@ export async function addToWaitlist(email: string): Promise<void> {
     from,
     to: [email],
     ...templates.confirmation,
+    ...(tags ? { tags } : {}),
   });
 
   if (notify) {
@@ -86,6 +95,7 @@ export async function addToWaitlist(email: string): Promise<void> {
       from,
       to: [notify],
       ...templates.notification(email),
+      ...(tags ? { tags } : {}),
     });
   }
 }
