@@ -4,7 +4,7 @@ import feedLook from "@/assets/feed-look.jpg";
 import { useReveal } from "@/hooks/use-reveal";
 
 import { AgentMark, AgentNote, Chip, Eyebrow, Section, Tag } from "./kit";
-import { Phone } from "./phone";
+import { Phone, TabBar } from "./phone";
 
 function FittingRoomScreen() {
   return (
