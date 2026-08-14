@@ -1,5 +1,5 @@
-import heroTryOn from "@/assets/hero-tryon.jpg";
-import tryOnProduct from "@/assets/tryon-product.jpg";
+import aModel1 from "@/assets/feed/a-model-1.jpg";
+import aProduct from "@/assets/feed/a-product.jpg";
 import { useReveal } from "@/hooks/use-reveal";
 
 import { Eyebrow, Section, Tag } from "./kit";
@@ -12,7 +12,7 @@ export function TryOn() {
       <div
         ref={ref}
         data-shown={shown}
-        className="reveal grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16"
+        className="reveal grid items-center gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16"
       >
         <div>
           <Eyebrow>How it looks on you</Eyebrow>
@@ -20,9 +20,11 @@ export function TryOn() {
             The catalog photo is the least useful photo.
           </h2>
           <p className="mt-6 max-w-[52ch] text-[17px] leading-[1.6] text-secondary-foreground">
-            Upload a few photos once. From then on every piece apt shows you is
-            rendered on your body, your proportions, your skin tone. You stop
-            guessing whether it works and start deciding whether you like it.
+            Upload a few photos once. From then on, every piece in your Fitting
+            Room feed — and everything apt hands you when you ask — is rendered
+            on your body, your proportions, your skin tone. Same system, both
+            tabs. You stop guessing whether it works and start deciding whether
+            you like it.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <Tag>Clothing</Tag>
@@ -32,31 +34,31 @@ export function TryOn() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           <figure className="overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-card)]">
             <img
-              src={tryOnProduct}
-              alt="Cream oversized wool coat photographed flat as a product shot"
-              width={896}
+              src={aProduct}
+              alt="A cream ribbed knit crewneck photographed on its own"
+              width={768}
               height={1152}
               loading="lazy"
               className="aspect-[3/4] w-full object-cover"
             />
-            <figcaption className="px-4 py-3 text-[13px] text-muted-foreground">
-              The product
+            <figcaption className="px-3 py-3 text-[13px] text-muted-foreground sm:px-4">
+              The product — from Everlane
             </figcaption>
           </figure>
           <figure className="overflow-hidden rounded-lg border border-border-agent bg-card shadow-[var(--shadow-raise)]">
             <img
-              src={heroTryOn}
-              alt="The same coat rendered on Maya by apt"
-              width={896}
+              src={aModel1}
+              alt="The same crewneck rendered on Maya by apt"
+              width={768}
               height={1152}
               loading="lazy"
-              className="aspect-[3/4] w-full object-cover"
+              className="aspect-[3/4] w-full object-cover object-top"
             />
-            <figcaption className="px-4 py-3 text-[13px] text-agent-foreground">
-              On you
+            <figcaption className="px-3 py-3 text-[13px] text-agent-foreground sm:px-4">
+              How it looks on you — AI generated
             </figcaption>
           </figure>
         </div>
