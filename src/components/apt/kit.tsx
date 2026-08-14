@@ -65,7 +65,7 @@ export function AgentMark({
 /* ---------- button ---------- */
 
 const button = cva(
-  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-[15px] font-medium tracking-[-0.012em] transition-[background-color,color,box-shadow,transform] duration-[160ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-[clamp(0.9rem,0.85rem+0.15vw,0.95rem)] font-medium tracking-[-0.012em] transition-[background-color,color,box-shadow,transform] duration-[160ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
@@ -78,7 +78,7 @@ const button = cva(
       },
       size: {
         md: "",
-        lg: "min-h-12 px-6 text-[17px]",
+        lg: "min-h-12 px-6 text-[clamp(0.95rem,0.9rem+0.3vw,1.0625rem)] sm:min-h-[3.25rem]",
       },
     },
     defaultVariants: { variant: "solid", size: "md" },
@@ -203,9 +203,14 @@ export function Section({
   return (
     <section
       id={id}
-      className={cn("scroll-mt-20 border-t border-border py-20 sm:py-28", className)}
+      className={cn(
+        "scroll-mt-16 border-t border-border py-14 sm:py-20 lg:py-28",
+        className,
+      )}
     >
-      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">{children}</div>
+      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8 lg:px-10 xl:max-w-7xl">
+        {children}
+      </div>
     </section>
   );
 }

@@ -49,30 +49,30 @@ export function AppTabs() {
       <Eyebrow>
         Inside <Wordmark className="lowercase! text-[16px]!" />
       </Eyebrow>
-      <h2 className="mt-4 max-w-[28ch] text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
+      <h2 className="mt-4 max-w-[28ch] text-[clamp(1.5rem,1.15rem+1.6vw,2.75rem)] text-balance leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
         Three tabs; apt, fitting room, you.
       </h2>
-      <p className="mt-3 max-w-[46ch] text-[15px] text-muted-foreground">
+      <p className="mt-3 max-w-[46ch] text-[clamp(0.9rem,0.87rem+0.15vw,0.95rem)] text-muted-foreground">
         Tap the tab bar on the phone to move between them.
       </p>
 
       <div
         ref={ref}
         data-shown={shown}
-        className="reveal mt-10 grid items-center gap-8 rounded-2xl border border-border bg-sunken/40 p-4 sm:rounded-3xl sm:p-10 lg:grid-cols-2 lg:gap-16"
+        className="reveal mt-8 grid items-center gap-8 rounded-2xl border border-border bg-sunken/40 p-4 sm:mt-10 sm:rounded-3xl sm:p-8 lg:grid-cols-[auto_minmax(0,1fr)] lg:gap-12 lg:p-10 xl:gap-16"
       >
         <div className="flex justify-center">
           <Screen onTab={setActive} />
         </div>
-        <div>
+        <div className="min-w-0">
           <span className="eyebrow">Tab {active + 1}</span>
-          <h3 className="mt-3 text-[clamp(1.5rem,2.6vw,2rem)] font-semibold tracking-[var(--tracking-heading)] lowercase">
+          <h3 className="mt-3 text-[clamp(1.375rem,1.15rem+1vw,2rem)] font-semibold tracking-[var(--tracking-heading)] lowercase">
             {tab.name}
           </h3>
-          <p className="mt-2 text-[clamp(1.1rem,2vw,1.375rem)] leading-[1.18] font-medium tracking-[-0.012em]">
+          <p className="mt-2 text-[clamp(1.05rem,0.95rem+0.55vw,1.375rem)] leading-[1.18] font-medium tracking-[-0.012em]">
             {tab.lead}
           </p>
-          <p className="mt-4 max-w-[52ch] text-[clamp(1rem,1.4vw,1.125rem)] leading-[1.6] text-secondary-foreground">
+          <p className="mt-4 max-w-[52ch] text-[clamp(0.95rem,0.9rem+0.3vw,1.125rem)] leading-[1.6] text-secondary-foreground">
             {tab.body}
           </p>
         </div>
