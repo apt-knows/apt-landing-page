@@ -21,10 +21,9 @@ export function TryOn() {
           </h2>
           <p className="mt-6 max-w-[52ch] text-[17px] leading-[1.6] text-secondary-foreground">
             Upload a few photos once. From then on, every piece in your Fitting
-            Room feed — and everything apt hands you when you ask — is rendered
-            on your body, your proportions, your skin tone. Same system, both
-            tabs. You stop guessing whether it works and start deciding whether
-            you like it.
+            Room feed is rendered on your body, your proportions, your skin tone.
+            You stop guessing whether it works and start deciding whether you
+            like it.
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             <Tag>Clothing</Tag>
