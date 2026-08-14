@@ -49,7 +49,7 @@ export function TryOn() {
           <figure className="overflow-hidden rounded-lg border border-border-agent bg-card shadow-[var(--shadow-raise)]">
             <img
               src={heroTryOn}
-              alt="The same coat rendered on the shopper by apt"
+              alt="The same coat rendered on Maya by apt"
               width={896}
               height={1152}
               loading="lazy"
