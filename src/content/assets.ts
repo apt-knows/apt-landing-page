@@ -32,7 +32,12 @@ import rainBoots from "@/assets/feed/rain-look-2.jpg";
 import rainShell from "@/assets/feed/rain-look-3.jpg";
 
 // Profile boards — portrait (3:4).
-import boardTrip from "@/assets/board-look.jpg";
+import boardTrip from "@/assets/board-puerto-rico.jpg";
+
+// Photos the demo user uploaded of herself — portrait (3:4).
+import mayaUpload1 from "@/assets/profile/maya-upload-1.jpg";
+import mayaUpload2 from "@/assets/profile/maya-upload-2.jpg";
+import mayaUpload3 from "@/assets/profile/maya-upload-3.jpg";
 
 export const assets = {
   team: {
@@ -59,6 +64,12 @@ export const assets = {
     trench: rainTrench,
     boots: rainBoots,
     shell: rainShell,
+  },
+  /** Selfies the demo user uploaded so try-on renders look like her. */
+  uploads: {
+    one: mayaUpload1,
+    two: mayaUpload2,
+    three: mayaUpload3,
   },
   boards: {
     trip: boardTrip,

@@ -12,7 +12,7 @@ import { assets } from "./assets";
 export const demoUser = {
   name: "Maya R.",
   meta: "New York · Fit model ready",
-  avatar: assets.onYou.bag1,
+  avatar: assets.uploads.three,
   stats: [
     { value: "6", label: "photos" },
     { value: "3", label: "boards" },
@@ -151,9 +151,9 @@ export const agentDemo = {
 /** Profile tab mock content. */
 export const profileDemo = {
   photos: [
-    { src: assets.onYou.knit1, alt: "A photo Maya uploaded of herself, facing forward" },
-    { src: assets.onYou.knit2, alt: "A second photo of Maya, side angle" },
-    { src: assets.onYou.bag1, alt: "A third photo of Maya in a black coat" },
+    { src: assets.uploads.one, alt: "A photo Maya uploaded of herself, facing forward" },
+    { src: assets.uploads.two, alt: "A second photo Maya uploaded, side angle" },
+    { src: assets.uploads.three, alt: "A third photo Maya uploaded, close up" },
   ],
   styles: [
     { label: "Quiet luxury", on: true },
