@@ -10,7 +10,7 @@ export function Principle() {
       <div
         ref={ref}
         data-shown={shown}
-        className="reveal grid gap-12 lg:grid-cols-[1fr_0.85fr] lg:gap-20"
+        className="reveal"
       >
         <div>
           <Eyebrow>The idea</Eyebrow>
