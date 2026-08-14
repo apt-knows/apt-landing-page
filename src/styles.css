@@ -147,7 +147,7 @@
 
 /* Small-caps tracked label used across sections */
 @utility eyebrow {
-  font-size: clamp(10px, 0.55rem + 0.25vw, 12px);
+  font-size: clamp(11px, 0.6rem + 0.45vw, 16px);
   font-weight: 600;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
