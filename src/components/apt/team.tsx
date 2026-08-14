@@ -66,7 +66,7 @@ export function Team() {
                 {member.name}
               </h3>
               <p className="mt-0.5 text-[13px] text-signal-ink">{member.role}</p>
-              <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2.5">
+              <div className="mt-4 flex flex-col gap-2.5">
                 {member.contact.map((c) => (
                   <ContactRow key={c.label} c={c} />
                 ))}
