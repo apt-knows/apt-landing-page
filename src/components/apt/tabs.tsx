@@ -46,13 +46,13 @@ const feed: FeedItem[] = [
       {
         src: aModel1,
         label: "How it looks on you",
-        alt: "The crewneck rendered on the shopper, facing forward",
+        alt: "The crewneck rendered on Maya, facing forward",
         generated: true,
       },
       {
         src: aModel2,
         label: "How it looks on you",
-        alt: "The crewneck rendered on the shopper, side angle",
+        alt: "The crewneck rendered on Maya, side angle",
         generated: true,
       },
     ],
@@ -70,13 +70,13 @@ const feed: FeedItem[] = [
       {
         src: bModel1,
         label: "How it looks on you",
-        alt: "The sneakers rendered on the shopper, full length",
+        alt: "The sneakers rendered on Maya, full length",
         generated: true,
       },
       {
         src: bModel2,
         label: "How it looks on you",
-        alt: "The sneakers rendered on the shopper, low angle",
+        alt: "The sneakers rendered on Maya, low angle",
         generated: true,
       },
     ],
@@ -94,13 +94,13 @@ const feed: FeedItem[] = [
       {
         src: cModel1,
         label: "How it looks on you",
-        alt: "The bag rendered on the shopper over a black coat",
+        alt: "The bag rendered on Maya over a black coat",
         generated: true,
       },
       {
         src: cModel2,
         label: "How it looks on you",
-        alt: "The bag rendered on the shopper, back angle",
+        alt: "The bag rendered on Maya, back angle",
         generated: true,
       },
     ],
@@ -276,7 +276,7 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
             <figure className="relative col-span-2">
               <img
                 src={rainLook1}
-                alt="A water-resistant trench and rain boots shown on the shopper"
+                alt="A water-resistant trench and rain boots shown on Maya"
                 width={768}
                 height={1152}
                 loading="lazy"
@@ -289,7 +289,7 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
             <figure className="relative">
               <img
                 src={rainLook2}
-                alt="Black waterproof rain boots shown on the shopper"
+                alt="Black waterproof rain boots shown on Maya"
                 width={768}
                 height={1152}
                 loading="lazy"
@@ -302,7 +302,7 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
             <figure className="relative">
               <img
                 src={rainLook3}
-                alt="An olive hooded rain shell shown on the shopper"
+                alt="An olive hooded rain shell shown on Maya"
                 width={768}
                 height={1152}
                 loading="lazy"
