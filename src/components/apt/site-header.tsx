@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 
-import { LinkButton, Wordmark } from "./kit";
+import { Wordmark } from "./kit";
 
 const nav = [
   { href: "/#how", label: "How it works" },
@@ -29,15 +29,7 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <LinkButton
-          href="#early-access"
-          variant="agent"
-          className="shrink-0 whitespace-nowrap px-4 text-[14px] sm:px-5 sm:text-[15px]"
-        >
-          Get early access
-        </LinkButton>
       </div>
-
     </header>
   );
 }
