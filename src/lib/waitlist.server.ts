@@ -24,6 +24,7 @@ function readEnv() {
     from: process.env["WAITLIST_FROM_EMAIL"] ?? DEFAULT_FROM,
     notify: process.env["WAITLIST_NOTIFY_EMAIL"],
     audienceId: process.env["RESEND_AUDIENCE_ID"],
+    segmentId: process.env["WAITLIST_SEGMENT_ID"],
   };
 }
 
