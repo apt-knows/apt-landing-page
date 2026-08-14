@@ -13,7 +13,9 @@ export function Principle() {
         className="reveal"
       >
         <div>
-          <Eyebrow>The idea</Eyebrow>
+          <Eyebrow>
+            The <Wordmark className="lowercase! text-[16px]!" /> idea
+          </Eyebrow>
           <p className="mt-5 text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
             Shopping used to mean trying it on. We're bringing that back.
           </p>

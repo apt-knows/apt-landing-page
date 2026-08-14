@@ -46,7 +46,9 @@ export function AppTabs() {
 
   return (
     <Section id="app" className="bg-card">
-      <Eyebrow>Inside the app</Eyebrow>
+      <Eyebrow>
+        Inside <Wordmark className="lowercase! text-[16px]!" />
+      </Eyebrow>
       <h2 className="mt-4 max-w-[28ch] text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
         Three tabs; apt, fitting room, you.
       </h2>
