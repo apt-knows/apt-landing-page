@@ -25,19 +25,6 @@ export function Principle() {
             store — just in your pocket, and it already knows your taste.
           </p>
         </div>
-
-        <div className="flex flex-col justify-center gap-3">
-          <AgentNote label="I noticed">
-            You've skipped every jacket with visible branding — I'll hide those.
-          </AgentNote>
-          <AgentNote label="My reasoning">
-            Ranked by fit and fabric because your last three keeps were oversized
-            wool.
-          </AgentNote>
-          <AgentNote label="Not sure" tone="neutral">
-            I don't have enough signal on sleeve length yet — assuming regular fit.
-          </AgentNote>
-        </div>
       </div>
     </Section>
   );
