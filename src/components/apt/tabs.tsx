@@ -255,25 +255,61 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
     <Phone>
       <div className="flex h-full flex-col bg-card pb-11">
         <div className="flex items-center gap-2 border-b border-border px-4 py-3 pt-6">
-          <AgentMark size={18} />
-          <span className="text-[14px] font-medium lowercase">apt</span>
+          <AgentMark size={18} active />
+          <div className="min-w-0">
+            <p className="text-[14px] font-medium lowercase leading-none">apt</p>
+            <p className="mt-1 text-[9px] text-muted-foreground">
+              Your shopping agent
+            </p>
+          </div>
         </div>
-        <div className="flex-1 space-y-3 p-4">
-          <div className="ml-auto w-fit rounded-full bg-sunken px-4 py-2 text-[13px]">
+
+        <div className="flex-1 space-y-3 overflow-y-auto p-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="ml-auto w-fit max-w-[80%] rounded-2xl rounded-br-sm bg-sunken px-3.5 py-2 text-[13px]">
             something for a rainy commute
           </div>
-          <div className="grid grid-cols-2 gap-2">
+
+          <div className="grid grid-cols-2 gap-1.5">
+            <figure className="relative col-span-2">
+              <img
+                src={bModel1}
+                alt="Water-resistant sneakers shown on the shopper"
+                width={768}
+                height={1152}
+                loading="lazy"
+                className="h-32 w-full rounded-lg object-cover object-top"
+              />
+              <figcaption className="absolute bottom-1.5 left-1.5 rounded-full bg-grey-10/65 px-2 py-0.5 text-[9px] font-medium text-signal backdrop-blur-sm">
+                How it looks on you
+              </figcaption>
+            </figure>
             <img
-              src={agentLook}
-              alt="White leather sneakers shown on a shopper"
-              width={896}
+              src={bProduct}
+              alt="White leather low-top sneakers, COS"
+              width={768}
               height={1152}
               loading="lazy"
-              className="col-span-2 h-32 w-full rounded-md object-cover"
+              className="h-20 w-full rounded-lg object-cover"
             />
-            <div className="h-20 rounded-md bg-sunken" />
-            <div className="h-20 rounded-md bg-sunken" />
+            <img
+              src={cModel1}
+              alt="A black coat and tan bag shown on the shopper"
+              width={768}
+              height={1152}
+              loading="lazy"
+              className="h-20 w-full rounded-lg object-cover object-top"
+            />
           </div>
+
+          <div className="flex gap-1.5">
+            <span className="rounded-full border border-border-strong px-2.5 py-1 text-[10px] font-medium text-secondary-foreground">
+              Under $250
+            </span>
+            <span className="rounded-full border border-border-strong px-2.5 py-1 text-[10px] font-medium text-secondary-foreground">
+              More like this
+            </span>
+          </div>
+
           <div className="rounded-lg border border-signal/30 bg-signal/[0.06] px-3 py-2.5">
             <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-signal">
               I learned
@@ -282,12 +318,43 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
               You keep water-resistant over wool. Showing those first.
             </p>
           </div>
+
+          <div className="ml-auto w-fit max-w-[80%] rounded-2xl rounded-br-sm bg-sunken px-3.5 py-2 text-[13px]">
+            save the second one to my trip board
+          </div>
+
+          <div className="flex items-center gap-2 rounded-lg border border-border bg-elevated px-3 py-2">
+            <img
+              src={cProduct}
+              alt="Tan leather shoulder bag saved to a board"
+              width={768}
+              height={1152}
+              loading="lazy"
+              className="h-9 w-9 rounded-md object-cover"
+            />
+            <p className="text-[11px] leading-[1.35] text-secondary-foreground">
+              Saved to{" "}
+              <span className="font-medium text-foreground">
+                Puerto Rico trip
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div className="border-t border-border px-4 py-2.5">
+          <div className="flex items-center justify-between rounded-full bg-sunken px-3 py-1.5">
+            <span className="text-[11px] text-muted-foreground">
+              Ask apt anything
+            </span>
+            <AgentMark size={13} active />
+          </div>
         </div>
       </div>
       <TabBar active={1} onSelect={onTab} />
     </Phone>
   );
 }
+
 
 function ProfileScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
   return (
