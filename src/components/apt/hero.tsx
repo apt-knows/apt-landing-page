@@ -11,7 +11,7 @@ export function Hero() {
         </span>
 
         <h1 className="mt-6 text-[clamp(2.75rem,7vw,5.5rem)] leading-[1.04] font-bold tracking-[var(--tracking-display)]">
-          <Wordmark className="text-signal-ink" /> shopping that's about you
+          <Wordmark className="text-signal" /> shopping that's about you
         </h1>
 
         <p className="mt-6 max-w-[52ch] text-[17px] leading-[1.6] text-secondary-foreground">
