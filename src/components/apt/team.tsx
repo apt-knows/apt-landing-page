@@ -1,7 +1,7 @@
 import teamCeo from "@/assets/team-ceo.jpg";
 import teamCto from "@/assets/team-cto.jpg";
 
-import { Eyebrow, Section } from "./kit";
+import { Eyebrow, Section, Wordmark } from "./kit";
 
 /**
  * Swap `image` for a real portrait (drop the file in src/assets and change the
