@@ -247,7 +247,7 @@ function FittingRoomScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
           </div>
         ))}
       </div>
-      <TabBar active={0} onSelect={onTab} />
+      <TabBar active={1} onSelect={onTab} />
     </Phone>
   );
 }
@@ -362,7 +362,7 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
           </div>
         </div>
       </div>
-      <TabBar active={1} onSelect={onTab} />
+      <TabBar active={0} onSelect={onTab} />
     </Phone>
   );
 }
@@ -547,15 +547,15 @@ const tabs: {
   agent?: boolean;
 }[] = [
   {
-    name: "Fitting Room",
-    lead: "A scroll worth staying in.",
-    body: "An endless feed where every card is a carousel: the product first, then you wearing it. Swipe sideways to see it on you, scroll up for the next piece. Ranked by a For You algorithm that treats a scroll-past as an opinion.",
-  },
-  {
     name: "apt",
     lead: "Your personal shopping agent.",
     body: "Tell her what you're after and she answers in pictures — options, already on you. No paragraphs to read, no filters to fight. Just looks you can judge in a second.",
     agent: true,
+  },
+  {
+    name: "Fitting Room",
+    lead: "A scroll worth staying in.",
+    body: "An endless feed where every card is a carousel: the product first, then you wearing it. Swipe sideways to see it on you, scroll up for the next piece. Ranked by a For You algorithm that treats a scroll-past as an opinion.",
   },
   {
     name: "Profile",
@@ -573,7 +573,7 @@ export function AppTabs() {
     <Section id="app" className="bg-card">
       <Eyebrow>Inside the app</Eyebrow>
       <h2 className="mt-4 max-w-[22ch] text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
-        Three tabs. That's the whole app.
+        Three tabs. apt, fitting room, you.
       </h2>
       <p className="mt-3 max-w-[46ch] text-[15px] text-muted-foreground">
         Tap the tab bar on the phone to move between them.
@@ -586,9 +586,9 @@ export function AppTabs() {
       >
         <div className="flex justify-center">
           {active === 0 ? (
-            <FittingRoomScreen onTab={setActive} />
-          ) : active === 1 ? (
             <AgentScreen onTab={setActive} />
+          ) : active === 1 ? (
+            <FittingRoomScreen onTab={setActive} />
           ) : (
             <ProfileScreen onTab={setActive} />
           )}

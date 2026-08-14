@@ -29,6 +29,8 @@ export function Phone({
 }
 
 const tabIcons = [
+  // apt agent — handled by AgentMark below
+  null,
   // Fitting Room — stacked carousel frames
   (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
@@ -36,9 +38,7 @@ const tabIcons = [
       <path d="M5 3v9M11 3v9" stroke="currentColor" strokeWidth="1.4" />
     </svg>
   ),
-  // apt agent — handled by AgentMark below
-  null,
-  // Profile — person glyph
+  // You — person glyph
   (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
       <circle cx="8" cy="5.5" r="2.4" stroke="currentColor" strokeWidth="1.4" />
@@ -55,7 +55,7 @@ export function TabBar({
   active: 0 | 1 | 2;
   onSelect?: (index: 0 | 1 | 2) => void;
 }) {
-  const labels = ["Fitting", "apt", "You"];
+  const labels = ["apt", "fitting", "you"];
   return (
     <div className="absolute inset-x-0 bottom-0 z-30 flex items-end justify-around border-t border-border bg-card/95 px-2 pb-2 pt-1.5 backdrop-blur-sm">
       {([0, 1, 2] as const).map((i) => {
@@ -70,7 +70,7 @@ export function TabBar({
             className="flex flex-1 cursor-pointer flex-col items-center gap-0.5 rounded-lg py-0.5 transition-opacity hover:opacity-80"
           >
             <span className={on ? "text-signal" : "text-grey-10/45"}>
-              {i === 1 ? <AgentMark size={15} active={on} /> : tabIcons[i]}
+              {i === 0 ? <AgentMark size={15} active={on} /> : tabIcons[i]}
             </span>
             <span
               className={`text-[9px] font-medium lowercase tracking-tight ${
