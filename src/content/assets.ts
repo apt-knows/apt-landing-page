@@ -12,8 +12,8 @@
  */
 
 // Team portraits — square (1:1), ideally 768x768 or larger.
-import teamCeo from "@/assets/team-ceo.jpg";
-import teamCto from "@/assets/team-cto.jpg";
+import teamCeoAsset from "@/assets/team-ceo.png.asset.json";
+import teamCtoAsset from "@/assets/team-cto.png.asset.json";
 
 // Fitting Room feed — portrait (3:4), 768x1152.
 import knitProduct from "@/assets/feed/a-product.jpg";
@@ -36,8 +36,8 @@ import boardTrip from "@/assets/board-look.jpg";
 
 export const assets = {
   team: {
-    ceo: teamCeo,
-    cto: teamCto,
+    ceo: teamCeoAsset.url,
+    cto: teamCtoAsset.url,
   },
   /** Product-only shots (what the store photographs). */
   product: {
