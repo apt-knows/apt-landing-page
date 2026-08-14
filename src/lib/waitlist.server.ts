@@ -8,6 +8,7 @@
  *   WAITLIST_FROM_EMAIL   — verified sender, e.g. "apt <hello@yourdomain.com>"
  *   WAITLIST_NOTIFY_EMAIL — internal inbox that gets a copy of each signup
  *   RESEND_AUDIENCE_ID    — optional Resend audience to add the contact to
+ *   WAITLIST_SEGMENT_ID   — optional segment id tagged on contacts + emails
  *
  * Without RESEND_API_KEY the signup still succeeds (placeholder mode) so the
  * UI can be developed and demoed with no credentials.
