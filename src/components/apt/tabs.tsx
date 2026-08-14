@@ -10,6 +10,9 @@ import bProduct from "@/assets/feed/b-product.jpg";
 import cModel1 from "@/assets/feed/c-model-1.jpg";
 import cModel2 from "@/assets/feed/c-model-2.jpg";
 import cProduct from "@/assets/feed/c-product.jpg";
+import rainLook1 from "@/assets/feed/rain-look-1.jpg";
+import rainLook2 from "@/assets/feed/rain-look-2.jpg";
+import rainLook3 from "@/assets/feed/rain-look-3.jpg";
 import { useReveal } from "@/hooks/use-reveal";
 
 import { AgentMark, Eyebrow, Section } from "./kit";
