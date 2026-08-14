@@ -1,4 +1,4 @@
-import { AgentMark, Wordmark } from "./kit";
+import { Wordmark } from "./kit";
 import { WaitlistForm } from "./waitlist-form";
 
 export function Hero() {
