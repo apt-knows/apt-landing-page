@@ -1,13 +1,17 @@
-# Apt — Landing Page
+# apt — Landing Page
 
-A single, fast landing page for Apt: an AI shopping agent that shows you how things look on you before you buy. Design pulled directly from the Apt design system on Replit: near-greyscale chrome, one cyan "signal" accent, Schibsted Grotesk.
+A single, fast landing page for apt: an AI shopping agent that shows you how things look on you before you buy. Design pulled directly from the apt design system on Replit: near-greyscale chrome, one cyan "signal" accent, Schibsted Grotesk.
+
+The name is always lowercase — `apt`, never "Apt" — everywhere in copy, metadata, and UI. The app wordmark renders as `apt.` with the period.
 
 ## Design foundation (taken from the design system)
 
 - Type: Schibsted Grotesk via Google Fonts link in the root route head. Tight display tracking (-0.035em), large scale up to 88px.
-- Color: full neutral ramp (grey-0 to grey-10) plus the single cyan signal ramp (wash / soft / signal / press / ink / deep). Product imagery is the only saturated thing on the page — every other surface stays near-greyscale.
+- Color: near-greyscale chrome (grey-0 to grey-10) with the single cyan signal ramp (wash / soft / signal / press / ink / deep) as the only accent. Page sits on grey-1, cards are white (grey-0) with subtle borders and the card shadow. Product imagery is the only other saturated thing on the page.
+- Buttons are pill-shaped (radius-pill) across all four variants: solid ink, agent cyan, outline, ghost. Chips and tags likewise.
+- Agent notes keep their tonal treatment: cyan-wash background with a cyan-soft border and a small cyan label ("I NOTICED", "MY REASONING", "I LEARNED"), plus the neutral grey variant for "NOT SURE".
 - Surfaces, borders, radii (4/8/12/16/28/pill), shadows (card / raise / sheet), motion easing and durations, and the focus ring all get ported as tokens into `src/styles.css`.
-- Reused component language: the four button variants (solid ink, agent cyan, outline, ghost), chips with counts, tags, and the AgentNote block ("I NOTICED", "MY REASONING", "I LEARNED") — the AgentNote is used as Apt's own voice on the page.
+
 
 ## Page structure (one route, `/`)
 
