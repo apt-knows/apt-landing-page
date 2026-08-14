@@ -205,7 +205,7 @@ const tabs: {
 export function AppTabs() {
   const { ref, shown } = useReveal<HTMLDivElement>();
   const [active, setActive] = useState<TabKey>(0);
-  const tab = tabs[active];
+  const tab = tabs[active]!;
 
   return (
     <Section id="app" className="bg-card">
