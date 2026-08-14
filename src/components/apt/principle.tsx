@@ -1,6 +1,6 @@
 import { useReveal } from "@/hooks/use-reveal";
 
-import { AgentNote, Eyebrow, Section } from "./kit";
+import { Eyebrow, Section } from "./kit";
 
 export function Principle() {
   const { ref, shown } = useReveal<HTMLDivElement>();
@@ -10,7 +10,7 @@ export function Principle() {
       <div
         ref={ref}
         data-shown={shown}
-        className="reveal grid gap-12 lg:grid-cols-[1fr_0.85fr] lg:gap-20"
+        className="reveal"
       >
         <div>
           <Eyebrow>The idea</Eyebrow>
@@ -24,19 +24,6 @@ export function Principle() {
             you see it on you, and you decide. Same feeling as your favourite
             store — just in your pocket, and it already knows your taste.
           </p>
-        </div>
-
-        <div className="flex flex-col justify-center gap-3">
-          <AgentNote label="I noticed">
-            You've skipped every jacket with visible branding — I'll hide those.
-          </AgentNote>
-          <AgentNote label="My reasoning">
-            Ranked by fit and fabric because your last three keeps were oversized
-            wool.
-          </AgentNote>
-          <AgentNote label="Not sure" tone="neutral">
-            I don't have enough signal on sleeve length yet — assuming regular fit.
-          </AgentNote>
         </div>
       </div>
     </Section>
