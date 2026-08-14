@@ -42,7 +42,7 @@ export function Team() {
   return (
     <Section id="team" className="bg-card">
       <Eyebrow>
-        <Wordmark className="lowercase! text-[16px]!" /> TEAM
+        <Wordmark className="lowercase! text-[1.35em]!" /> TEAM
       </Eyebrow>
       <h2 className="mt-4 text-[clamp(1.5rem,1.15rem+1.6vw,2.75rem)] text-balance leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
         Built by people who hate <span className="text-signal line-through decoration-signal decoration-[3px] underline-offset-2">online</span> bad shopping
