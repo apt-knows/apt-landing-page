@@ -36,8 +36,8 @@ import boardTrip from "@/assets/board-look.jpg";
 
 export const assets = {
   team: {
-    ceo: teamCeo,
-    cto: teamCto,
+    ceo: teamCeoAsset.url,
+    cto: teamCtoAsset.url,
   },
   /** Product-only shots (what the store photographs). */
   product: {
