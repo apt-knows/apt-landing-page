@@ -59,7 +59,7 @@ export function AppTabs() {
       <div
         ref={ref}
         data-shown={shown}
-        className="reveal mt-8 grid grid-cols-1 items-center gap-8 rounded-2xl border border-border bg-sunken/40 p-4 sm:mt-10 sm:rounded-3xl sm:p-8 lg:gap-12 lg:p-10 xl:gap-16"
+        className="reveal mt-8 grid grid-cols-1 items-center gap-8 rounded-2xl border border-border bg-sunken/40 p-4 sm:mt-10 sm:rounded-3xl sm:p-8 lg:grid-cols-2 lg:gap-12 lg:p-10 xl:gap-16"
       >
         <div className="flex w-full justify-center">
           <Screen onTab={setActive} />
