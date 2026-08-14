@@ -1,5 +1,5 @@
 import { useState } from "react";
-import agentLook from "@/assets/agent-look.jpg";
+
 import boardLook from "@/assets/board-look.jpg";
 import aModel1 from "@/assets/feed/a-model-1.jpg";
 import aModel2 from "@/assets/feed/a-model-2.jpg";
@@ -46,13 +46,13 @@ const feed: FeedItem[] = [
       {
         src: aModel1,
         label: "How it looks on you",
-        alt: "The crewneck rendered on the shopper, facing forward",
+        alt: "The crewneck rendered on Maya, facing forward",
         generated: true,
       },
       {
         src: aModel2,
         label: "How it looks on you",
-        alt: "The crewneck rendered on the shopper, side angle",
+        alt: "The crewneck rendered on Maya, side angle",
         generated: true,
       },
     ],
@@ -70,13 +70,13 @@ const feed: FeedItem[] = [
       {
         src: bModel1,
         label: "How it looks on you",
-        alt: "The sneakers rendered on the shopper, full length",
+        alt: "The sneakers rendered on Maya, full length",
         generated: true,
       },
       {
         src: bModel2,
         label: "How it looks on you",
-        alt: "The sneakers rendered on the shopper, low angle",
+        alt: "The sneakers rendered on Maya, low angle",
         generated: true,
       },
     ],
@@ -94,13 +94,13 @@ const feed: FeedItem[] = [
       {
         src: cModel1,
         label: "How it looks on you",
-        alt: "The bag rendered on the shopper over a black coat",
+        alt: "The bag rendered on Maya over a black coat",
         generated: true,
       },
       {
         src: cModel2,
         label: "How it looks on you",
-        alt: "The bag rendered on the shopper, back angle",
+        alt: "The bag rendered on Maya, back angle",
         generated: true,
       },
     ],
@@ -276,7 +276,7 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
             <figure className="relative col-span-2">
               <img
                 src={rainLook1}
-                alt="A water-resistant trench and rain boots shown on the shopper"
+                alt="A water-resistant trench and rain boots shown on Maya"
                 width={768}
                 height={1152}
                 loading="lazy"
@@ -289,7 +289,7 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
             <figure className="relative">
               <img
                 src={rainLook2}
-                alt="Black waterproof rain boots shown on the shopper"
+                alt="Black waterproof rain boots shown on Maya"
                 width={768}
                 height={1152}
                 loading="lazy"
@@ -302,7 +302,7 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
             <figure className="relative">
               <img
                 src={rainLook3}
-                alt="An olive hooded rain shell shown on the shopper"
+                alt="An olive hooded rain shell shown on Maya"
                 width={768}
                 height={1152}
                 loading="lazy"
@@ -370,9 +370,9 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
 
 function ProfileScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
   const photos = [
-    { src: aModel1, alt: "A photo the shopper uploaded of themselves" },
-    { src: aModel2, alt: "A second uploaded photo, side angle" },
-    { src: cModel1, alt: "A third uploaded photo in a black coat" },
+    { src: aModel1, alt: "A photo Maya uploaded of herself, facing forward" },
+    { src: aModel2, alt: "A second photo of Maya, side angle" },
+    { src: cModel1, alt: "A third photo of Maya in a black coat" },
   ];
   const styles = [
     { label: "Quiet luxury", on: true },
@@ -389,29 +389,57 @@ function ProfileScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
   return (
     <Phone>
       <div className="flex h-full flex-col overflow-y-auto bg-card pb-11 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="flex items-center gap-3 px-4 pt-8 pb-3">
-          <img
-            src={cModel1}
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            className="h-11 w-11 rounded-full object-cover object-top"
-          />
-          <div className="min-w-0">
-            <p className="truncate text-[14px] font-medium">Maya R.</p>
-            <p className="text-[11px] text-muted-foreground">
-              6 photos · 3 boards · 128 saved
-            </p>
+        <div className="bg-sunken px-4 pt-8 pb-4">
+          <div className="flex items-center gap-3.5">
+            <span className="relative shrink-0">
+              <img
+                src={cModel1}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                className="h-16 w-16 rounded-full object-cover object-top ring-2 ring-signal ring-offset-2 ring-offset-sunken"
+              />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[20px] font-semibold leading-tight tracking-[-0.01em]">
+                Maya R.
+              </p>
+              <p className="mt-0.5 text-[11px] text-muted-foreground">
+                New York · Fit model ready
+              </p>
+            </div>
+            <span className="rounded-full bg-grey-10 px-3 py-1.5 text-[10px] font-semibold text-inverse-foreground">
+              Edit
+            </span>
           </div>
-          <span className="ml-auto rounded-full border border-border-strong px-2.5 py-1 text-[10px] font-medium text-secondary-foreground">
-            Edit
-          </span>
+
+          <div className="mt-3.5 grid grid-cols-3 overflow-hidden rounded-lg border border-border bg-card">
+            {[
+              { n: "6", l: "photos" },
+              { n: "3", l: "boards" },
+              { n: "128", l: "saved" },
+            ].map((s, i) => (
+              <div
+                key={s.l}
+                className={
+                  i === 1
+                    ? "border-x border-border px-2 py-2 text-center"
+                    : "px-2 py-2 text-center"
+                }
+              >
+                <p className="text-[15px] font-semibold leading-none">{s.n}</p>
+                <p className="mt-1 text-[9px] uppercase tracking-[0.12em] text-muted-foreground">
+                  {s.l}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="border-t border-border px-4 py-3">
           <div className="flex items-baseline justify-between">
             <p className="eyebrow">Your photos</p>
-            <span className="text-[10px] text-signal">Fit model ready</span>
+            <span className="text-[10px] text-muted-foreground">Manage</span>
           </div>
           <p className="mt-1 text-[11px] leading-[1.35] text-muted-foreground">
             So try-on looks like you.
