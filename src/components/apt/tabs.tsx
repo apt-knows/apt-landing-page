@@ -2,47 +2,186 @@ import { useState } from "react";
 import agentLook from "@/assets/agent-look.jpg";
 import boardLook from "@/assets/board-look.jpg";
 import feedLook from "@/assets/feed-look.jpg";
+import heroTryon from "@/assets/hero-tryon.jpg";
+import tryonProduct from "@/assets/tryon-product.jpg";
 import { useReveal } from "@/hooks/use-reveal";
 
 import { AgentMark, Eyebrow, Section } from "./kit";
 import { Phone, TabBar } from "./phone";
-import { cn } from "@/lib/utils";
 
-function FittingRoomScreen() {
+type FeedItem = {
+  name: string;
+  price: string;
+  frames: { src: string; label: string; alt: string }[];
+};
+
+const feed: FeedItem[] = [
+  {
+    name: "Ribbed knit crewneck",
+    price: "$128",
+    frames: [
+      {
+        src: tryonProduct,
+        label: "Product",
+        alt: "A ribbed knit crewneck photographed on its own",
+      },
+      {
+        src: feedLook,
+        label: "On you",
+        alt: "The crewneck rendered on the shopper",
+      },
+      {
+        src: heroTryon,
+        label: "On you",
+        alt: "A second angle of the crewneck on the shopper",
+      },
+    ],
+  },
+  {
+    name: "Leather low-top sneaker",
+    price: "$210",
+    frames: [
+      {
+        src: agentLook,
+        label: "Product",
+        alt: "White leather low-top sneakers",
+      },
+      {
+        src: boardLook,
+        label: "On you",
+        alt: "The sneakers rendered on the shopper",
+      },
+    ],
+  },
+];
+
+const actions = [
+  {
+    label: "Board",
+    icon: (
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
+        <path
+          d="M4 2.5h8v11l-4-2.6-4 2.6z"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    label: "Cart",
+    icon: (
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
+        <path
+          d="M3 4.5h10l-1 8H4l-1-8zM6 4.5a2 2 0 1 1 4 0"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+  {
+    label: "Share",
+    icon: (
+      <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
+        <path
+          d="M8 11V3m0 0L5 6m3-3 3 3M3.5 10v3h9v-3"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    ),
+  },
+];
+
+function FeedCard({ item }: { item: FeedItem }) {
+  const [frame, setFrame] = useState(0);
+
   return (
-    <Phone>
-      <img
-        src={feedLook}
-        alt="A shopper shown wearing a charcoal knit sweater and olive trousers"
-        width={896}
-        height={1152}
-        loading="lazy"
-        className="h-full w-full object-cover"
-      />
-      <div className="absolute inset-x-0 top-8 flex justify-center gap-1.5">
-        {[0, 1, 2, 3].map((i) => (
+    <div className="relative h-full w-full snap-start overflow-hidden">
+      <div
+        className="flex h-full w-full snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        onScroll={(e) => {
+          const el = e.currentTarget;
+          setFrame(Math.round(el.scrollLeft / el.clientWidth));
+        }}
+      >
+        {item.frames.map((f) => (
+          <img
+            key={f.src + f.label}
+            src={f.src}
+            alt={f.alt}
+            loading="lazy"
+            className="h-full w-full shrink-0 snap-center object-cover"
+          />
+        ))}
+      </div>
+
+      {/* carousel progress */}
+      <div className="pointer-events-none absolute inset-x-0 top-7 flex justify-center gap-1.5 px-8">
+        {item.frames.map((f, i) => (
           <span
-            key={i}
+            key={f.label + i}
             className={
-              i === 1
-                ? "h-1 w-8 rounded-full bg-grey-0"
-                : "h-1 w-8 rounded-full bg-grey-0/40"
+              i === frame
+                ? "h-1 flex-1 rounded-full bg-grey-0"
+                : "h-1 flex-1 rounded-full bg-grey-0/40"
             }
           />
         ))}
       </div>
-      <div className="absolute inset-x-0 bottom-11 space-y-2 bg-gradient-to-t from-grey-10/80 to-transparent p-4 pt-16">
-        <span className="inline-flex items-center rounded-full bg-signal/15 px-2.5 py-1 text-[11px] font-medium text-signal">
-          On you · frame 2 of 4
-        </span>
-        <p className="text-[15px] font-medium text-inverse-foreground">
-          Ribbed knit crewneck
-        </p>
+
+      {/* rail of side actions */}
+      <div className="pointer-events-none absolute bottom-28 right-2.5 flex flex-col items-center gap-3">
+        {actions.map((a) => (
+          <span key={a.label} className="flex flex-col items-center gap-0.5">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-grey-10/55 text-inverse-foreground backdrop-blur-sm">
+              {a.icon}
+            </span>
+            <span className="text-[8px] font-medium text-inverse-foreground/85">
+              {a.label}
+            </span>
+          </span>
+        ))}
       </div>
-      <TabBar active={0} />
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-11 space-y-2 bg-gradient-to-t from-grey-10/85 to-transparent p-4 pt-16">
+        <span className="inline-flex items-center rounded-full bg-signal/20 px-2.5 py-1 text-[10px] font-medium text-signal">
+          {item.frames[frame]?.label} · {frame + 1} of {item.frames.length}
+        </span>
+        <div className="flex items-end justify-between gap-2 pr-12">
+          <p className="text-[15px] font-medium text-inverse-foreground">
+            {item.name}
+          </p>
+          <p className="text-[13px] text-inverse-foreground/80">{item.price}</p>
+        </div>
+        <span className="inline-flex items-center rounded-full bg-grey-0 px-3 py-1.5 text-[11px] font-semibold text-grey-10">
+          Add to cart
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function FittingRoomScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
+  return (
+    <Phone>
+      <div className="h-full w-full snap-y snap-mandatory overflow-y-auto scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {feed.map((item) => (
+          <div key={item.name} className="h-full w-full snap-start">
+            <FeedCard item={item} />
+          </div>
+        ))}
+      </div>
+      <TabBar active={0} onSelect={onTab} />
     </Phone>
   );
 }
+
 
 function AgentScreen() {
   return (
