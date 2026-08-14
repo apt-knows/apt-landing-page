@@ -20,7 +20,7 @@ export const site = {
   url: (import.meta.env["VITE_SITE_URL"] as string | undefined)?.replace(
     /\/$/,
     "",
-  ) ?? "https://apt.app",
+  ) ?? "https://aptknows.com",
   /** Public contact address shown in the footer and legal pages. */
   contactEmail:
     (import.meta.env["VITE_CONTACT_EMAIL"] as string | undefined) ??
