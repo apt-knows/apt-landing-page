@@ -6,17 +6,17 @@ const steps = [
   {
     step: "01",
     real: "You walk into a store",
-    apt: "You open the Fitting Room — an endless, ranked scroll of pieces picked for you.",
+    apt: "Open the Fitting Room — an endless, ranked scroll of pieces picked for you.",
   },
   {
     step: "02",
     real: "Something catches your eye",
-    apt: "The first frame of every carousel is the product itself, shot clean.",
+    apt: "Scroll your personal feed until you find something you like",
   },
   {
     step: "03",
     real: "You try it on",
-    apt: "Keep swiping and the same piece appears on you, generated from your photos.",
+    apt: "Swipe left to see how it would actually look on you",
   },
   {
     step: "04",

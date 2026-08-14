@@ -1,9 +1,8 @@
 import { useState } from "react";
 
-import { tabCopy } from "@/content/app-demo";
 import { useReveal } from "@/hooks/use-reveal";
 
-import { Eyebrow, Section } from "./kit";
+import { Eyebrow, Section, Wordmark } from "./kit";
 import type { TabKey } from "./phone";
 import { AgentScreen } from "./screens/agent";
 import { FittingRoomScreen } from "./screens/fitting-room";
@@ -15,17 +14,41 @@ const screens = {
   2: ProfileScreen,
 } as const;
 
+const tabs: { name: string; lead: string; body: React.ReactNode }[] = [
+  {
+    name: "apt",
+    lead: "Your personal shopping agent.",
+    body: (
+      <>
+        Tell <Wordmark /> what you're after and she gives you options — already
+        on you. No paragraphs to read, no filters to fight. Just looks you can
+        judge in a second.
+      </>
+    ),
+  },
+  {
+    name: "Fitting Room",
+    lead: "A scroll worth staying in.",
+    body: "An endless feed where every card is a carousel — the product first, then you wearing it. Swipe to see it on you, scroll up for the next. Ranked by what you scroll past.",
+  },
+  {
+    name: "Profile",
+    lead: "The part that makes it yours.",
+    body: "Set your interests, add photos so try-on looks like you, and build situational boards — a Puerto Rico trip, a wedding, a new job — that fill up now and get bought later.",
+  },
+];
+
 export function AppTabs() {
   const { ref, shown } = useReveal<HTMLDivElement>();
   const [active, setActive] = useState<TabKey>(0);
-  const tab = tabCopy[active]!;
+  const tab = tabs[active]!;
   const Screen = screens[active];
 
   return (
     <Section id="app" className="bg-card">
       <Eyebrow>Inside the app</Eyebrow>
-      <h2 className="mt-4 max-w-[22ch] text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
-        Three tabs. apt, fitting room, you.
+      <h2 className="mt-4 max-w-[28ch] text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
+        Three tabs; apt, fitting room, you.
       </h2>
       <p className="mt-3 max-w-[46ch] text-[15px] text-muted-foreground">
         Tap the tab bar on the phone to move between them.

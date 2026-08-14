@@ -173,27 +173,3 @@ export const profileDemo = {
   ],
 } as const;
 
-/** Copy for the three-tab interactive card. */
-export const tabCopy: {
-  name: string;
-  lead: string;
-  body: string;
-  agent?: boolean;
-}[] = [
-  {
-    name: "apt",
-    lead: "Your personal shopping agent.",
-    body: "Tell her what you're after and she answers in pictures — options, already on you. No paragraphs to read, no filters to fight. Just looks you can judge in a second.",
-    agent: true,
-  },
-  {
-    name: "Fitting Room",
-    lead: "A scroll worth staying in.",
-    body: "An endless feed where every card is a carousel: the product first, then you wearing it. Swipe sideways to see it on you, scroll up for the next piece. Ranked by a For You algorithm that treats a scroll-past as an opinion.",
-  },
-  {
-    name: "Profile",
-    lead: "The part that makes it yours.",
-    body: "Set your interests, add photos so try-on looks like you, and build situational boards — a Puerto Rico trip, a wedding, a new job — that fill up now and get bought later.",
-  },
-];
