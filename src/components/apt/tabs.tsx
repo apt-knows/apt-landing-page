@@ -191,11 +191,11 @@ export function AppTabs() {
         Three tabs. That's the whole app.
       </h2>
 
-      <div ref={ref} data-shown={shown} className="reveal mt-14 space-y-20">
+      <div ref={ref} data-shown={shown} className="reveal mt-14 space-y-16">
         {tabs.map((tab, index) => (
           <div
             key={tab.name}
-            className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16 lg:[&>div:first-child]:order-2"
+            className="grid items-center gap-8 sm:gap-12 lg:gap-16 grid-cols-2 [&>div:first-child]:order-2"
           >
             <div className="flex justify-center">{tab.screen}</div>
             <div>
@@ -203,13 +203,13 @@ export function AppTabs() {
                 {tab.agent ? <AgentMark size={20} /> : null}
                 <span className="eyebrow">Tab {index + 1}</span>
               </div>
-              <h3 className="mt-3 text-[24px] font-semibold tracking-[var(--tracking-heading)] lowercase">
+              <h3 className="mt-3 text-[clamp(1.25rem,2.4vw,1.5rem)] font-semibold tracking-[var(--tracking-heading)] lowercase">
                 {tab.name}
               </h3>
-              <p className="mt-2 text-[20px] leading-[1.18] font-medium tracking-[-0.012em]">
+              <p className="mt-2 text-[clamp(1.05rem,1.9vw,1.25rem)] leading-[1.18] font-medium tracking-[-0.012em]">
                 {tab.lead}
               </p>
-              <p className="mt-4 max-w-[52ch] text-[17px] leading-[1.6] text-secondary-foreground">
+              <p className="mt-4 text-[clamp(0.95rem,1.3vw,1.0625rem)] leading-[1.6] text-secondary-foreground">
                 {tab.body}
               </p>
             </div>
