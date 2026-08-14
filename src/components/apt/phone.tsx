@@ -48,14 +48,27 @@ const tabIcons = [
 ];
 
 /** Bottom navigation shown across every app screen. */
-export function TabBar({ active }: { active: 0 | 1 | 2 }) {
+export function TabBar({
+  active,
+  onSelect,
+}: {
+  active: 0 | 1 | 2;
+  onSelect?: (index: 0 | 1 | 2) => void;
+}) {
   const labels = ["Fitting", "apt", "You"];
   return (
     <div className="absolute inset-x-0 bottom-0 z-30 flex items-end justify-around border-t border-border bg-card/95 px-2 pb-2 pt-1.5 backdrop-blur-sm">
-      {[0, 1, 2].map((i) => {
+      {([0, 1, 2] as const).map((i) => {
         const on = i === active;
         return (
-          <div key={i} className="flex flex-1 flex-col items-center gap-0.5">
+          <button
+            key={i}
+            type="button"
+            onClick={() => onSelect?.(i)}
+            aria-pressed={on}
+            aria-label={`${labels[i]} tab`}
+            className="flex flex-1 cursor-pointer flex-col items-center gap-0.5 rounded-lg py-0.5 transition-opacity hover:opacity-80"
+          >
             <span className={on ? "text-signal" : "text-grey-10/45"}>
               {i === 1 ? <AgentMark size={15} active={on} /> : tabIcons[i]}
             </span>
@@ -66,9 +79,10 @@ export function TabBar({ active }: { active: 0 | 1 | 2 }) {
             >
               {labels[i]}
             </span>
-          </div>
+          </button>
         );
       })}
     </div>
   );
 }
+
