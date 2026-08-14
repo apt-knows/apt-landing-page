@@ -3,7 +3,7 @@ import { useState } from "react";
 import { tabCopy } from "@/content/app-demo";
 import { useReveal } from "@/hooks/use-reveal";
 
-import { AgentMark, Eyebrow, Section } from "./kit";
+import { Eyebrow, Section } from "./kit";
 import type { TabKey } from "./phone";
 import { AgentScreen } from "./screens/agent";
 import { FittingRoomScreen } from "./screens/fitting-room";
@@ -40,10 +40,7 @@ export function AppTabs() {
           <Screen onTab={setActive} />
         </div>
         <div>
-          <div className="flex items-center gap-2">
-            {tab.agent ? <AgentMark size={20} /> : null}
-            <span className="eyebrow">Tab {active + 1}</span>
-          </div>
+          <span className="eyebrow">Tab {active + 1}</span>
           <h3 className="mt-3 text-[clamp(1.5rem,2.6vw,2rem)] font-semibold tracking-[var(--tracking-heading)] lowercase">
             {tab.name}
           </h3>
