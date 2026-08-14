@@ -195,9 +195,7 @@ export function AppTabs() {
         {tabs.map((tab, index) => (
           <div
             key={tab.name}
-            className={`grid items-center gap-10 lg:grid-cols-2 lg:gap-16 ${
-              index % 2 === 1 ? "lg:[&>div:first-child]:order-2" : ""
-            }`}
+            className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16 lg:[&>div:first-child]:order-2"
           >
             <div className="flex justify-center">{tab.screen}</div>
             <div>
