@@ -31,7 +31,7 @@ export function SiteHeader() {
 
         <LinkButton
           href="#early-access"
-          variant="solid"
+          variant="agent"
           className="shrink-0 whitespace-nowrap px-4 text-[14px] sm:px-5 sm:text-[15px]"
         >
           Get early access
