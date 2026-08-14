@@ -6,7 +6,7 @@ const steps = [
   {
     step: "01",
     real: "You walk into a store",
-    apt: "You open the Fitting Room — an endless, ranked scroll of pieces picked for you.",
+    apt: "Open the Fitting Room — an endless, ranked scroll of pieces picked for you.",
   },
   {
     step: "02",
