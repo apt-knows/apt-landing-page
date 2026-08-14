@@ -16,7 +16,7 @@ const steps = [
   {
     step: "03",
     real: "You try it on",
-    apt: "Keep swiping and the same piece appears on you, generated from your photos.",
+    apt: "Swipe left to see how it would actually look on you",
   },
   {
     step: "04",
