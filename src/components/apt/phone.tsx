@@ -57,7 +57,7 @@ export function TabBar({ active }: { active: 0 | 1 | 2 }) {
         return (
           <div key={i} className="flex flex-1 flex-col items-center gap-0.5">
             <span className={on ? "text-signal" : "text-grey-10/45"}>
-              {i === 1 ? <AgentMark size={15} /> : tabIcons[i]}
+              {i === 1 ? <AgentMark size={15} active={on} /> : tabIcons[i]}
             </span>
             <span
               className={`text-[9px] font-medium lowercase tracking-tight ${
