@@ -19,10 +19,10 @@ export function Principle() {
           </p>
           <p className="mt-6 max-w-[58ch] text-[17px] leading-[1.6] text-secondary-foreground">
             Online, you scroll through thousands of things on people who aren't
-            you, guess your size, order three, and send two back. apt rebuilds the
-            part that actually made shopping work: you walk in, you see something,
-            you see it on you, and you decide. Same feeling as your favourite
-            store — just in your pocket, and it already knows your taste.
+            you, guess your size, and send half of it back. apt brings back the
+            part that made shopping work: you see something, you see it on you,
+            you decide — in your pocket, with a store that already knows your
+            taste.
           </p>
         </div>
       </div>

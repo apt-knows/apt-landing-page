@@ -16,9 +16,6 @@ export function EarlyAccess() {
         <div className="mx-auto mt-8 max-w-lg text-left">
           <WaitlistForm id="cta-email" size="lg" />
         </div>
-        <p className="text-[13px] text-muted-foreground">
-          One email when we launch. Nothing else.
-        </p>
       </div>
     </Section>
   );
