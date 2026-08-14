@@ -54,10 +54,10 @@ export const team: TeamMember[] = [
     blurb:
       "Product and taste. Obsessed with what makes a recommendation feel personal.",
     contact: [
-      { label: "Instagram", handle: "@robelbruk_", url: "https://instagram.com/robelbruk_" },
-      { label: "LinkedIn", handle: "in/robel-bruk", url: "https://www.linkedin.com/in/robel-bruk/" },
-      { label: "X", handle: "@robelbruk", url: "https://x.com/robelbruk" },
       { label: "Email", handle: "robelbruk4@gmail.com", url: "mailto:robelbruk4@gmail.com" },
+      { label: "LinkedIn", handle: "in/robel-bruk", url: "https://www.linkedin.com/in/robel-bruk/" },
+      { label: "Instagram", handle: "@robelbruk_", url: "https://instagram.com/robelbruk_" },
+      { label: "X", handle: "@robelbruk", url: "https://x.com/robelbruk" },
     ],
   },
   {
@@ -67,10 +67,10 @@ export const team: TeamMember[] = [
     blurb:
       "Ranking, try-on generation, and the systems that learn from every scroll.",
     contact: [
-      { label: "Instagram", handle: "@robiee__m", url: "https://instagram.com/robiee__m" },
-      { label: "LinkedIn", handle: "in/robel-m-kebede", url: "https://www.linkedin.com/in/robel-m-kebede/" },
-      { label: "X", handle: "@robelmkebede", url: "https://x.com/robelmkebede" },
       { label: "Email", handle: "robiemelaku@gmail.com", url: "mailto:robiemelaku@gmail.com" },
+      { label: "LinkedIn", handle: "in/robel-m-kebede", url: "https://www.linkedin.com/in/robel-m-kebede/" },
+      { label: "Instagram", handle: "@robiee__m", url: "https://instagram.com/robiee__m" },
+      { label: "X", handle: "@robelmkebede", url: "https://x.com/robelmkebede" },
     ],
   },
 ];
