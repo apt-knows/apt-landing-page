@@ -78,7 +78,7 @@ export async function addToWaitlist(email: string): Promise<void> {
     await resend(apiKey, `/audiences/${audienceId}/contacts`, {
       email,
       unsubscribed: false,
-      ...(segmentId ? { first_name: undefined, segment_id: segmentId } : {}),
+      ...(segmentId ? { segment_id: segmentId } : {}),
     });
   }
 
