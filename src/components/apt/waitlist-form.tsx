@@ -28,9 +28,9 @@ export function WaitlistForm({ id, size = "md" }: { id: string; size?: "md" | "l
           type="email"
           autoComplete="email"
           placeholder="you@email.com"
-          className="min-h-11 flex-1 rounded-full border border-border-strong bg-card px-5 text-[15px] text-foreground placeholder:text-muted-foreground"
+          className="min-h-11 flex-1 rounded-full border border-border-strong bg-card px-5 text-[15px] text-foreground transition-colors placeholder:text-muted-foreground focus:border-signal focus:ring-2 focus:ring-signal-soft focus:outline-none"
         />
-        <Button type="submit" size={size} disabled={pending}>
+        <Button type="submit" variant="agent" size={size} disabled={pending}>
           {pending ? "Joining…" : "Join the waitlist"}
         </Button>
       </div>

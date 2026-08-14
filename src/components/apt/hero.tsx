@@ -5,7 +5,8 @@ export function Hero() {
   return (
     <section className="relative overflow-hidden">
       <div className="mx-auto w-full max-w-3xl px-5 pt-16 pb-20 sm:px-8 sm:pt-24 sm:pb-28">
-        <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-[12px] font-medium text-secondary-foreground">
+        <span className="inline-flex items-center gap-2 rounded-full border border-border-agent bg-agent px-3 py-1 text-[12px] font-medium text-agent-foreground">
+          <span className="h-1.5 w-1.5 rounded-full bg-signal" aria-hidden="true" />
           Beta — early access
         </span>
 
