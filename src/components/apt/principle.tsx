@@ -1,6 +1,6 @@
 import { useReveal } from "@/hooks/use-reveal";
 
-import { Eyebrow, Section } from "./kit";
+import { Eyebrow, Section, Wordmark } from "./kit";
 
 export function Principle() {
   const { ref, shown } = useReveal<HTMLDivElement>();
@@ -19,7 +19,7 @@ export function Principle() {
           </p>
           <p className="mt-6 max-w-[58ch] text-[17px] leading-[1.6] text-secondary-foreground">
             Online, you scroll through thousands of things on people who aren't
-            you, guess your size, and send half of it back. apt brings back the
+            you, guess your size, and send half of it back. <Wordmark /> brings back the
             part that made shopping work: you see something, you see it on you,
             you decide — in your pocket, with a store that already knows your
             taste.
