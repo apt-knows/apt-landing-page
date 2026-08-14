@@ -49,7 +49,7 @@ export function Team() {
       </h2>
 
 
-      <div className="mt-8 grid gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:max-w-3xl">
+      <div className="mt-8 grid w-full gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6">
         {team.map((member) => (
           <article
             key={member.name}
