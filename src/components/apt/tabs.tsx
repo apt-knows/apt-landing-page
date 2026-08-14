@@ -1,5 +1,5 @@
 import { useState } from "react";
-import agentLook from "@/assets/agent-look.jpg";
+
 import boardLook from "@/assets/board-look.jpg";
 import aModel1 from "@/assets/feed/a-model-1.jpg";
 import aModel2 from "@/assets/feed/a-model-2.jpg";
