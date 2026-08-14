@@ -10,6 +10,9 @@ import bProduct from "@/assets/feed/b-product.jpg";
 import cModel1 from "@/assets/feed/c-model-1.jpg";
 import cModel2 from "@/assets/feed/c-model-2.jpg";
 import cProduct from "@/assets/feed/c-product.jpg";
+import rainLook1 from "@/assets/feed/rain-look-1.jpg";
+import rainLook2 from "@/assets/feed/rain-look-2.jpg";
+import rainLook3 from "@/assets/feed/rain-look-3.jpg";
 import { useReveal } from "@/hooks/use-reveal";
 
 import { AgentMark, Eyebrow, Section } from "./kit";
@@ -272,33 +275,43 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
           <div className="grid grid-cols-2 gap-1.5">
             <figure className="relative col-span-2">
               <img
-                src={bModel1}
-                alt="Water-resistant sneakers shown on the shopper"
+                src={rainLook1}
+                alt="A water-resistant trench and rain boots shown on the shopper"
                 width={768}
                 height={1152}
                 loading="lazy"
                 className="h-32 w-full rounded-lg object-cover object-top"
               />
               <figcaption className="absolute bottom-1.5 left-1.5 rounded-full bg-grey-10/65 px-2 py-0.5 text-[9px] font-medium text-signal backdrop-blur-sm">
-                How it looks on you
+                Water-resistant trench · on you
               </figcaption>
             </figure>
-            <img
-              src={bProduct}
-              alt="White leather low-top sneakers, COS"
-              width={768}
-              height={1152}
-              loading="lazy"
-              className="h-20 w-full rounded-lg object-cover"
-            />
-            <img
-              src={cModel1}
-              alt="A black coat and tan bag shown on the shopper"
-              width={768}
-              height={1152}
-              loading="lazy"
-              className="h-20 w-full rounded-lg object-cover object-top"
-            />
+            <figure className="relative">
+              <img
+                src={rainLook2}
+                alt="Black waterproof rain boots shown on the shopper"
+                width={768}
+                height={1152}
+                loading="lazy"
+                className="h-20 w-full rounded-lg object-cover"
+              />
+              <figcaption className="absolute bottom-1 left-1 rounded-full bg-grey-10/65 px-1.5 py-0.5 text-[8px] font-medium text-signal backdrop-blur-sm">
+                Rain boots
+              </figcaption>
+            </figure>
+            <figure className="relative">
+              <img
+                src={rainLook3}
+                alt="An olive hooded rain shell shown on the shopper"
+                width={768}
+                height={1152}
+                loading="lazy"
+                className="h-20 w-full rounded-lg object-cover object-top"
+              />
+              <figcaption className="absolute bottom-1 left-1 rounded-full bg-grey-10/65 px-1.5 py-0.5 text-[8px] font-medium text-signal backdrop-blur-sm">
+                Rain shell
+              </figcaption>
+            </figure>
           </div>
 
           <div className="flex gap-1.5">
@@ -320,13 +333,13 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
           </div>
 
           <div className="ml-auto w-fit max-w-[80%] rounded-2xl rounded-br-sm bg-sunken px-3.5 py-2 text-[13px]">
-            save the second one to my trip board
+            save the boots to my commute board
           </div>
 
           <div className="flex items-center gap-2 rounded-lg border border-border bg-elevated px-3 py-2">
             <img
-              src={cProduct}
-              alt="Tan leather shoulder bag saved to a board"
+              src={rainLook2}
+              alt="Rain boots saved to a board"
               width={768}
               height={1152}
               loading="lazy"
@@ -334,11 +347,10 @@ function AgentScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
             />
             <p className="text-[11px] leading-[1.35] text-secondary-foreground">
               Saved to{" "}
-              <span className="font-medium text-foreground">
-                Puerto Rico trip
-              </span>
+              <span className="font-medium text-foreground">Rainy commute</span>
             </p>
           </div>
+
         </div>
 
         <div className="border-t border-border px-4 py-2.5">
