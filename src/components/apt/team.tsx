@@ -1,26 +1,8 @@
-import teamCeo from "@/assets/team-ceo.jpg";
-import teamCto from "@/assets/team-cto.jpg";
+import { team } from "@/content/site";
 
 import { Eyebrow, Section, Wordmark } from "./kit";
 
-/**
- * Swap `image` for a real portrait (drop the file in src/assets and change the
- * import) — nothing else needs to move.
- */
-const team = [
-  {
-    name: "Robel Bruk",
-    role: "Co-founder & CEO",
-    image: teamCeo,
-    blurb: "Product and taste. Obsessed with what makes a recommendation feel personal.",
-  },
-  {
-    name: "Robel Kebede",
-    role: "Co-founder & CTO",
-    image: teamCto,
-    blurb: "Ranking, try-on generation, and the systems that learn from every scroll.",
-  },
-];
+/** People come from `src/content/site.ts`; portraits from `src/content/assets.ts`. */
 
 export function Team() {
   return (
