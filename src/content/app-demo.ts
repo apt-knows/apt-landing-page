@@ -168,8 +168,8 @@ export const profileDemo = {
   ],
   settings: [
     { label: "Try-on generation", value: "On", accent: true },
-    { label: "Orders & returns", value: "2 active" },
-    { label: "Notifications", value: "Drops only" },
+    { label: "Orders & returns", value: "2 active", accent: false },
+    { label: "Notifications", value: "Drops only", accent: false },
   ],
 } as const;
 
