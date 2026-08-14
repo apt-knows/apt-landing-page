@@ -5,18 +5,9 @@ import { feed, type FeedItem } from "@/content/app-demo";
 import { Phone, TabBar, type TabKey } from "../phone";
 
 const actions = [
-  {
-    label: "Board",
-    path: "M4 2.5h8v11l-4-2.6-4 2.6z",
-  },
-  {
-    label: "Cart",
-    path: "M3 4.5h10l-1 8H4l-1-8zM6 4.5a2 2 0 1 1 4 0",
-  },
-  {
-    label: "Share",
-    path: "M8 11V3m0 0L5 6m3-3 3 3M3.5 10v3h9v-3",
-  },
+  { label: "Board", path: "M4 2.5h8v11l-4-2.6-4 2.6z" },
+  { label: "Cart", path: "M3 4.5h10l-1 8H4l-1-8zM6 4.5a2 2 0 1 1 4 0" },
+  { label: "Share", path: "M8 11V3m0 0L5 6m3-3 3 3M3.5 10v3h9v-3" },
 ];
 
 function FeedCard({ item }: { item: FeedItem }) {
@@ -24,7 +15,7 @@ function FeedCard({ item }: { item: FeedItem }) {
   const current = item.frames[frame];
 
   return (
-    <div className="flex h-full w-full snap-start flex-col bg-grey-10">
+    <div className="flex h-full w-full snap-start flex-col bg-grey-0">
       {/* image area — fills everything except the caption strip */}
       <div className="relative flex-1 overflow-hidden">
         <div
@@ -52,18 +43,18 @@ function FeedCard({ item }: { item: FeedItem }) {
               key={f.label + i}
               className={
                 i === frame
-                  ? "h-1 flex-1 rounded-full bg-grey-0"
-                  : "h-1 flex-1 rounded-full bg-grey-0/40"
+                  ? "h-1 flex-1 rounded-full bg-signal"
+                  : "h-1 flex-1 rounded-full bg-grey-0/70"
               }
             />
           ))}
         </div>
 
-        {/* rail of side actions */}
-        <div className="pointer-events-none absolute right-2.5 bottom-3 flex flex-col items-center gap-3">
+        {/* rail of side actions — white pill buttons */}
+        <div className="pointer-events-none absolute right-2.5 bottom-3 flex flex-col items-center gap-2.5">
           {actions.map((a) => (
             <span key={a.label} className="flex flex-col items-center gap-0.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-grey-10/55 text-inverse-foreground backdrop-blur-sm">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full border border-border-subtle bg-grey-0/85 text-grey-10 shadow-card backdrop-blur-sm">
                 <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden>
                   <path
                     d={a.path}
@@ -74,7 +65,7 @@ function FeedCard({ item }: { item: FeedItem }) {
                   />
                 </svg>
               </span>
-              <span className="rounded-full bg-grey-10/45 px-1.5 text-[8px] font-medium text-inverse-foreground backdrop-blur-sm">
+              <span className="rounded-full bg-grey-0/85 px-1.5 text-[8px] font-medium text-grey-7 backdrop-blur-sm">
                 {a.label}
               </span>
             </span>
@@ -82,37 +73,31 @@ function FeedCard({ item }: { item: FeedItem }) {
         </div>
       </div>
 
-      {/* caption strip — like a TikTok/Reels caption area */}
-      <div className="shrink-0 space-y-2 px-4 pb-12 pt-3">
+      {/* caption strip — white card following apt theme */}
+      <div className="shrink-0 space-y-2.5 border-t border-border-subtle bg-grey-0 px-4 pb-12 pt-3">
         <div className="flex flex-wrap items-center gap-1.5">
           {current?.generated ? (
             <>
-              <span className="inline-flex items-center rounded-full bg-grey-1 px-2.5 py-1 text-[10px] font-medium text-signal">
+              <span className="inline-flex items-center rounded-full bg-signal-wash px-2.5 py-1 text-[10px] font-medium text-signal-ink">
                 How it looks on you
               </span>
-              <span className="inline-flex items-center rounded-full border border-border-strong px-2 py-1 text-[9px] font-medium text-inverse-foreground/85">
+              <span className="inline-flex items-center rounded-full border border-border-subtle px-2 py-1 text-[9px] font-medium text-text-secondary">
                 AI generated
               </span>
             </>
           ) : (
-            <span className="inline-flex items-center rounded-full bg-grey-1 px-2.5 py-1 text-[10px] font-medium text-inverse-foreground">
+            <span className="inline-flex items-center rounded-full bg-grey-1 px-2.5 py-1 text-[10px] font-medium text-foreground">
               From {item.store}
             </span>
           )}
-          <span className="text-[9px] text-inverse-foreground/60">
+          <span className="text-[9px] text-text-muted">
             {frame + 1}/{item.frames.length}
           </span>
         </div>
         <div className="flex items-end justify-between gap-2 pr-12">
-          <p className="text-[15px] font-medium text-inverse-foreground">
-            {item.name}
-          </p>
-          <p className="text-[13px] text-inverse-foreground/80">{item.price}</p>
+          <p className="text-[15px] font-medium text-foreground">{item.name}</p>
+          <p className="text-[13px] text-text-secondary">{item.price}</p>
         </div>
-
-        <span className="inline-flex items-center rounded-full bg-grey-0 px-3 py-1.5 text-[11px] font-semibold text-grey-10">
-          Add to cart
-        </span>
       </div>
     </div>
   );
