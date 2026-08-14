@@ -47,13 +47,16 @@ const tabIcons = [
   ),
 ];
 
+/** Index of the active tab: 0 = apt, 1 = fitting room, 2 = you. */
+export type TabKey = 0 | 1 | 2;
+
 /** Bottom navigation shown across every app screen. */
 export function TabBar({
   active,
   onSelect,
 }: {
-  active: 0 | 1 | 2;
-  onSelect?: (index: 0 | 1 | 2) => void;
+  active: TabKey;
+  onSelect?: (index: TabKey) => void;
 }) {
   const labels = ["apt", "fitting", "you"];
   return (
