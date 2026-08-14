@@ -9,7 +9,7 @@ export function SiteFooter() {
         <div>
           <Wordmark className="text-[18px]" />
           <p className="mt-1 text-[13px] text-muted-foreground">
-            Exactly suitable. Shopping that's about you.
+            Shopping that's about you.
           </p>
         </div>
         <nav
