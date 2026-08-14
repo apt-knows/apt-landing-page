@@ -1,59 +1,109 @@
 import { useState } from "react";
 import agentLook from "@/assets/agent-look.jpg";
 import boardLook from "@/assets/board-look.jpg";
-import feedLook from "@/assets/feed-look.jpg";
-import heroTryon from "@/assets/hero-tryon.jpg";
-import tryonProduct from "@/assets/tryon-product.jpg";
+import aModel1 from "@/assets/feed/a-model-1.jpg";
+import aModel2 from "@/assets/feed/a-model-2.jpg";
+import aProduct from "@/assets/feed/a-product.jpg";
+import bModel1 from "@/assets/feed/b-model-1.jpg";
+import bModel2 from "@/assets/feed/b-model-2.jpg";
+import bProduct from "@/assets/feed/b-product.jpg";
+import cModel1 from "@/assets/feed/c-model-1.jpg";
+import cModel2 from "@/assets/feed/c-model-2.jpg";
+import cProduct from "@/assets/feed/c-product.jpg";
 import { useReveal } from "@/hooks/use-reveal";
 
 import { AgentMark, Eyebrow, Section } from "./kit";
 import { Phone, TabBar } from "./phone";
 
+type Frame = {
+  src: string;
+  label: string;
+  alt: string;
+  generated?: boolean;
+};
+
 type FeedItem = {
   name: string;
   price: string;
-  frames: { src: string; label: string; alt: string }[];
+  store: string;
+  frames: Frame[];
 };
 
 const feed: FeedItem[] = [
   {
     name: "Ribbed knit crewneck",
     price: "$128",
+    store: "Everlane",
     frames: [
       {
-        src: tryonProduct,
+        src: aProduct,
         label: "Product",
-        alt: "A ribbed knit crewneck photographed on its own",
+        alt: "A cream ribbed knit crewneck photographed on its own",
       },
       {
-        src: feedLook,
-        label: "On you",
-        alt: "The crewneck rendered on the shopper",
+        src: aModel1,
+        label: "How it looks on you",
+        alt: "The crewneck rendered on the shopper, facing forward",
+        generated: true,
       },
       {
-        src: heroTryon,
-        label: "On you",
-        alt: "A second angle of the crewneck on the shopper",
+        src: aModel2,
+        label: "How it looks on you",
+        alt: "The crewneck rendered on the shopper, side angle",
+        generated: true,
       },
     ],
   },
   {
     name: "Leather low-top sneaker",
     price: "$210",
+    store: "COS",
     frames: [
       {
-        src: agentLook,
+        src: bProduct,
         label: "Product",
         alt: "White leather low-top sneakers",
       },
       {
-        src: boardLook,
-        label: "On you",
-        alt: "The sneakers rendered on the shopper",
+        src: bModel1,
+        label: "How it looks on you",
+        alt: "The sneakers rendered on the shopper, full length",
+        generated: true,
+      },
+      {
+        src: bModel2,
+        label: "How it looks on you",
+        alt: "The sneakers rendered on the shopper, low angle",
+        generated: true,
+      },
+    ],
+  },
+  {
+    name: "Structured shoulder bag",
+    price: "$340",
+    store: "Arket",
+    frames: [
+      {
+        src: cProduct,
+        label: "Product",
+        alt: "A tan leather structured shoulder bag",
+      },
+      {
+        src: cModel1,
+        label: "How it looks on you",
+        alt: "The bag rendered on the shopper over a black coat",
+        generated: true,
+      },
+      {
+        src: cModel2,
+        label: "How it looks on you",
+        alt: "The bag rendered on the shopper, back angle",
+        generated: true,
       },
     ],
   },
 ];
+
 
 const actions = [
   {
