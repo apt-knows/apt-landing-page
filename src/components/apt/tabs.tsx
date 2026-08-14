@@ -317,27 +317,23 @@ const tabs: {
   name: string;
   lead: string;
   body: string;
-  screen: React.ReactNode;
   agent?: boolean;
 }[] = [
   {
     name: "Fitting Room",
     lead: "A scroll worth staying in.",
-    body: "An endless feed where every card is a carousel: the product first, then you wearing it. Ranked by a For You algorithm that treats a scroll-past as an opinion.",
-    screen: <FittingRoomScreen />,
+    body: "An endless feed where every card is a carousel: the product first, then you wearing it. Swipe sideways to see it on you, scroll up for the next piece. Ranked by a For You algorithm that treats a scroll-past as an opinion.",
   },
   {
     name: "apt",
     lead: "Your personal shopping agent.",
     body: "Tell her what you're after and she answers in pictures — options, already on you. No paragraphs to read, no filters to fight. Just looks you can judge in a second.",
-    screen: <AgentScreen />,
     agent: true,
   },
   {
     name: "Profile",
     lead: "The part that makes it yours.",
     body: "Set your interests, add photos so try-on looks like you, and build situational boards — a Puerto Rico trip, a wedding, a new job — that fill up now and get bought later.",
-    screen: <ProfileScreen />,
   },
 ];
 
@@ -352,38 +348,24 @@ export function AppTabs() {
       <h2 className="mt-4 max-w-[22ch] text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
         Three tabs. That's the whole app.
       </h2>
+      <p className="mt-3 max-w-[46ch] text-[15px] text-muted-foreground">
+        Tap the tab bar on the phone to move between them.
+      </p>
 
-      {/* Tab switcher */}
-      <div className="mt-10 flex flex-wrap items-center gap-2">
-        {tabs.map((t, index) => {
-          const on = index === active;
-          return (
-            <button
-              key={t.name}
-              type="button"
-              onClick={() => setActive(index as TabKey)}
-              aria-pressed={on}
-              className={cn(
-                "flex items-center gap-1.5 rounded-full border px-4 py-2 text-[14px] font-medium lowercase tracking-tight transition-colors",
-                on
-                  ? "border-signal bg-signal text-inverse-foreground"
-                  : "border-border-strong bg-card text-secondary-foreground hover:border-border-strong hover:bg-sunken",
-              )}
-            >
-              {t.agent ? <AgentMark size={16} /> : null}
-              {t.name}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Active tab card */}
       <div
         ref={ref}
         data-shown={shown}
         className="reveal mt-10 grid items-center gap-10 rounded-3xl border border-border bg-sunken/40 p-8 sm:p-10 lg:grid-cols-2 lg:gap-16"
       >
-        <div className="flex justify-center">{tab.screen}</div>
+        <div className="flex justify-center">
+          {active === 0 ? (
+            <FittingRoomScreen onTab={setActive} />
+          ) : active === 1 ? (
+            <AgentScreen onTab={setActive} />
+          ) : (
+            <ProfileScreen onTab={setActive} />
+          )}
+        </div>
         <div>
           <div className="flex items-center gap-2">
             {tab.agent ? <AgentMark size={20} /> : null}
@@ -403,3 +385,4 @@ export function AppTabs() {
     </Section>
   );
 }
+
