@@ -8,7 +8,6 @@ import { SiteFooter } from "@/components/apt/site-footer";
 import { SiteHeader } from "@/components/apt/site-header";
 import { AppTabs } from "@/components/apt/tabs";
 import { Team } from "@/components/apt/team";
-import { TryOn } from "@/components/apt/try-on";
 
 const title = "apt — shopping that's about you";
 const description =
@@ -37,7 +36,6 @@ function Landing() {
         <Principle />
         <HowItWorks />
         <AppTabs />
-        <TryOn />
         <Team />
         <EarlyAccess />
       </main>
