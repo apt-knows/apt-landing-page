@@ -1,9 +1,10 @@
 /**
  * Single entry point for waitlist signups.
  *
- * Nothing is persisted yet — when Resend (and a stored list) is wired up,
- * only the body of `submitWaitlist` changes; no UI touches required.
+ * The actual delivery happens server-side in `waitlist.server.ts` (Resend).
  */
+
+import { joinWaitlist } from "./waitlist.functions";
 
 export type WaitlistState =
   | { status: "idle" }
@@ -22,8 +23,15 @@ export async function submitWaitlist(
   if (!EMAIL.test(email))
     return { status: "error", message: "That email doesn't look right." };
 
-  // Placeholder for the Resend hookup.
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  try {
+    await joinWaitlist({ data: { email } });
+  } catch (error) {
+    console.error(error);
+    return {
+      status: "error",
+      message: "Something went wrong. Please try again.",
+    };
+  }
 
   return { status: "success", email };
 }

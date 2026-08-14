@@ -27,8 +27,9 @@ export function Team() {
     <Section id="team" className="bg-card">
       <Eyebrow>Team</Eyebrow>
       <h2 className="mt-4 text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
-        Two people building apt.
+        Meet the apt team
       </h2>
+
 
       <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:max-w-3xl">
         {team.map((member) => (

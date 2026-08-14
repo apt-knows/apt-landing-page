@@ -582,8 +582,9 @@ export function AppTabs() {
       <div
         ref={ref}
         data-shown={shown}
-        className="reveal mt-10 grid items-center gap-10 rounded-3xl border border-border bg-sunken/40 p-8 sm:p-10 lg:grid-cols-2 lg:gap-16"
+        className="reveal mt-10 grid items-center gap-8 rounded-2xl border border-border bg-sunken/40 p-4 sm:rounded-3xl sm:p-10 lg:grid-cols-2 lg:gap-16"
       >
+
         <div className="flex justify-center">
           {active === 0 ? (
             <AgentScreen onTab={setActive} />
