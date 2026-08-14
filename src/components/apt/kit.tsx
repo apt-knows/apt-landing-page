@@ -43,29 +43,20 @@ export function AgentMark({
       className={cn("shrink-0 select-none", className)}
       style={{ width: size, height: size }}
     >
-      {/* tip */}
+      {/* cyan tip between the twin peaks */}
       <path
-        d="M50 12 L57 40 L50 54 L43 40 Z"
+        d="M50 6 L56 36 L50 56 L44 36 Z"
         className={active ? "fill-signal" : "fill-grey-5"}
       />
-      {/* outer A */}
+      {/* twin-peak delta outline */}
       <path
-        d="M8 92 L44 26 M56 26 L92 92"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M46 16 L50 52 L54 16 L97 97 L50 62 L3 97 Z
+           M47 41 L50 59 L53 41 L85 92 L50 70 L15 92 Z"
+        fill="currentColor"
       />
-      {/* inner chevron */}
-      <path
-        d="M20 92 L50 64 L80 92"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+
     </svg>
   );
 }
