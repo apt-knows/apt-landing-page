@@ -142,7 +142,7 @@ function FeedCard({ item }: { item: FeedItem }) {
             <span className="flex h-9 w-9 items-center justify-center rounded-full bg-grey-10/55 text-inverse-foreground backdrop-blur-sm">
               {a.icon}
             </span>
-            <span className="text-[8px] font-medium text-inverse-foreground/85">
+            <span className="rounded-full bg-grey-10/45 px-1.5 text-[8px] font-medium text-inverse-foreground backdrop-blur-sm">
               {a.label}
             </span>
           </span>
@@ -150,7 +150,7 @@ function FeedCard({ item }: { item: FeedItem }) {
       </div>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-11 space-y-2 bg-gradient-to-t from-grey-10/85 to-transparent p-4 pt-16">
-        <span className="inline-flex items-center rounded-full bg-signal/20 px-2.5 py-1 text-[10px] font-medium text-signal">
+        <span className="inline-flex items-center rounded-full bg-grey-10/60 px-2.5 py-1 text-[10px] font-medium text-signal backdrop-blur-sm">
           {item.frames[frame]?.label} · {frame + 1} of {item.frames.length}
         </span>
         <div className="flex items-end justify-between gap-2 pr-12">
