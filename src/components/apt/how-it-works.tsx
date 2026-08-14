@@ -11,7 +11,7 @@ const steps = [
   {
     step: "02",
     real: "Something catches your eye",
-    apt: "The first frame of every carousel is the product itself, shot clean.",
+    apt: "Scroll your personal feed until you find something you like",
   },
   {
     step: "03",
