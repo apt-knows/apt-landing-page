@@ -389,23 +389,51 @@ function ProfileScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
   return (
     <Phone>
       <div className="flex h-full flex-col overflow-y-auto bg-card pb-11 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <div className="flex items-center gap-3 px-4 pt-8 pb-3">
-          <img
-            src={cModel1}
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            className="h-11 w-11 rounded-full object-cover object-top"
-          />
-          <div className="min-w-0">
-            <p className="truncate text-[14px] font-medium">Maya R.</p>
-            <p className="text-[11px] text-muted-foreground">
-              6 photos · 3 boards · 128 saved
-            </p>
+        <div className="bg-sunken px-4 pt-8 pb-4">
+          <div className="flex items-center gap-3.5">
+            <span className="relative shrink-0">
+              <img
+                src={cModel1}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                className="h-16 w-16 rounded-full object-cover object-top ring-2 ring-signal ring-offset-2 ring-offset-sunken"
+              />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="truncate text-[20px] font-semibold leading-tight tracking-[-0.01em]">
+                Maya R.
+              </p>
+              <p className="mt-0.5 text-[11px] text-muted-foreground">
+                New York · Fit model ready
+              </p>
+            </div>
+            <span className="rounded-full bg-grey-10 px-3 py-1.5 text-[10px] font-semibold text-inverse-foreground">
+              Edit
+            </span>
           </div>
-          <span className="ml-auto rounded-full border border-border-strong px-2.5 py-1 text-[10px] font-medium text-secondary-foreground">
-            Edit
-          </span>
+
+          <div className="mt-3.5 grid grid-cols-3 overflow-hidden rounded-lg border border-border bg-card">
+            {[
+              { n: "6", l: "photos" },
+              { n: "3", l: "boards" },
+              { n: "128", l: "saved" },
+            ].map((s, i) => (
+              <div
+                key={s.l}
+                className={
+                  i === 1
+                    ? "border-x border-border px-2 py-2 text-center"
+                    : "px-2 py-2 text-center"
+                }
+              >
+                <p className="text-[15px] font-semibold leading-none">{s.n}</p>
+                <p className="mt-1 text-[9px] uppercase tracking-[0.12em] text-muted-foreground">
+                  {s.l}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div className="border-t border-border px-4 py-3">
