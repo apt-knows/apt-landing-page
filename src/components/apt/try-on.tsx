@@ -25,12 +25,6 @@ export function TryOn() {
             You stop guessing whether it works and start deciding whether you
             like it.
           </p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            <Tag>Clothing</Tag>
-            <Tag>Shoes</Tag>
-            <Tag>Bags</Tag>
-            <Tag>Accessories</Tag>
-          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:gap-4">
