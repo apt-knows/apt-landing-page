@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { LegalPage } from "@/components/apt/legal-page";
+import { Wordmark } from "@/components/apt/kit";
 
 const title = "Privacy — apt";
 const description =
