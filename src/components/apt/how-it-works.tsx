@@ -35,7 +35,9 @@ export function HowItWorks() {
 
   return (
     <Section id="how">
-      <Eyebrow>How it works</Eyebrow>
+      <Eyebrow>
+        How <Wordmark className="lowercase! text-[16px]!" /> works
+      </Eyebrow>
       <h2 className="mt-4 max-w-[20ch] text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
         The real shopping loop, rebuilt in your pocket.
       </h2>
