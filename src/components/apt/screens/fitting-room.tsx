@@ -80,7 +80,7 @@ function FeedCard({ item }: { item: FeedItem }) {
         </div>
 
         {/* right action rail */}
-        <div className="pointer-events-none absolute right-2 top-1/2 flex -translate-y-1/2 flex-col items-center gap-2.5">
+        <div className="pointer-events-none absolute right-3 top-1/2 flex -translate-y-1/2 flex-col items-center gap-2.5">
           {actions.map((a) => (
             <span key={a.label} className="flex flex-col items-center gap-0.5">
               <span
@@ -94,7 +94,7 @@ function FeedCard({ item }: { item: FeedItem }) {
                   <path d={a.path} stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
-              <span className="text-[7px] font-semibold uppercase tracking-[0.08em] text-inverse-foreground/85">
+              <span className="whitespace-nowrap text-[7px] font-semibold uppercase tracking-[0.06em] text-inverse-foreground/85">
                 {a.label}
               </span>
             </span>
