@@ -1,7 +1,7 @@
 import heroTryOn from "@/assets/hero-tryon.jpg";
 import tryOnProduct from "@/assets/tryon-product.jpg";
 
-import { AgentMark, Chip, Tag, Wordmark } from "./kit";
+import { AgentMark, Tag, Wordmark } from "./kit";
 import { Phone } from "./phone";
 import { WaitlistForm } from "./waitlist-form";
 
@@ -29,11 +29,6 @@ export function Hero() {
             <WaitlistForm id="hero-email" size="lg" />
           </div>
 
-          <div className="mt-4 flex flex-wrap gap-2">
-            <Chip active>See it on you</Chip>
-            <Chip>Clothes, shoes, bags</Chip>
-            <Chip>No feed of strangers</Chip>
-          </div>
         </div>
 
         <div className="relative mx-auto flex w-full justify-center">
