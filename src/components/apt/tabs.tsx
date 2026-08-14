@@ -1,10 +1,12 @@
+import { useState } from "react";
 import agentLook from "@/assets/agent-look.jpg";
 import boardLook from "@/assets/board-look.jpg";
 import feedLook from "@/assets/feed-look.jpg";
 import { useReveal } from "@/hooks/use-reveal";
 
-import { AgentMark, AgentNote, Chip, Eyebrow, Section, Tag } from "./kit";
+import { AgentMark, Eyebrow, Section } from "./kit";
 import { Phone, TabBar } from "./phone";
+import { cn } from "@/lib/utils";
 
 function FittingRoomScreen() {
   return (
@@ -30,7 +32,9 @@ function FittingRoomScreen() {
         ))}
       </div>
       <div className="absolute inset-x-0 bottom-11 space-y-2 bg-gradient-to-t from-grey-10/80 to-transparent p-4 pt-16">
-        <Tag tone="agent">On you · frame 2 of 4</Tag>
+        <span className="inline-flex items-center rounded-full bg-signal/15 px-2.5 py-1 text-[11px] font-medium text-signal">
+          On you · frame 2 of 4
+        </span>
         <p className="text-[15px] font-medium text-inverse-foreground">
           Ribbed knit crewneck
         </p>
@@ -64,9 +68,14 @@ function AgentScreen() {
             <div className="h-20 rounded-md bg-sunken" />
             <div className="h-20 rounded-md bg-sunken" />
           </div>
-          <AgentNote label="I learned">
-            You keep water-resistant over wool. Showing those first.
-          </AgentNote>
+          <div className="rounded-lg border border-signal/30 bg-signal/[0.06] px-3 py-2.5">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-signal">
+              I learned
+            </p>
+            <p className="mt-1 text-[13px] leading-[1.4] text-secondary-foreground">
+              You keep water-resistant over wool. Showing those first.
+            </p>
+          </div>
         </div>
       </div>
       <TabBar active={1} />
@@ -129,8 +138,12 @@ function ProfileScreen() {
         <div className="border-t border-border px-4 py-3">
           <p className="eyebrow">Your style</p>
           <div className="mt-2 flex flex-wrap gap-1.5">
-            <Chip active>Quiet luxury</Chip>
-            <Chip>Workwear</Chip>
+            <span className="rounded-full bg-grey-10 px-2.5 py-1 text-[11px] font-medium text-inverse-foreground">
+              Quiet luxury
+            </span>
+            <span className="rounded-full border border-border-strong px-2.5 py-1 text-[11px] font-medium text-secondary-foreground">
+              Workwear
+            </span>
           </div>
         </div>
 
@@ -159,7 +172,15 @@ function ProfileScreen() {
   );
 }
 
-const tabs = [
+type TabKey = 0 | 1 | 2;
+
+const tabs: {
+  name: string;
+  lead: string;
+  body: string;
+  screen: React.ReactNode;
+  agent?: boolean;
+}[] = [
   {
     name: "Fitting Room",
     lead: "A scroll worth staying in.",
@@ -183,6 +204,8 @@ const tabs = [
 
 export function AppTabs() {
   const { ref, shown } = useReveal<HTMLDivElement>();
+  const [active, setActive] = useState<TabKey>(0);
+  const tab = tabs[active];
 
   return (
     <Section id="app" className="bg-card">
@@ -191,30 +214,52 @@ export function AppTabs() {
         Three tabs. That's the whole app.
       </h2>
 
-      <div ref={ref} data-shown={shown} className="reveal mt-14 space-y-16">
-        {tabs.map((tab, index) => (
-          <div
-            key={tab.name}
-            className="grid items-center gap-8 sm:gap-12 lg:gap-16 grid-cols-2 [&>div:first-child]:order-2"
-          >
-            <div className="flex justify-center">{tab.screen}</div>
-            <div>
-              <div className="flex items-center gap-2">
-                {tab.agent ? <AgentMark size={20} /> : null}
-                <span className="eyebrow">Tab {index + 1}</span>
-              </div>
-              <h3 className="mt-3 text-[clamp(1.25rem,2.4vw,1.5rem)] font-semibold tracking-[var(--tracking-heading)] lowercase">
-                {tab.name}
-              </h3>
-              <p className="mt-2 text-[clamp(1.05rem,1.9vw,1.25rem)] leading-[1.18] font-medium tracking-[-0.012em]">
-                {tab.lead}
-              </p>
-              <p className="mt-4 text-[clamp(0.95rem,1.3vw,1.0625rem)] leading-[1.6] text-secondary-foreground">
-                {tab.body}
-              </p>
-            </div>
+      {/* Tab switcher */}
+      <div className="mt-10 flex flex-wrap items-center gap-2">
+        {tabs.map((t, index) => {
+          const on = index === active;
+          return (
+            <button
+              key={t.name}
+              type="button"
+              onClick={() => setActive(index as TabKey)}
+              aria-pressed={on}
+              className={cn(
+                "flex items-center gap-1.5 rounded-full border px-4 py-2 text-[14px] font-medium lowercase tracking-tight transition-colors",
+                on
+                  ? "border-signal bg-signal text-inverse-foreground"
+                  : "border-border-strong bg-card text-secondary-foreground hover:border-border-strong hover:bg-sunken",
+              )}
+            >
+              {t.agent ? <AgentMark size={16} /> : null}
+              {t.name}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Active tab card */}
+      <div
+        ref={ref}
+        data-shown={shown}
+        className="reveal mt-10 grid items-center gap-10 rounded-3xl border border-border bg-sunken/40 p-8 sm:p-10 lg:grid-cols-2 lg:gap-16"
+      >
+        <div className="flex justify-center">{tab.screen}</div>
+        <div>
+          <div className="flex items-center gap-2">
+            {tab.agent ? <AgentMark size={20} /> : null}
+            <span className="eyebrow">Tab {active + 1}</span>
           </div>
-        ))}
+          <h3 className="mt-3 text-[clamp(1.5rem,2.6vw,2rem)] font-semibold tracking-[var(--tracking-heading)] lowercase">
+            {tab.name}
+          </h3>
+          <p className="mt-2 text-[clamp(1.1rem,2vw,1.375rem)] leading-[1.18] font-medium tracking-[-0.012em]">
+            {tab.lead}
+          </p>
+          <p className="mt-4 max-w-[52ch] text-[clamp(1rem,1.4vw,1.125rem)] leading-[1.6] text-secondary-foreground">
+            {tab.body}
+          </p>
+        </div>
       </div>
     </Section>
   );
