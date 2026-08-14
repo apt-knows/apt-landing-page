@@ -2,7 +2,7 @@ import aModel1 from "@/assets/feed/a-model-1.jpg";
 import aProduct from "@/assets/feed/a-product.jpg";
 import { useReveal } from "@/hooks/use-reveal";
 
-import { Eyebrow, Section, Tag } from "./kit";
+import { Eyebrow, Section } from "./kit";
 
 export function TryOn() {
   const { ref, shown } = useReveal<HTMLDivElement>();
