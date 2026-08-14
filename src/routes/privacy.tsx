@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { LegalPage } from "@/components/apt/legal-page";
+import { Wordmark } from "@/components/apt/kit";
 
 const title = "Privacy — apt";
 const description =
@@ -24,7 +25,7 @@ function Privacy() {
   return (
     <LegalPage title="Privacy" updated="August 2026">
       <p>
-        apt is in private beta. This page describes, in plain terms, what we
+        <Wordmark /> is in private beta. This page describes, in plain terms, what we
         collect today and how it is used.
       </p>
       <h2>What we collect</h2>

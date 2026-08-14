@@ -16,7 +16,7 @@ export function Wordmark({
   return (
     <span
       className={cn(
-        "font-semibold lowercase tracking-[-0.045em] text-foreground",
+        "font-semibold lowercase tracking-[-0.045em] text-signal",
         className,
       )}
     >

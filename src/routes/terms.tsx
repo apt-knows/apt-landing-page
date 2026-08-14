@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { LegalPage } from "@/components/apt/legal-page";
+import { Wordmark } from "@/components/apt/kit";
 
 const title = "Terms — apt";
 const description =
@@ -24,7 +25,7 @@ function Terms() {
   return (
     <LegalPage title="Terms" updated="August 2026">
       <p>
-        These terms cover the apt website and the early-access list. Fuller terms
+        These terms cover the <Wordmark /> website and the early-access list. Fuller terms
         will apply when the app itself launches.
       </p>
       <h2>Early access</h2>
@@ -34,7 +35,7 @@ function Terms() {
       </p>
       <h2>Your content</h2>
       <p>
-        You keep ownership of anything you upload. You grant apt permission to
+        You keep ownership of anything you upload. You grant <Wordmark /> permission to
         process it for the purpose of generating your recommendations and try-on
         imagery.
       </p>
