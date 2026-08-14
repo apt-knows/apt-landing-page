@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 
-import { LinkButton, Wordmark } from "./kit";
+import { Wordmark } from "./kit";
 
 const nav = [
   { href: "/#how", label: "How it works" },
