@@ -14,7 +14,7 @@ export function Phone({
   return (
     <div
       className={cn(
-        "relative w-full max-w-[300px] rounded-[2.25rem] border border-border-strong bg-card p-2 shadow-[var(--shadow-sheet)]",
+        "relative w-full max-w-[min(300px,82vw)] rounded-[2rem] sm:max-w-[300px] sm:rounded-[2.25rem] lg:max-w-[320px] border border-border-strong bg-card p-2 shadow-[var(--shadow-sheet)]",
         className,
       )}
     >

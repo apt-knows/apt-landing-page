@@ -44,12 +44,12 @@ export function Team() {
       <Eyebrow>
         <Wordmark className="lowercase! text-[16px]!" /> TEAM
       </Eyebrow>
-      <h2 className="mt-4 text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
+      <h2 className="mt-4 text-[clamp(1.5rem,1.15rem+1.6vw,2.75rem)] text-balance leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
         Built by people who hate <span className="text-signal line-through decoration-signal decoration-[3px] underline-offset-2">online</span> bad shopping
       </h2>
 
 
-      <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:max-w-3xl">
+      <div className="mt-8 grid gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:max-w-3xl">
         {team.map((member) => (
           <article
             key={member.name}
@@ -63,7 +63,7 @@ export function Team() {
               loading="lazy"
               className="aspect-square w-full object-cover"
             />
-            <div className="p-5">
+            <div className="p-4 sm:p-5">
               <h3 className="text-[17px] font-semibold tracking-[-0.012em]">
                 {member.name}
               </h3>

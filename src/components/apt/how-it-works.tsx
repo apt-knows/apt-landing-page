@@ -38,22 +38,22 @@ export function HowItWorks() {
       <Eyebrow>
         How <Wordmark className="lowercase! text-[16px]!" /> works
       </Eyebrow>
-      <h2 className="mt-4 max-w-[20ch] text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
+      <h2 className="mt-4 max-w-[20ch] text-[clamp(1.5rem,1.15rem+1.6vw,2.75rem)] text-balance leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
         The real shopping loop, rebuilt in your pocket.
       </h2>
 
       <div
         ref={ref}
         data-shown={shown}
-        className="reveal mt-12 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-2 lg:grid-cols-4"
+        className="reveal mt-8 grid gap-px overflow-hidden rounded-lg border border-border bg-border sm:mt-12 sm:grid-cols-2 lg:grid-cols-4"
       >
         {steps.map((item) => (
-          <div key={item.step} className="bg-card p-6">
+          <div key={item.step} className="bg-card p-5 sm:p-6 lg:p-7">
             <span className="eyebrow text-signal-ink">{item.step}</span>
-            <p className="mt-4 text-[17px] font-medium tracking-[-0.012em]">
+            <p className="mt-3 text-[clamp(1rem,0.95rem+0.2vw,1.0625rem)] font-medium sm:mt-4 tracking-[-0.012em]">
               {item.real}
             </p>
-            <p className="mt-2 text-[15px] leading-[1.6] text-secondary-foreground">
+            <p className="mt-2 text-[clamp(0.9rem,0.87rem+0.15vw,0.95rem)] leading-[1.6] text-secondary-foreground">
               {item.apt}
             </p>
           </div>
