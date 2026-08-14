@@ -1,6 +1,6 @@
 import { useReveal } from "@/hooks/use-reveal";
 
-import { Eyebrow, Section } from "./kit";
+import { Eyebrow, Section, Wordmark } from "./kit";
 
 const steps = [
   {
@@ -21,7 +21,12 @@ const steps = [
   {
     step: "04",
     real: "You keep it or leave it",
-    apt: "Add to cart, or scroll away — either way apt learns and the next look gets sharper.",
+    apt: (
+      <>
+        Add to cart, or scroll away — either way <Wordmark /> learns and the next
+        look gets sharper.
+      </>
+    ),
   },
 ];
 

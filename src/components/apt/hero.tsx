@@ -15,7 +15,7 @@ export function Hero() {
         </h1>
 
         <p className="mt-6 max-w-[52ch] text-[17px] leading-[1.6] text-secondary-foreground">
-          apt is a personal shopping agent that learns your taste, finds the
+          <Wordmark /> is a personal shopping agent that learns your taste, finds the
           pieces worth your attention, and shows you how each one actually looks
           on you — before you spend anything.
         </p>

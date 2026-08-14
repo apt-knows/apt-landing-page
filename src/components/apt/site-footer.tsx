@@ -29,7 +29,7 @@ export function SiteFooter() {
             Terms
           </Link>
           <span className="text-muted-foreground">
-            © {new Date().getFullYear()} apt
+            © {new Date().getFullYear()} <Wordmark className="text-muted-foreground" />
           </span>
         </nav>
       </div>

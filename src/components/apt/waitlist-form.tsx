@@ -1,7 +1,7 @@
 import { useActionState } from "react";
 
 import { submitWaitlist, type WaitlistState } from "@/lib/waitlist";
-import { Button } from "./kit";
+import { Button, Wordmark } from "./kit";
 
 const initial: WaitlistState = { status: "idle" };
 
@@ -11,7 +11,7 @@ export function WaitlistForm({ id, size = "md" }: { id: string; size?: "md" | "l
   if (state.status === "success") {
     return (
       <div className="rounded-full border border-border-agent bg-agent px-5 py-3.5 text-[15px] text-agent-foreground">
-        You're on the list — we'll email {state.email} when apt opens up.
+        You're on the list — we'll email {state.email} when <Wordmark /> opens up.
       </div>
     );
   }
