@@ -70,7 +70,8 @@ const button = cva(
     variants: {
       variant: {
         solid: "bg-grey-10 text-inverse-foreground hover:bg-signal hover:text-grey-10",
-        agent: "bg-signal text-signal-deep hover:bg-signal-press",
+        agent:
+          "bg-signal text-signal-deep shadow-[0_1px_0_var(--signal-soft)] hover:bg-signal-press hover:shadow-[0_2px_12px_-4px_var(--signal-ink)] focus-visible:ring-2 focus-visible:ring-signal-soft focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none active:bg-signal-ink active:text-card disabled:bg-signal-soft disabled:text-signal-ink disabled:opacity-100",
         outline:
           "border border-border-strong bg-card text-foreground hover:border-grey-5",
         ghost: "text-foreground hover:bg-sunken",
