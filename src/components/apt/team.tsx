@@ -32,9 +32,25 @@ export function Team() {
                 {member.name}
               </h3>
               <p className="mt-0.5 text-[13px] text-signal-ink">{member.role}</p>
-              <p className="mt-3 text-[15px] leading-[1.6] text-secondary-foreground">
-                {member.blurb}
-              </p>
+              <ul className="mt-4 space-y-2">
+                {member.contact.map((c) => (
+                  <li key={c.label}>
+                    <a
+                      href={c.url}
+                      target={c.url.startsWith("mailto:") ? undefined : "_blank"}
+                      rel={c.url.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+                      className="group flex items-baseline gap-2 text-[14px] leading-[1.4]"
+                    >
+                      <span className="w-20 shrink-0 text-secondary-foreground">
+                        {c.label}
+                      </span>
+                      <span className="font-medium text-foreground transition-colors group-hover:text-signal">
+                        {c.handle}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
             </div>
           </article>
         ))}

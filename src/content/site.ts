@@ -27,12 +27,23 @@ export const site = {
     "hello@apt.app",
 } as const;
 
+export type ContactLink = {
+  /** Short label: Instagram, LinkedIn, X, Email. */
+  label: string;
+  /** Handle shown next to the label, e.g. "@robelbruk_". */
+  handle: string;
+  /** Full URL (or mailto:) the row links to. */
+  url: string;
+};
+
 export type TeamMember = {
   name: string;
   role: string;
   /** Swap the import in `content/assets.ts` for a real portrait. */
   image: string;
   blurb: string;
+  /** Reach-the-founder rows rendered under the portrait. */
+  contact: ContactLink[];
 };
 
 export const team: TeamMember[] = [
@@ -42,6 +53,12 @@ export const team: TeamMember[] = [
     image: assets.team.ceo,
     blurb:
       "Product and taste. Obsessed with what makes a recommendation feel personal.",
+    contact: [
+      { label: "Instagram", handle: "@robelbruk_", url: "https://instagram.com/robelbruk_" },
+      { label: "LinkedIn", handle: "in/robel-bruk", url: "https://www.linkedin.com/in/robel-bruk/" },
+      { label: "X", handle: "@robelbruk", url: "https://x.com/robelbruk" },
+      { label: "Email", handle: "robelbruk4@gmail.com", url: "mailto:robelbruk4@gmail.com" },
+    ],
   },
   {
     name: "Robel Kebede",
@@ -49,5 +66,11 @@ export const team: TeamMember[] = [
     image: assets.team.cto,
     blurb:
       "Ranking, try-on generation, and the systems that learn from every scroll.",
+    contact: [
+      { label: "Instagram", handle: "@robiee__m", url: "https://instagram.com/robiee__m" },
+      { label: "LinkedIn", handle: "in/robel-m-kebede", url: "https://www.linkedin.com/in/robel-m-kebede/" },
+      { label: "X", handle: "@robelmkebede", url: "https://x.com/robelmkebede" },
+      { label: "Email", handle: "robiemelaku@gmail.com", url: "mailto:robiemelaku@gmail.com" },
+    ],
   },
 ];
