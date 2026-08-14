@@ -439,7 +439,7 @@ function ProfileScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
         <div className="border-t border-border px-4 py-3">
           <div className="flex items-baseline justify-between">
             <p className="eyebrow">Your photos</p>
-            <span className="text-[10px] text-signal">Fit model ready</span>
+            <span className="text-[10px] text-muted-foreground">Manage</span>
           </div>
           <p className="mt-1 text-[11px] leading-[1.35] text-muted-foreground">
             So try-on looks like you.
