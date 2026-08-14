@@ -200,15 +200,32 @@ function FeedCard({ item }: { item: FeedItem }) {
       </div>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-11 space-y-2 bg-gradient-to-t from-grey-10/85 to-transparent p-4 pt-16">
-        <span className="inline-flex items-center rounded-full bg-grey-10/60 px-2.5 py-1 text-[10px] font-medium text-signal backdrop-blur-sm">
-          {item.frames[frame]?.label} · {frame + 1} of {item.frames.length}
-        </span>
+        <div className="flex flex-wrap items-center gap-1.5">
+          {item.frames[frame]?.generated ? (
+            <>
+              <span className="inline-flex items-center rounded-full bg-grey-10/60 px-2.5 py-1 text-[10px] font-medium text-signal backdrop-blur-sm">
+                How it looks on you
+              </span>
+              <span className="inline-flex items-center rounded-full border border-grey-0/30 px-2 py-1 text-[9px] font-medium text-inverse-foreground/85 backdrop-blur-sm">
+                AI generated
+              </span>
+            </>
+          ) : (
+            <span className="inline-flex items-center rounded-full bg-grey-10/60 px-2.5 py-1 text-[10px] font-medium text-inverse-foreground backdrop-blur-sm">
+              From {item.store}
+            </span>
+          )}
+          <span className="text-[9px] text-inverse-foreground/60">
+            {frame + 1}/{item.frames.length}
+          </span>
+        </div>
         <div className="flex items-end justify-between gap-2 pr-12">
           <p className="text-[15px] font-medium text-inverse-foreground">
             {item.name}
           </p>
           <p className="text-[13px] text-inverse-foreground/80">{item.price}</p>
         </div>
+
         <span className="inline-flex items-center rounded-full bg-grey-0 px-3 py-1.5 text-[11px] font-semibold text-grey-10">
           Add to cart
         </span>
@@ -299,7 +316,7 @@ function ProfileScreen({ onTab }: { onTab: (i: 0 | 1 | 2) => void }) {
           </p>
           <div className="mt-2 grid grid-cols-4 gap-1.5">
             <img
-              src={feedLook}
+              src={aModel1}
               alt="A photo the shopper uploaded of themselves"
               width={896}
               height={1152}
