@@ -41,9 +41,11 @@ function ContactRow({ c }: { c: ContactLink }) {
 export function Team() {
   return (
     <Section id="team" className="bg-card">
-      <Eyebrow>Team</Eyebrow>
+      <Eyebrow>
+        <Wordmark className="lowercase!" /> TEAM
+      </Eyebrow>
       <h2 className="mt-4 text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
-        Meet the <Wordmark /> team
+        Built by people who hate bad shopping
       </h2>
 
 
