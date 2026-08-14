@@ -3,7 +3,7 @@ import { useState } from "react";
 import { tabCopy } from "@/content/app-demo";
 import { useReveal } from "@/hooks/use-reveal";
 
-import { AgentMark, Eyebrow, Section } from "./kit";
+import { Eyebrow, Section } from "./kit";
 import type { TabKey } from "./phone";
 import { AgentScreen } from "./screens/agent";
 import { FittingRoomScreen } from "./screens/fitting-room";
