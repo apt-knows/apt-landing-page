@@ -130,6 +130,8 @@
     background-color: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
+    overflow-x: hidden;
+    text-wrap: pretty;
   }
 
   :focus-visible {
@@ -145,7 +147,7 @@
 
 /* Small-caps tracked label used across sections */
 @utility eyebrow {
-  font-size: 11px;
+  font-size: clamp(11px, 0.6rem + 0.45vw, 16px);
   font-weight: 600;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;

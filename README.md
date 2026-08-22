@@ -61,8 +61,13 @@ email delivery, copy `.env.example` to `.env`; these values are server-only.
 | `WAITLIST_FROM_EMAIL` | Verified sender; required when a Resend key is set |
 | `WAITLIST_NOTIFY_EMAIL` | Internal inbox notified on each signup |
 | `RESEND_AUDIENCE_ID` | Optional Resend audience for contacts |
+| `WAITLIST_SEGMENT_ID` | Optional source segment attached to contacts and emails |
 
 ## Deploying to Vercel
+
+Vercel requires a Pro team when this private organization repository is
+connected to a team project. A Hobby project can deploy it only if the GitHub
+repository is public.
 
 1. Push this repo to GitHub and import it in Vercel.
 2. `vercel.json` is already configured — Vercel runs `npm run build:vercel`

@@ -12,8 +12,8 @@
  */
 
 // Team portraits — square (1:1), ideally 768x768 or larger.
-import teamCeoAsset from "@/assets/team-ceo.png.asset.json";
-import teamCtoAsset from "@/assets/team-cto.png.asset.json";
+import teamCeo from "@/assets/team-ceo.jpg";
+import teamCto from "@/assets/team-cto.jpg";
 
 // Fitting Room feed — portrait (3:4), 768x1152.
 import knitProduct from "@/assets/feed/a-product.jpg";
@@ -41,8 +41,8 @@ import mayaUpload3 from "@/assets/profile/maya-upload-3.jpg";
 
 export const assets = {
   team: {
-    ceo: teamCeoAsset.url,
-    cto: teamCtoAsset.url,
+    ceo: teamCeo,
+    cto: teamCto,
   },
   /** Product-only shots (what the store photographs). */
   product: {
