@@ -13,8 +13,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
-import { Route as AdminLoginRouteImport } from './routes/admin.login'
-import { Route as AdminAuthCallbackRouteImport } from './routes/admin.auth.callback'
+import { Route as AdminLoginRouteImport } from './routes/admin_.login'
+import { Route as AdminAuthCallbackRouteImport } from './routes/admin_.auth.callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -37,19 +37,19 @@ const TermsRoute = TermsRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => AdminRoute,
+  id: '/admin_/login',
+  path: '/admin/login',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminAuthCallbackRoute = AdminAuthCallbackRouteImport.update({
-  id: '/auth/callback',
-  path: '/auth/callback',
-  getParentRoute: () => AdminRoute,
+  id: '/admin_/auth/callback',
+  path: '/admin/auth/callback',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/admin': typeof AdminRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/admin/login': typeof AdminLoginRoute
@@ -57,7 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/admin': typeof AdminRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/admin/login': typeof AdminLoginRoute
@@ -66,11 +66,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/admin': typeof AdminRouteWithChildren
+  '/admin': typeof AdminRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
-  '/admin/login': typeof AdminLoginRoute
-  '/admin/auth/callback': typeof AdminAuthCallbackRoute
+  '/admin_/login': typeof AdminLoginRoute
+  '/admin_/auth/callback': typeof AdminAuthCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -95,15 +95,17 @@ export interface FileRouteTypes {
     | '/admin'
     | '/privacy'
     | '/terms'
-    | '/admin/login'
-    | '/admin/auth/callback'
+    | '/admin_/login'
+    | '/admin_/auth/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AdminRoute: typeof AdminRouteWithChildren
+  AdminRoute: typeof AdminRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminAuthCallbackRoute: typeof AdminAuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -136,40 +138,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin/login': {
-      id: '/admin/login'
-      path: '/login'
+    '/admin_/login': {
+      id: '/admin_/login'
+      path: '/admin/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
-    '/admin/auth/callback': {
-      id: '/admin/auth/callback'
-      path: '/auth/callback'
+    '/admin_/auth/callback': {
+      id: '/admin_/auth/callback'
+      path: '/admin/auth/callback'
       fullPath: '/admin/auth/callback'
       preLoaderRoute: typeof AdminAuthCallbackRouteImport
-      parentRoute: typeof AdminRoute
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
-interface AdminRouteChildren {
-  AdminLoginRoute: typeof AdminLoginRoute
-  AdminAuthCallbackRoute: typeof AdminAuthCallbackRoute
-}
-
-const AdminRouteChildren: AdminRouteChildren = {
-  AdminLoginRoute: AdminLoginRoute,
-  AdminAuthCallbackRoute: AdminAuthCallbackRoute,
-}
-
-const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AdminRoute: AdminRouteWithChildren,
+  AdminRoute: AdminRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminAuthCallbackRoute: AdminAuthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

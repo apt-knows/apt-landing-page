@@ -12,7 +12,7 @@ import {
   logoutAdmin,
 } from "@/lib/admin/admin.functions";
 
-export const Route = createFileRoute("/admin/login")({
+export const Route = createFileRoute("/admin_/login")({
   head: () => ({
     meta: [
       { title: "Founder sign in · apt" },
