@@ -78,6 +78,13 @@ describe("founder authorization boundary", () => {
     expect(state.headers.get("X-Robots-Tag")).toContain("noindex");
   });
 
+  it("fails closed with 503 and no-store headers when server configuration is absent", async () => {
+    delete process.env["SUPABASE_SERVICE_ROLE_KEY"];
+    await expect(currentAdmin()).resolves.toEqual({ access: "unconfigured" });
+    expect(state.responseStatus).toBe(503);
+    expect(state.headers.get("Cache-Control")).toBe("private, no-store, max-age=0");
+  });
+
   it("denies an authenticated non-founder with HTTP 403", async () => {
     state.userId = "11111111-1111-4111-8111-111111111111";
     await expect(requireAdmin()).rejects.toThrow("Founder authorization is required.");
