@@ -117,7 +117,7 @@ export interface AdminState {
 }
 
 export async function loadAdminState(): Promise<
-  { access: "anonymous" | "forbidden" | "unconfigured" } | { access: "founder"; state: AdminState }
+  { access: "anonymous" | "forbidden" } | { access: "founder"; state: AdminState }
 > {
   const admin = await currentAdmin();
   if (admin.access !== "founder") return { access: admin.access };

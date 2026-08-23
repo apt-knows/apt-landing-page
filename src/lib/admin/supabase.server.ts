@@ -24,8 +24,8 @@ export function noStoreAdminResponse() {
   setResponseHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
 }
 
-export function requestSupabaseClient(config = environment()) {
-  const env = config;
+export function requestSupabaseClient() {
+  const env = environment();
   return createServerClient(env.SUPABASE_URL, env.SUPABASE_PUBLISHABLE_KEY, {
     cookies: {
       getAll() {
@@ -46,8 +46,8 @@ export function requestSupabaseClient(config = environment()) {
   });
 }
 
-export function serviceSupabaseClient(config = environment()) {
-  const env = config;
+export function serviceSupabaseClient() {
+  const env = environment();
   return createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
     auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false },
   });
@@ -55,15 +55,10 @@ export function serviceSupabaseClient(config = environment()) {
 
 export async function currentAdmin() {
   noStoreAdminResponse();
-  const parsed = environmentSchema.safeParse(process.env);
-  if (!parsed.success) {
-    setResponseStatus(503);
-    return { access: "unconfigured" as const };
-  }
-  const client = requestSupabaseClient(parsed.data);
+  const client = requestSupabaseClient();
   const { data } = await client.auth.getUser();
   if (!data.user) return { access: "anonymous" as const };
-  const service = serviceSupabaseClient(parsed.data);
+  const service = serviceSupabaseClient();
   const { data: admin, error } = await service
     .from("claw_admins")
     .select("user_id")
@@ -76,10 +71,6 @@ export async function currentAdmin() {
 
 export async function requireAdmin() {
   const admin = await currentAdmin();
-  if (admin.access === "unconfigured") {
-    setResponseStatus(503);
-    throw new Error("The founder console is not configured.");
-  }
   if (admin.access === "anonymous") {
     setResponseStatus(401);
     throw new Error("Sign in is required.");

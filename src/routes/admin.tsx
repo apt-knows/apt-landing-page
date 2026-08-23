@@ -19,17 +19,6 @@ export const Route = createFileRoute("/admin")({
 
 function AdminPage() {
   const loaded = Route.useLoaderData();
-  if (loaded.access === "unconfigured")
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-zinc-950 p-6 text-zinc-100">
-        <div className="max-w-md text-center">
-          <h1 className="text-2xl font-semibold">Founder console setup required</h1>
-          <p className="mt-3 text-zinc-400">
-            Add the server-only Supabase environment variables to this deployment, then redeploy.
-          </p>
-        </div>
-      </main>
-    );
   if (loaded.access !== "founder")
     return (
       <main className="flex min-h-screen items-center justify-center bg-zinc-950 p-6 text-zinc-100">
