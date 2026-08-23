@@ -52,16 +52,29 @@ boards or the demo user: `src/content/app-demo.ts`.
 
 ## Environment variables
 
-No `.env` is needed for ordinary local development. To exercise real waitlist
-email delivery, copy `.env.example` to `.env`; these values are server-only.
+No `.env` is needed for the public landing page. To exercise real waitlist
+email delivery or the founder-only Claw console, copy `.env.example` to `.env`;
+all listed values are server-only.
 
-| Variable | Purpose |
-| --- | --- |
-| `RESEND_API_KEY` | Resend key; without it signups log instead of sending |
-| `WAITLIST_FROM_EMAIL` | Verified sender; required when a Resend key is set |
-| `WAITLIST_NOTIFY_EMAIL` | Internal inbox notified on each signup |
-| `RESEND_AUDIENCE_ID` | Optional Resend audience for contacts |
-| `WAITLIST_SEGMENT_ID` | Optional source segment attached to contacts and emails |
+| Variable                    | Purpose                                                                    |
+| --------------------------- | -------------------------------------------------------------------------- |
+| `RESEND_API_KEY`            | Resend key; without it signups log instead of sending                      |
+| `WAITLIST_FROM_EMAIL`       | Verified sender; required when a Resend key is set                         |
+| `WAITLIST_NOTIFY_EMAIL`     | Internal inbox notified on each signup                                     |
+| `RESEND_AUDIENCE_ID`        | Optional Resend audience for contacts                                      |
+| `WAITLIST_SEGMENT_ID`       | Optional source segment attached to contacts and emails                    |
+| `SUPABASE_URL`              | Shared Supabase project URL for `/admin` SSR                               |
+| `SUPABASE_PUBLISHABLE_KEY`  | Publishable key used by server-managed PKCE sessions                       |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-only founder console data/RPC credential; never prefix with `VITE_` |
+
+## Founder console
+
+`/admin` is rendered with private/no-store/noindex headers. Sign-in uses
+server-managed Supabase cookies, but authorization is a separate UUID lookup in
+`public.claw_admins`; authenticated non-founders receive 403 and no Claw data.
+The console owns draft, validate, diff, publish, proposal review, and clone-based
+rollback workflows. Live shared prompt and skill content belongs in Supabase,
+not this repository.
 
 ## Deploying to Vercel
 
