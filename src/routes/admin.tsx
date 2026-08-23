@@ -1,6 +1,7 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { AdminConsole } from "@/components/admin/admin-console";
 import { getAdminState } from "@/lib/admin/admin.functions";
+import { adminRedirect } from "@/lib/admin/admin-http";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -11,7 +12,7 @@ export const Route = createFileRoute("/admin")({
   }),
   loader: async () => {
     const loaded = await getAdminState();
-    if (loaded.access === "anonymous") throw redirect({ to: "/admin/login" });
+    if (loaded.access === "anonymous") throw adminRedirect("/admin/login");
     return loaded;
   },
   component: AdminPage,

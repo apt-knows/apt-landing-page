@@ -7,6 +7,7 @@ import {
   setResponseStatus,
 } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { ADMIN_PRIVATE_HEADERS } from "./admin-http";
 
 const environmentSchema = z.object({
   SUPABASE_URL: z.string().url(),
@@ -19,9 +20,9 @@ function environment() {
 }
 
 export function noStoreAdminResponse() {
-  setResponseHeader("Cache-Control", "private, no-store, max-age=0");
-  setResponseHeader("Pragma", "no-cache");
-  setResponseHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
+  for (const [name, value] of Object.entries(ADMIN_PRIVATE_HEADERS)) {
+    setResponseHeader(name, value);
+  }
 }
 
 export function requestSupabaseClient(config = environment()) {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +11,7 @@ import {
   loginAdmin,
   logoutAdmin,
 } from "@/lib/admin/admin.functions";
+import { adminRedirect } from "@/lib/admin/admin-http";
 
 export const Route = createFileRoute("/admin_/login")({
   head: () => ({
@@ -21,7 +22,7 @@ export const Route = createFileRoute("/admin_/login")({
   }),
   loader: async () => {
     const access = await getAdminAccess();
-    if (access.access === "founder") throw redirect({ to: "/admin" });
+    if (access.access === "founder") throw adminRedirect("/admin");
     return access;
   },
   component: AdminLogin,
