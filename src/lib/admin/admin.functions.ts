@@ -74,7 +74,7 @@ export const saveAdminCapability = createServerFn({ method: "POST" })
       .object({
         releaseId: uuid,
         expectedRevision: z.number().int().positive(),
-        key: z.enum(["memory", "session_search", "skills", "apt_bridge"]),
+        key: z.enum(["memory", "session_search", "skills", "browser", "apt_bridge"]),
         kind: z.enum(["toolset", "mcp"]),
         enabled: z.boolean(),
         config: z.record(z.unknown()),

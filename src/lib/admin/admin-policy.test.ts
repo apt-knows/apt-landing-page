@@ -64,7 +64,7 @@ function validState(): AdminState {
       document("intent.food", "intent"),
       document("apt-commerce", "skill"),
     ],
-    capabilities: ["memory", "session_search", "skills", "apt_bridge"].map(capability),
+    capabilities: ["memory", "session_search", "skills", "browser", "apt_bridge"].map(capability),
     proposals: [],
     overview: {
       provisionedProfiles: 0,
@@ -82,14 +82,14 @@ describe("founder release policy", () => {
 
   it("rejects forbidden tools and malformed shared skills", () => {
     const state = validState();
-    state.capabilities.push(capability("browser"));
+    state.capabilities.push(capability("terminal"));
     const skill = state.documents.find((item) => item.kind === "skill")!;
     skill.content = "# No frontmatter";
     expect(validateDraft(state, draftId)).toEqual({
       valid: false,
       issues: [
         "Skill apt-commerce needs matching name and description frontmatter.",
-        "Forbidden capability browser.",
+        "Forbidden capability terminal.",
       ],
     });
   });
@@ -104,6 +104,7 @@ describe("founder release policy", () => {
     state.capabilities.push({ ...capability("memory"), id: "base-cap", release_id: baseId });
     expect(releaseDiff(state, draftId).map((item) => item.key)).toEqual([
       "capability:apt_bridge",
+      "capability:browser",
       "capability:session_search",
       "capability:skills",
       "document:apt-commerce",

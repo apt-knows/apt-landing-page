@@ -1,6 +1,12 @@
 import type { AdminState } from "./admin.server";
 
-export const allowedCapabilities = new Set(["memory", "session_search", "skills", "apt_bridge"]);
+export const allowedCapabilities = new Set([
+  "memory",
+  "session_search",
+  "skills",
+  "browser",
+  "apt_bridge",
+]);
 
 export function validateDraft(state: AdminState, releaseId: string) {
   const release = state.releases.find((item) => item.id === releaseId);

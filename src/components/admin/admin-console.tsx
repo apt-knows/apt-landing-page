@@ -31,7 +31,7 @@ import {
 import type { AdminCapability, AdminDocument, AdminState } from "@/lib/admin/admin.server";
 
 const effectiveDenyList = [
-  "generic web/browser",
+  "browser use outside read-only commerce Hunts",
   "terminal/filesystem/code execution",
   "vision/media generation",
   "delegation/cron",
@@ -572,7 +572,7 @@ function CapabilityEditor({
         <CardHeader>
           <CardTitle>Tools and MCP</CardTitle>
           <CardDescription className="text-zinc-400">
-            Only four code-approved capabilities can be saved. Secret values never enter Supabase.
+            Only five code-approved capabilities can be saved. Secret values never enter Supabase.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -590,7 +590,7 @@ function CapabilityEditor({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {["memory", "session_search", "skills", "apt_bridge"].map((key) => (
+                  {["memory", "session_search", "skills", "browser", "apt_bridge"].map((key) => (
                     <SelectItem key={key} value={key}>
                       {key}
                     </SelectItem>
