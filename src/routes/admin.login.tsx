@@ -29,6 +29,7 @@ export const Route = createFileRoute("/admin/login")({
 
 function AdminLogin() {
   const initial = Route.useLoaderData();
+  const unconfigured = initial.access === "unconfigured";
   const router = useRouter();
   const login = useServerFn(loginAdmin);
   const google = useServerFn(googleAdminLogin);
@@ -36,7 +37,11 @@ function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(
-    initial.access === "forbidden" ? "This signed-in account is not a Claw founder." : null,
+    unconfigured
+      ? "The founder console needs its server-only Supabase environment variables."
+      : initial.access === "forbidden"
+        ? "This signed-in account is not a Claw founder."
+        : null,
   );
   const [busy, setBusy] = useState(false);
   async function submit(event: React.FormEvent) {
@@ -69,6 +74,7 @@ function AdminLogin() {
               <Label>Email</Label>
               <Input
                 type="email"
+                disabled={unconfigured}
                 autoComplete="email"
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
@@ -78,6 +84,7 @@ function AdminLogin() {
               <Label>Password</Label>
               <Input
                 type="password"
+                disabled={unconfigured}
                 autoComplete="current-password"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
@@ -88,14 +95,14 @@ function AdminLogin() {
                 {error}
               </div>
             )}
-            <Button className="w-full" disabled={busy}>
+            <Button className="w-full" disabled={busy || unconfigured}>
               {busy ? "Signing in…" : "Sign in"}
             </Button>
             <Button
               type="button"
               variant="outline"
               className="w-full border-zinc-700"
-              disabled={busy}
+              disabled={busy || unconfigured}
               onClick={() =>
                 void (async () => {
                   try {
