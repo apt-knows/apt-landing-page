@@ -1,12 +1,20 @@
-import type { AdminState } from "./admin.server";
+import type { AdminCapability, AdminState } from "./admin.server";
 
-export const allowedCapabilities = new Set([
-  "memory",
-  "session_search",
-  "skills",
-  "browser",
-  "apt_bridge",
-]);
+export const requiredCapabilityKinds = {
+  memory: "toolset",
+  session_search: "toolset",
+  skills: "toolset",
+  browser: "toolset",
+  apt_bridge: "mcp",
+} as const satisfies Record<string, AdminCapability["kind"]>;
+
+export const allowedCapabilities = new Set(Object.keys(requiredCapabilityKinds));
+
+export function requiredCapabilityKind(key: string): AdminCapability["kind"] | null {
+  return key in requiredCapabilityKinds
+    ? requiredCapabilityKinds[key as keyof typeof requiredCapabilityKinds]
+    : null;
+}
 
 export function validateDraft(state: AdminState, releaseId: string) {
   const release = state.releases.find((item) => item.id === releaseId);
@@ -33,9 +41,14 @@ export function validateDraft(state: AdminState, releaseId: string) {
     if (name !== document.key || !description || description.length > 500)
       issues.push(`Skill ${document.key} needs matching name and description frontmatter.`);
   }
-  for (const key of allowedCapabilities)
-    if (!capabilities.some((capability) => capability.key === key))
+  for (const [key, requiredKind] of Object.entries(requiredCapabilityKinds)) {
+    const capability = capabilities.find((item) => item.key === key);
+    if (!capability) {
       issues.push(`Missing enabled ${key} capability.`);
+    } else if (capability.kind !== requiredKind) {
+      issues.push(`${key} must use the ${requiredKind} kind.`);
+    }
+  }
   for (const capability of capabilities)
     if (!allowedCapabilities.has(capability.key))
       issues.push(`Forbidden capability ${capability.key}.`);

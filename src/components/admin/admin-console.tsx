@@ -29,6 +29,7 @@ import {
   saveAdminDocument,
   validateAdminRelease,
 } from "@/lib/admin/admin.functions";
+import { requiredCapabilityKind } from "@/lib/admin/admin-policy";
 import type { AdminCapability, AdminDocument, AdminState } from "@/lib/admin/admin.server";
 
 const effectiveDenyList = [
@@ -572,7 +573,7 @@ function CapabilityEditor({
   function select(capability: AdminCapability) {
     setForm({
       key: capability.key,
-      kind: capability.kind,
+      kind: requiredCapabilityKind(capability.key) ?? capability.kind,
       enabled: capability.enabled,
       config: JSON.stringify(capability.config, null, 2),
       instructions: capability.instructions,
@@ -598,7 +599,19 @@ function CapabilityEditor({
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Capability">
-              <Select value={form.key} onValueChange={(key) => setForm({ ...form, key })}>
+              <Select
+                value={form.key}
+                onValueChange={(key) => {
+                  const kind = requiredCapabilityKind(key);
+                  if (!kind) return;
+                  setForm({
+                    ...form,
+                    key,
+                    kind,
+                    secretRefs: key === "apt_bridge" ? "APT_BRIDGE_TOKEN" : "",
+                  });
+                }}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -612,18 +625,10 @@ function CapabilityEditor({
               </Select>
             </Field>
             <Field label="Kind">
-              <Select
-                value={form.kind}
-                onValueChange={(kind: AdminCapability["kind"]) => setForm({ ...form, kind })}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="admin-theme">
-                  <SelectItem value="toolset">toolset</SelectItem>
-                  <SelectItem value="mcp">mcp</SelectItem>
-                </SelectContent>
-              </Select>
+              <Input className="bg-sunken" value={form.kind} readOnly aria-readonly="true" />
+              <p className="text-xs text-muted-foreground">
+                Fixed by the code-approved capability policy.
+              </p>
             </Field>
           </div>
           <Field label="Bounded config JSON">
