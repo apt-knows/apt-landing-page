@@ -3,6 +3,7 @@ import { getRequestUrl } from "@tanstack/react-start/server";
 import { z } from "zod";
 import {
   currentAdmin,
+  founderAccessForUser,
   requestSupabaseClient,
   requireAdmin,
   serviceSupabaseClient,
@@ -19,9 +20,9 @@ export async function getAccess() {
 
 export async function signInWithPassword(email: string, password: string) {
   const client = requestSupabaseClient();
-  const { error } = await client.auth.signInWithPassword({ email, password });
-  if (error) throw new Error("The email or password was not accepted.");
-  return currentAdmin();
+  const { data, error } = await client.auth.signInWithPassword({ email, password });
+  if (error || !data.user) throw new Error("The email or password was not accepted.");
+  return founderAccessForUser(data.user.id);
 }
 
 export async function startGoogleSignIn() {
@@ -37,9 +38,9 @@ export async function startGoogleSignIn() {
 
 export async function exchangeOAuthCode(code: string) {
   const client = requestSupabaseClient();
-  const { error } = await client.auth.exchangeCodeForSession(code);
-  if (error) throw new Error("The sign-in callback is invalid or expired.");
-  return currentAdmin();
+  const { data, error } = await client.auth.exchangeCodeForSession(code);
+  if (error || !data.user) throw new Error("The sign-in callback is invalid or expired.");
+  return founderAccessForUser(data.user.id);
 }
 
 export async function signOutAdmin() {
