@@ -3,6 +3,7 @@ import { useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { AlertTriangle, CheckCircle2, LogOut, ShieldCheck } from "lucide-react";
 import { AgentMark, Wordmark } from "@/components/apt/kit";
+import { UserHarnessViewer } from "@/components/admin/user-harness-viewer";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -105,8 +106,8 @@ export function AdminConsole({ state }: { state: AdminState }) {
               Claw shared harness
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-secondary-foreground">
-              Draft, validate, publish, and roll back shared commerce behavior. Private user
-              artifacts are never shown here.
+              Draft, validate, publish, and roll back shared commerce behavior. Authorized founders
+              can also inspect each isolated user harness through a separate read-only view.
             </p>
           </div>
           <div className="flex items-center gap-2 rounded-full border border-border-agent bg-agent px-4 py-2 text-sm font-medium text-agent-foreground">
@@ -240,6 +241,7 @@ export function AdminConsole({ state }: { state: AdminState }) {
               "skills",
               "tools",
               "proposals",
+              "users",
               "releases",
             ].map((tab) => (
               <TabsTrigger key={tab} value={tab} className="capitalize">
@@ -295,6 +297,9 @@ export function AdminConsole({ state }: { state: AdminState }) {
           </TabsContent>
           <TabsContent value="proposals">
             <ProposalList state={state} draft={draft} onAction={action} />
+          </TabsContent>
+          <TabsContent value="users">
+            <UserHarnessViewer users={state.users} />
           </TabsContent>
           <TabsContent value="releases">
             <ReleaseManager state={state} onAction={action} setDraftId={setDraftId} />
@@ -358,7 +363,7 @@ function Overview({
         <CardHeader>
           <CardTitle>Artifact health</CardTitle>
           <CardDescription>
-            Counts and errors only; private content is intentionally unavailable.
+            Private content is available only in the founder-gated, read-only Users view.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">

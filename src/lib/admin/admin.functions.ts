@@ -17,6 +17,7 @@ import {
   startGoogleSignIn,
   validateDraft,
 } from "./admin.server";
+import { loadUserHarness } from "./user-harness.server";
 
 const uuid = z.string().uuid();
 const releaseAction = z.object({
@@ -26,6 +27,10 @@ const releaseAction = z.object({
 
 export const getAdminAccess = createServerFn({ method: "GET" }).handler(() => getAccess());
 export const getAdminState = createServerFn({ method: "GET" }).handler(() => loadAdminState());
+
+export const getAdminUserHarness = createServerFn({ method: "GET" })
+  .validator((data) => z.object({ userId: uuid }).parse(data))
+  .handler(({ data }) => loadUserHarness(data.userId));
 
 export const loginAdmin = createServerFn({ method: "POST" })
   .validator((data) =>

@@ -9,6 +9,7 @@ import {
   serviceSupabaseClient,
 } from "./supabase.server";
 import { requiredCapabilityKind, stableJson } from "./admin-policy";
+import type { AdminUserSummary } from "./user-harness.server";
 export { releaseDiff, validateDraft } from "./admin-policy";
 
 export type JsonValue =
@@ -105,6 +106,7 @@ export interface AdminProposal {
 
 export interface AdminState {
   founderId: string;
+  users: AdminUserSummary[];
   releases: AdminRelease[];
   documents: AdminDocument[];
   capabilities: AdminCapability[];
@@ -123,7 +125,7 @@ export async function loadAdminState(): Promise<
   const admin = await currentAdmin();
   if (admin.access !== "founder") return { access: admin.access };
   const service = serviceSupabaseClient();
-  const [releases, documents, capabilities, proposalRows, instances, privateProfiles, errors] =
+  const [releases, documents, capabilities, proposalRows, instances, privateProfiles] =
     await Promise.all([
       service
         .from("claw_releases")
@@ -146,12 +148,14 @@ export async function loadAdminState(): Promise<
         )
         .order("created_at", { ascending: false })
         .limit(100),
-      service.from("agent_instances").select("user_id,hermes_profile_name"),
-      service.from("claw_user_profiles").select("user_id", { count: "exact", head: true }),
+      service
+        .from("agent_instances")
+        .select("user_id,hermes_profile_name,hermes_session_id,status,created_at,updated_at"),
       service
         .from("claw_user_profiles")
-        .select("user_id", { count: "exact", head: true })
-        .not("reconciliation_error", "is", null),
+        .select(
+          "user_id,revision,knowledge_revision,runtime_hash,last_learning_at,last_reconciled_at,reconciliation_error",
+        ),
     ]);
   for (const result of [
     releases,
@@ -160,7 +164,6 @@ export async function loadAdminState(): Promise<
     proposalRows,
     instances,
     privateProfiles,
-    errors,
   ]) {
     if (result.error) throw new Error("Unable to load the Claw admin state.");
   }
@@ -174,18 +177,45 @@ export async function loadAdminState(): Promise<
       submitter_profile_id: userId ? (profileByUser.get(userId) ?? null) : null,
     } as AdminProposal;
   });
+  const privateProfileByUser = new Map(
+    (privateProfiles.data ?? []).map((profile) => [profile.user_id, profile]),
+  );
+  const users = await Promise.all(
+    (instances.data ?? []).map(async (instance) => {
+      const profile = privateProfileByUser.get(instance.user_id);
+      const authUser = await service.auth.admin.getUserById(instance.user_id);
+      return {
+        ...instance,
+        email: authUser.data.user?.email ?? null,
+        profile_revision: profile?.revision ?? null,
+        knowledge_revision: profile?.knowledge_revision ?? null,
+        runtime_hash: profile?.runtime_hash ?? null,
+        last_learning_at: profile?.last_learning_at ?? null,
+        last_reconciled_at: profile?.last_reconciled_at ?? null,
+        reconciliation_error: profile?.reconciliation_error ?? null,
+      } as AdminUserSummary;
+    }),
+  );
+  users.sort((left, right) =>
+    (left.email ?? left.hermes_profile_name).localeCompare(
+      right.email ?? right.hermes_profile_name,
+    ),
+  );
   return {
     access: "founder",
     state: {
       founderId: admin.userId,
+      users,
       releases: (releases.data ?? []) as AdminRelease[],
       documents: (documents.data ?? []) as AdminDocument[],
       capabilities: (capabilities.data ?? []) as AdminCapability[],
       proposals,
       overview: {
         provisionedProfiles: instances.data?.length ?? 0,
-        privateProfiles: privateProfiles.count ?? 0,
-        reconciliationErrors: errors.count ?? 0,
+        privateProfiles: privateProfiles.data?.length ?? 0,
+        reconciliationErrors: (privateProfiles.data ?? []).filter(
+          (profile) => profile.reconciliation_error,
+        ).length,
         pendingProposals: proposals.filter((proposal) => proposal.status === "pending").length,
       },
     },
