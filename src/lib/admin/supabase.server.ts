@@ -19,6 +19,8 @@ function environment() {
   return environmentSchema.parse(process.env);
 }
 
+type Environment = z.infer<typeof environmentSchema>;
+
 export function noStoreAdminResponse() {
   for (const [name, value] of Object.entries(ADMIN_PRIVATE_HEADERS)) {
     setResponseHeader(name, value);
@@ -54,6 +56,28 @@ export function serviceSupabaseClient(config = environment()) {
   });
 }
 
+async function founderAccessForUserWithConfig(userId: string, config: Environment) {
+  const service = serviceSupabaseClient(config);
+  const { data: admin, error } = await service
+    .from("claw_admins")
+    .select("user_id")
+    .eq("user_id", userId)
+    .maybeSingle();
+  if (error) throw new Error("Unable to verify founder authorization.");
+  if (!admin) return { access: "forbidden" as const };
+  return { access: "founder" as const, userId };
+}
+
+export async function founderAccessForUser(userId: string) {
+  noStoreAdminResponse();
+  const parsed = environmentSchema.safeParse(process.env);
+  if (!parsed.success) {
+    setResponseStatus(503);
+    return { access: "unconfigured" as const };
+  }
+  return founderAccessForUserWithConfig(userId, parsed.data);
+}
+
 export async function currentAdmin() {
   noStoreAdminResponse();
   const parsed = environmentSchema.safeParse(process.env);
@@ -64,15 +88,7 @@ export async function currentAdmin() {
   const client = requestSupabaseClient(parsed.data);
   const { data } = await client.auth.getUser();
   if (!data.user) return { access: "anonymous" as const };
-  const service = serviceSupabaseClient(parsed.data);
-  const { data: admin, error } = await service
-    .from("claw_admins")
-    .select("user_id")
-    .eq("user_id", data.user.id)
-    .maybeSingle();
-  if (error) throw new Error("Unable to verify founder authorization.");
-  if (!admin) return { access: "forbidden" as const };
-  return { access: "founder" as const, userId: data.user.id };
+  return founderAccessForUserWithConfig(data.user.id, parsed.data);
 }
 
 export async function requireAdmin() {

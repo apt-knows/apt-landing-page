@@ -55,7 +55,12 @@ vi.mock("@supabase/supabase-js", () => ({
   }),
 }));
 
-import { currentAdmin, requestSupabaseClient, requireAdmin } from "./supabase.server";
+import {
+  currentAdmin,
+  founderAccessForUser,
+  requestSupabaseClient,
+  requireAdmin,
+} from "./supabase.server";
 
 describe("founder authorization boundary", () => {
   beforeEach(() => {
@@ -89,6 +94,14 @@ describe("founder authorization boundary", () => {
     state.userId = "11111111-1111-4111-8111-111111111111";
     await expect(requireAdmin()).rejects.toThrow("Founder authorization is required.");
     expect(state.responseStatus).toBe(403);
+  });
+
+  it("authorizes a newly authenticated founder by UUID without rereading request cookies", async () => {
+    state.founder = true;
+    await expect(founderAccessForUser("22222222-2222-4222-8222-222222222222")).resolves.toEqual({
+      access: "founder",
+      userId: "22222222-2222-4222-8222-222222222222",
+    });
   });
 
   it("accepts only a matching founder UUID and hardens SSR cookies", async () => {
