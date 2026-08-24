@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { AlertTriangle, CheckCircle2, LogOut, ShieldCheck } from "lucide-react";
+import { AgentMark, Wordmark } from "@/components/apt/kit";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -71,22 +72,17 @@ export function AdminConsole({ state }: { state: AdminState }) {
   }
 
   return (
-    <main className="min-h-screen bg-zinc-950 text-zinc-100">
-      <div className="mx-auto max-w-7xl px-5 py-8 lg:px-8">
-        <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <div className="mb-2 flex items-center gap-2 text-sm text-emerald-400">
-              <ShieldCheck className="size-4" /> Founder control plane
-            </div>
-            <h1 className="text-3xl font-semibold tracking-tight">Claw shared harness</h1>
-            <p className="mt-2 text-sm text-zinc-400">
-              Draft, validate, publish, and roll back shared commerce behavior. Private user
-              artifacts are never shown here.
-            </p>
-          </div>
+    <main className="admin-theme admin-shell min-h-screen text-foreground">
+      <div className="border-b border-border bg-[var(--scrim-chrome)] backdrop-blur-[14px] backdrop-saturate-150">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-5 lg:px-8">
+          <a href="/" className="flex items-center gap-3" aria-label="Apt home">
+            <Wordmark className="text-xl" />
+            <span className="h-5 w-px bg-border-strong" aria-hidden="true" />
+            <span className="text-sm font-medium text-secondary-foreground">Founder console</span>
+          </a>
           <Button
             variant="outline"
-            className="border-zinc-700 bg-zinc-900"
+            className="rounded-full border-border-strong bg-card"
             onClick={() =>
               void action(async () => {
                 await logout({ data: undefined });
@@ -96,11 +92,30 @@ export function AdminConsole({ state }: { state: AdminState }) {
           >
             <LogOut /> Sign out
           </Button>
+        </div>
+      </div>
+      <div className="mx-auto max-w-7xl px-5 py-8 lg:px-8 lg:py-10">
+        <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div className="eyebrow mb-3 flex items-center gap-2 text-agent-foreground">
+              <AgentMark size={14} /> Founder control plane
+            </div>
+            <h1 className="text-3xl font-semibold tracking-heading sm:text-4xl">
+              Claw shared harness
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-secondary-foreground">
+              Draft, validate, publish, and roll back shared commerce behavior. Private user
+              artifacts are never shown here.
+            </p>
+          </div>
+          <div className="flex items-center gap-2 rounded-full border border-border-agent bg-agent px-4 py-2 text-sm font-medium text-agent-foreground">
+            <ShieldCheck className="size-4" /> UUID authorized
+          </div>
         </header>
 
         {(notice || error) && (
           <div
-            className={`mb-6 rounded-lg border px-4 py-3 text-sm ${error ? "border-red-800 bg-red-950/40 text-red-200" : "border-emerald-800 bg-emerald-950/40 text-emerald-200"}`}
+            className={`mb-6 rounded-md border px-4 py-3 text-sm ${error ? "border-alert/40 bg-alert-wash text-alert" : "border-border-agent bg-agent text-agent-foreground"}`}
           >
             {error ?? notice}
           </div>
@@ -130,7 +145,7 @@ export function AdminConsole({ state }: { state: AdminState }) {
           />
         </div>
 
-        <div className="mb-6 flex flex-wrap items-end gap-3 rounded-xl border border-zinc-800 bg-zinc-900/70 p-4">
+        <div className="mb-6 flex flex-wrap items-end gap-3 rounded-xl border border-border bg-card p-4 shadow-card">
           <div className="min-w-64 flex-1">
             <Label className="mb-2 block">Working draft</Label>
             <Select
@@ -140,10 +155,10 @@ export function AdminConsole({ state }: { state: AdminState }) {
                 setValidation(null);
               }}
             >
-              <SelectTrigger className="border-zinc-700 bg-zinc-950">
+              <SelectTrigger className="border-border-strong bg-sunken">
                 <SelectValue placeholder="Create or clone a draft" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="admin-theme">
                 {state.releases
                   .filter((release) => release.status === "draft")
                   .map((release) => (
@@ -190,22 +205,22 @@ export function AdminConsole({ state }: { state: AdminState }) {
 
         {validation && (
           <div
-            className={`mb-6 rounded-lg border p-4 text-sm ${validation.valid ? "border-emerald-800" : "border-amber-800"}`}
+            className={`mb-6 rounded-md border p-4 text-sm ${validation.valid ? "border-border-agent bg-agent" : "border-alert/40 bg-alert-wash"}`}
           >
             <div className="flex items-center gap-2 font-medium">
               {validation.valid ? (
-                <CheckCircle2 className="size-4 text-emerald-400" />
+                <CheckCircle2 className="size-4 text-agent-foreground" />
               ) : (
-                <AlertTriangle className="size-4 text-amber-400" />
+                <AlertTriangle className="size-4 text-alert" />
               )}
               {validation.valid ? "Draft is valid" : "Draft needs work"}
             </div>
             {validation.issues.map((issue) => (
-              <div key={issue} className="mt-2 text-zinc-300">
+              <div key={issue} className="mt-2 text-foreground">
                 • {issue}
               </div>
             ))}
-            <div className="mt-3 text-zinc-400">
+            <div className="mt-3 text-secondary-foreground">
               Deterministic diff:{" "}
               {validation.diff.length
                 ? validation.diff.map((item) => item.key).join(", ")
@@ -215,7 +230,7 @@ export function AdminConsole({ state }: { state: AdminState }) {
         )}
 
         <Tabs defaultValue="overview">
-          <TabsList className="mb-6 h-auto w-full flex-wrap justify-start bg-zinc-900 p-1">
+          <TabsList className="mb-6 h-auto w-full flex-wrap justify-start border border-border bg-sunken p-1">
             {[
               "overview",
               "core",
@@ -301,12 +316,12 @@ function Metric({
   warning?: boolean;
 }) {
   return (
-    <Card className="border-zinc-800 bg-zinc-900">
+    <Card className="border-border bg-card shadow-card">
       <CardHeader className="pb-2">
-        <CardDescription className="text-zinc-400">{label}</CardDescription>
-        <CardTitle className={warning ? "text-amber-400" : "text-zinc-100"}>{value}</CardTitle>
+        <CardDescription>{label}</CardDescription>
+        <CardTitle className={warning ? "text-alert" : "text-foreground"}>{value}</CardTitle>
       </CardHeader>
-      <CardContent className="text-xs text-zinc-500">{detail}</CardContent>
+      <CardContent className="text-xs text-muted-foreground">{detail}</CardContent>
     </Card>
   );
 }
@@ -320,12 +335,10 @@ function Overview({
 }) {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
-      <Card className="border-zinc-800 bg-zinc-900">
+      <Card className="border-border bg-card shadow-card">
         <CardHeader>
           <CardTitle>Active release</CardTitle>
-          <CardDescription className="text-zinc-400">
-            New runs pin this immutable release.
-          </CardDescription>
+          <CardDescription>New runs pin this immutable release.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
           <Row
@@ -340,10 +353,10 @@ function Overview({
           <Row label="Publisher UUID" value={published?.published_by ?? "—"} />
         </CardContent>
       </Card>
-      <Card className="border-zinc-800 bg-zinc-900">
+      <Card className="border-border bg-card shadow-card">
         <CardHeader>
           <CardTitle>Artifact health</CardTitle>
-          <CardDescription className="text-zinc-400">
+          <CardDescription>
             Counts and errors only; private content is intentionally unavailable.
           </CardDescription>
         </CardHeader>
@@ -360,8 +373,8 @@ function Overview({
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex justify-between gap-4 border-b border-zinc-800 py-2">
-      <span className="text-zinc-400">{label}</span>
+    <div className="flex justify-between gap-4 border-b border-border py-2">
+      <span className="text-secondary-foreground">{label}</span>
       <span className="max-w-[65%] break-all text-right">{value}</span>
     </div>
   );
@@ -415,16 +428,16 @@ function DocumentEditor({
       });
   }
   return (
-    <Card className="border-zinc-800 bg-zinc-900">
+    <Card className="border-border bg-card shadow-card">
       <CardHeader>
         <CardTitle>{title}</CardTitle>
-        <CardDescription className="text-zinc-400">{description}</CardDescription>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6 lg:grid-cols-[260px_1fr]">
         <div className="space-y-2">
           <Button
             variant="outline"
-            className="w-full border-zinc-700"
+            className="w-full border-border-strong"
             onClick={() => {
               setSelectedId("");
               setForm({
@@ -443,10 +456,10 @@ function DocumentEditor({
             <button
               key={document.id}
               onClick={() => select(document.id)}
-              className={`w-full rounded-md border p-3 text-left text-sm ${selectedId === document.id ? "border-emerald-600 bg-emerald-950/30" : "border-zinc-800 bg-zinc-950"}`}
+              className={`w-full rounded-md border p-3 text-left text-sm transition-colors ${selectedId === document.id ? "border-border-agent bg-agent text-agent-foreground" : "border-border bg-sunken text-foreground hover:border-border-strong"}`}
             >
               <div className="font-medium">{document.title}</div>
-              <div className="mt-1 text-xs text-zinc-500">
+              <div className="mt-1 text-xs text-muted-foreground">
                 {document.key} · {document.enabled ? "enabled" : "disabled"}
               </div>
             </button>
@@ -468,7 +481,7 @@ function DocumentEditor({
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="admin-theme">
                   {kinds.map((kind) => (
                     <SelectItem key={kind} value={kind}>
                       {kind}
@@ -568,10 +581,10 @@ function CapabilityEditor({
   }
   return (
     <div className="grid gap-4 lg:grid-cols-[1fr_320px]">
-      <Card className="border-zinc-800 bg-zinc-900">
+      <Card className="border-border bg-card shadow-card">
         <CardHeader>
           <CardTitle>Tools and MCP</CardTitle>
-          <CardDescription className="text-zinc-400">
+          <CardDescription>
             Only five code-approved capabilities can be saved. Secret values never enter Supabase.
           </CardDescription>
         </CardHeader>
@@ -589,7 +602,7 @@ function CapabilityEditor({
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="admin-theme">
                   {["memory", "session_search", "skills", "browser", "apt_bridge"].map((key) => (
                     <SelectItem key={key} value={key}>
                       {key}
@@ -606,7 +619,7 @@ function CapabilityEditor({
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="admin-theme">
                   <SelectItem value="toolset">toolset</SelectItem>
                   <SelectItem value="mcp">mcp</SelectItem>
                 </SelectContent>
@@ -670,7 +683,7 @@ function CapabilityEditor({
           </div>
         </CardContent>
       </Card>
-      <Card className="border-zinc-800 bg-zinc-900">
+      <Card className="border-border bg-card shadow-card">
         <CardHeader>
           <CardTitle>Effective deny list</CardTitle>
         </CardHeader>
@@ -678,7 +691,7 @@ function CapabilityEditor({
           {effectiveDenyList.map((item) => (
             <div
               key={item}
-              className="rounded border border-zinc-800 bg-zinc-950 px-3 py-2 text-sm text-zinc-400"
+              className="rounded-md border border-border bg-sunken px-3 py-2 text-sm text-secondary-foreground"
             >
               {item}
             </div>
@@ -704,25 +717,25 @@ function ProposalList({
   return (
     <div className="space-y-4">
       {!pending.length && (
-        <Card className="border-zinc-800 bg-zinc-900 p-6 text-sm text-zinc-400">
+        <Card className="border-border bg-card p-6 text-sm text-secondary-foreground shadow-card">
           No pending proposals.
         </Card>
       )}
       {pending.map((proposal) => (
-        <Card key={proposal.id} className="border-zinc-800 bg-zinc-900">
+        <Card key={proposal.id} className="border-border bg-card shadow-card">
           <CardHeader>
             <div className="flex flex-wrap items-center gap-2">
               <CardTitle>{proposal.title}</CardTitle>
               <Badge>{proposal.kind}</Badge>
             </div>
-            <CardDescription className="text-zinc-400">
+            <CardDescription>
               Profile {proposal.submitter_profile_id ?? "deleted"} · run{" "}
               {proposal.agent_run_id ?? "unavailable"} · {proposal.created_at}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="text-sm text-zinc-300">{proposal.rationale}</div>
-            <pre className="max-h-64 overflow-auto whitespace-pre-wrap rounded border border-zinc-800 bg-zinc-950 p-4 text-xs">
+            <div className="text-sm text-foreground">{proposal.rationale}</div>
+            <pre className="max-h-64 overflow-auto whitespace-pre-wrap rounded-md border border-border bg-sunken p-4 text-xs text-foreground">
               {proposal.content}
             </pre>
             <div className="flex flex-wrap gap-2">
@@ -788,10 +801,10 @@ function ReleaseManager({
   const [note, setNote] = useState("");
   return (
     <div className="space-y-4">
-      <Card className="border-zinc-800 bg-zinc-900">
+      <Card className="border-border bg-card shadow-card">
         <CardHeader>
           <CardTitle>Create a draft</CardTitle>
-          <CardDescription className="text-zinc-400">
+          <CardDescription>
             Create release 1 or clone any immutable release for a new version.
           </CardDescription>
         </CardHeader>
@@ -820,7 +833,7 @@ function ReleaseManager({
         </CardContent>
       </Card>
       {state.releases.map((release) => (
-        <Card key={release.id} className="border-zinc-800 bg-zinc-900">
+        <Card key={release.id} className="border-border bg-card shadow-card">
           <CardContent className="flex flex-wrap items-center gap-3 p-5">
             <div className="min-w-48 flex-1">
               <div className="flex items-center gap-2">
@@ -829,7 +842,7 @@ function ReleaseManager({
                 </span>
                 <Badge variant="outline">{release.status}</Badge>
               </div>
-              <div className="mt-1 text-xs text-zinc-500">
+              <div className="mt-1 text-xs text-muted-foreground">
                 rev {release.revision} · {release.content_checksum?.slice(0, 12) ?? "no checksum"} ·{" "}
                 {release.change_note || "no change note"}
               </div>

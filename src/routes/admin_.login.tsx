@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
+import { AgentMark, Wordmark } from "@/components/apt/kit";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -61,79 +62,103 @@ function AdminLogin() {
     }
   }
   return (
-    <main className="flex min-h-screen items-center justify-center bg-zinc-950 p-6 text-zinc-100">
-      <Card className="w-full max-w-md border-zinc-800 bg-zinc-900">
-        <CardHeader>
-          <CardTitle>Founder sign in</CardTitle>
-          <CardDescription className="text-zinc-400">
-            Shared Claw configuration is restricted to approved Supabase UUIDs.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={(event) => void submit(event)} className="space-y-4">
-            <div className="space-y-2">
-              <Label>Email</Label>
-              <Input
-                type="email"
-                disabled={unconfigured}
-                autoComplete="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Password</Label>
-              <Input
-                type="password"
-                disabled={unconfigured}
-                autoComplete="current-password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-            </div>
-            {error && (
-              <div className="rounded border border-red-900 bg-red-950/40 p-3 text-sm text-red-200">
-                {error}
+    <main className="admin-theme admin-shell min-h-screen text-foreground">
+      <div className="mx-auto flex min-h-screen w-full max-w-7xl flex-col px-5 sm:px-8 lg:px-10">
+        <header className="flex h-16 items-center">
+          <a href="/" aria-label="Apt home" className="flex items-center gap-3">
+            <Wordmark className="text-xl" />
+            <span className="h-5 w-px bg-border-strong" aria-hidden="true" />
+            <span className="text-sm font-medium text-secondary-foreground">Founder console</span>
+          </a>
+        </header>
+        <div className="flex flex-1 items-center justify-center py-10 sm:py-16">
+          <Card className="w-full max-w-md border-border bg-card shadow-sheet">
+            <CardHeader className="space-y-4 p-7 pb-5 sm:p-8 sm:pb-5">
+              <div className="flex size-12 items-center justify-center rounded-full border border-border-agent bg-agent text-agent-foreground">
+                <AgentMark size={24} />
               </div>
-            )}
-            <Button className="w-full" disabled={busy || unconfigured}>
-              {busy ? "Signing in…" : "Sign in"}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full border-zinc-700"
-              disabled={busy || unconfigured}
-              onClick={() =>
-                void (async () => {
-                  try {
-                    window.location.assign(await google({ data: undefined }));
-                  } catch (caught) {
-                    setError(caught instanceof Error ? caught.message : "Google sign in failed.");
+              <div>
+                <p className="eyebrow mb-2 text-agent-foreground">Private control plane</p>
+                <CardTitle className="text-2xl tracking-heading">Founder sign in</CardTitle>
+                <CardDescription className="mt-2 leading-6">
+                  Shared Claw configuration is restricted to approved Supabase UUIDs.
+                </CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent className="px-7 pb-7 sm:px-8 sm:pb-8">
+              <form onSubmit={(event) => void submit(event)} className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Email</Label>
+                  <Input
+                    className="h-11 bg-sunken text-foreground"
+                    type="email"
+                    disabled={unconfigured}
+                    autoComplete="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Password</Label>
+                  <Input
+                    className="h-11 bg-sunken text-foreground"
+                    type="password"
+                    disabled={unconfigured}
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
+                  />
+                </div>
+                {error && (
+                  <div className="rounded-md border border-alert/40 bg-alert-wash p-3 text-sm text-alert">
+                    {error}
+                  </div>
+                )}
+                <Button className="h-11 w-full rounded-full" disabled={busy || unconfigured}>
+                  {busy ? "Signing in…" : "Sign in"}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-11 w-full rounded-full border-border-strong bg-card"
+                  disabled={busy || unconfigured}
+                  onClick={() =>
+                    void (async () => {
+                      try {
+                        window.location.assign(await google({ data: undefined }));
+                      } catch (caught) {
+                        setError(
+                          caught instanceof Error ? caught.message : "Google sign in failed.",
+                        );
+                      }
+                    })()
                   }
-                })()
-              }
-            >
-              Continue with Google
-            </Button>
-            {initial.access === "forbidden" && (
-              <Button
-                type="button"
-                variant="ghost"
-                className="w-full"
-                onClick={() =>
-                  void (async () => {
-                    await logout({ data: undefined });
-                    window.location.reload();
-                  })()
-                }
-              >
-                Sign out current account
-              </Button>
-            )}
-          </form>
-        </CardContent>
-      </Card>
+                >
+                  Continue with Google
+                </Button>
+                {initial.access === "forbidden" && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="w-full rounded-full"
+                    onClick={() =>
+                      void (async () => {
+                        await logout({ data: undefined });
+                        window.location.reload();
+                      })()
+                    }
+                  >
+                    Sign out current account
+                  </Button>
+                )}
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+        <p className="pb-8 text-center text-xs text-muted-foreground">
+          Access is logged and restricted to the Apt founding team.
+        </p>
+      </div>
     </main>
   );
 }

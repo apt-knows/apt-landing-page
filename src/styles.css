@@ -64,8 +64,7 @@
 }
 
 @theme inline {
-  --font-sans:
-    "Schibsted Grotesk", -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-sans: "Schibsted Grotesk", -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   --color-grey-0: var(--grey-0);
   --color-grey-1: var(--grey-1);
@@ -90,10 +89,23 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--surface-card);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--surface-card);
+  --color-popover-foreground: var(--foreground);
+  --color-primary: var(--signal);
+  --color-primary-foreground: var(--signal-deep);
+  --color-secondary: var(--surface-sunken);
+  --color-secondary-foreground: var(--text-secondary);
+  --color-muted: var(--surface-sunken);
+  --color-accent: var(--surface-agent);
+  --color-accent-foreground: var(--text-agent);
+  --color-destructive: var(--alert);
+  --color-destructive-foreground: var(--text-inverse);
+  --color-input: var(--border-strong);
+  --color-ring: var(--signal);
   --color-sunken: var(--surface-sunken);
   --color-inverse: var(--surface-inverse);
   --color-agent: var(--surface-agent);
-  --color-secondary-foreground: var(--text-secondary);
   --color-muted-foreground: var(--text-muted);
   --color-inverse-foreground: var(--text-inverse);
   --color-agent-foreground: var(--text-agent);
@@ -114,6 +126,61 @@
   --tracking-display: -0.035em;
   --tracking-heading: -0.022em;
   --tracking-label: 0.13em;
+}
+
+/*
+ * The founder console follows the operating-system theme without changing the
+ * public landing page. Portalled controls also receive this class so their
+ * surfaces use the same palette as the console that opened them.
+ */
+.admin-theme {
+  color-scheme: light;
+}
+
+.admin-shell {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(circle at 12% 0%, oklch(0.76 0.11 205 / 0.12), transparent 30rem),
+    linear-gradient(oklch(0.993 0.001 240 / 0.82), oklch(0.98 0.002 240 / 0.96));
+}
+
+@media (prefers-color-scheme: dark) {
+  .admin-theme {
+    color-scheme: dark;
+    --background: oklch(0.14 0.006 250);
+    --surface-card: oklch(0.19 0.007 250);
+    --surface-sunken: oklch(0.115 0.005 250);
+    --surface-inverse: oklch(0.96 0.003 240);
+    --surface-agent: oklch(0.22 0.028 205);
+
+    --foreground: oklch(0.96 0.003 240);
+    --text-secondary: oklch(0.78 0.009 245);
+    --text-muted: oklch(0.67 0.01 245);
+    --text-inverse: oklch(0.16 0.006 250);
+    --text-agent: oklch(0.86 0.075 205);
+
+    --border-subtle: oklch(0.3 0.009 250);
+    --border-strong: oklch(0.4 0.011 250);
+    --border-agent: oklch(0.42 0.065 205);
+
+    --signal-wash: oklch(0.22 0.028 205);
+    --signal-soft: oklch(0.4 0.065 205);
+    --signal-ink: oklch(0.86 0.075 205);
+    --signal-deep: oklch(0.18 0.025 205);
+    --alert: oklch(0.72 0.15 25);
+    --alert-wash: oklch(0.22 0.04 25);
+
+    --shadow-card: 0 1px 2px oklch(0.02 0.005 250 / 0.36);
+    --shadow-raise: 0 8px 24px -8px oklch(0.02 0.005 250 / 0.52);
+    --shadow-sheet: 0 28px 70px -32px oklch(0.02 0.005 250 / 0.78);
+    --scrim-chrome: oklch(0.14 0.006 250 / 0.82);
+  }
+
+  .admin-shell {
+    background-image:
+      radial-gradient(circle at 12% 0%, oklch(0.76 0.11 205 / 0.1), transparent 32rem),
+      linear-gradient(oklch(0.14 0.006 250 / 0.94), oklch(0.115 0.005 250));
+  }
 }
 
 @layer base {
