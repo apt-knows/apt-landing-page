@@ -94,6 +94,16 @@ describe("founder release policy", () => {
     });
   });
 
+  it("rejects a capability whose kind does not match the publish contract", () => {
+    const state = validState();
+    const bridge = state.capabilities.find((item) => item.key === "apt_bridge")!;
+    bridge.kind = "toolset";
+    expect(validateDraft(state, draftId)).toEqual({
+      valid: false,
+      issues: ["apt_bridge must use the mcp kind."],
+    });
+  });
+
   it("reports only changed release artifacts in deterministic order", () => {
     const state = validState();
     state.documents.push({

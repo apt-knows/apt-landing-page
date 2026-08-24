@@ -8,7 +8,7 @@ import {
   requireAdmin,
   serviceSupabaseClient,
 } from "./supabase.server";
-import { allowedCapabilities, stableJson } from "./admin-policy";
+import { requiredCapabilityKind, stableJson } from "./admin-policy";
 export { releaseDiff, validateDraft } from "./admin-policy";
 
 export type JsonValue =
@@ -260,8 +260,10 @@ export async function saveCapability(input: {
   secretRefs: string[];
 }) {
   const admin = await requireAdmin();
-  if (!allowedCapabilities.has(input.key))
-    throw new Error("Capability is outside the code-approved allowlist.");
+  const requiredKind = requiredCapabilityKind(input.key);
+  if (!requiredKind) throw new Error("Capability is outside the code-approved allowlist.");
+  if (input.kind !== requiredKind)
+    throw new Error(`${input.key} must use the ${requiredKind} kind.`);
   const checksum = hash(
     stableJson({
       key: input.key,
