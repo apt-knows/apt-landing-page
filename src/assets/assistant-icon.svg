@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- apt "a" mark, rebuilt as vector from apt-1.jpeg (colors sampled from the file).
+       To replace the icon site-wide: overwrite this file, keep the name. -->
+  <circle cx="50" cy="50" r="35.85" fill="none" stroke="#0E1017" stroke-width="18.3" />
+  <rect x="76.2" y="5" width="18.8" height="90" fill="#0E1017" />
+  <circle cx="50" cy="50" r="11.8" fill="#11B4BB" />
+</svg>

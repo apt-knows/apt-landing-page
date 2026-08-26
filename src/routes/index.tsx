@@ -1,18 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { EarlyAccess } from "@/components/apt/early-access";
 import { Hero } from "@/components/apt/hero";
 import { HowItWorks } from "@/components/apt/how-it-works";
-import { Principle } from "@/components/apt/principle";
 import { SiteFooter } from "@/components/apt/site-footer";
 import { SiteHeader } from "@/components/apt/site-header";
-import { AppTabs } from "@/components/apt/tabs";
-import { Team } from "@/components/apt/team";
 import { site } from "@/content/site";
 
-const title = "apt — shopping that's about you";
+const title = "apt";
 const description =
-  "apt is a personal shopping agent that learns your taste and shows you how every piece looks on you before you buy. Join the early-access list.";
+  "apt is your personal shopping assistant that learns your taste, searches across your stores, and brings back the few products that fit. Join the early-access list.";
 const ogImage = `${site.url}/og-image.jpg`;
 
 export const Route = createFileRoute("/")({
@@ -35,18 +31,13 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-
 function Landing() {
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
       <main>
         <Hero />
-        <Principle />
         <HowItWorks />
-        <AppTabs />
-        <Team />
-        <EarlyAccess />
       </main>
       <SiteFooter />
     </div>

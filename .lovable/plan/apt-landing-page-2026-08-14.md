@@ -12,7 +12,6 @@ The name is always lowercase — `apt`, never "Apt" — everywhere in copy, meta
 - Agent notes keep their tonal treatment: cyan-wash background with a cyan-soft border and a small cyan label ("I NOTICED", "MY REASONING", "I LEARNED"), plus the neutral grey variant for "NOT SURE".
 - Surfaces, borders, radii (4/8/12/16/28/pill), shadows (card / raise / sheet), motion easing and durations, and the focus ring all get ported as tokens into `src/styles.css`.
 
-
 ## Page structure (one route, `/`)
 
 1. **Header** — `apt.` wordmark, anchor links, pill "Get early access" button that scrolls to the form.
@@ -38,7 +37,6 @@ Plus `/privacy` and `/terms` as plain, short legal stubs.
 ## Imagery
 
 AI-generated editorial imagery: a hero try-on frame, three mockup images (one per tab), a product/on-you pair for the try-on band, and two neutral team portraits. Muted, editorial, natural light — the imagery carries all the color.
-
 
 ## Technical notes
 

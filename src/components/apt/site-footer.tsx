@@ -8,9 +8,7 @@ export function SiteFooter() {
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-5 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-10 lg:px-10 xl:max-w-7xl">
         <div>
           <Wordmark className="text-[18px]" />
-          <p className="mt-1 text-[13px] text-muted-foreground">
-            Shopping that's about you.
-          </p>
+          <p className="mt-1 text-[13px] text-muted-foreground">Shopping for you.</p>
         </div>
         <nav
           className="flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-secondary-foreground"
@@ -19,9 +17,9 @@ export function SiteFooter() {
           <a href="/#how" className="hover:text-foreground">
             How it works
           </a>
-          <a href="/#app" className="hover:text-foreground">
-            The app
-          </a>
+          <Link to="/team" className="hover:text-foreground">
+            Team
+          </Link>
           <Link to="/privacy" className="hover:text-foreground">
             Privacy
           </Link>

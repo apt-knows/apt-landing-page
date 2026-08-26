@@ -7,9 +7,7 @@
 import { joinWaitlist } from "./waitlist.functions";
 
 export type WaitlistState =
-  | { status: "idle" }
-  | { status: "error"; message: string }
-  | { status: "success"; email: string };
+  { status: "idle" } | { status: "error"; message: string } | { status: "success"; email: string };
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -20,8 +18,7 @@ export async function submitWaitlist(
   const email = String(formData.get("email") ?? "").trim();
 
   if (!email) return { status: "error", message: "Enter your email to join." };
-  if (!EMAIL.test(email))
-    return { status: "error", message: "That email doesn't look right." };
+  if (!EMAIL.test(email)) return { status: "error", message: "That email doesn't look right." };
 
   try {
     await joinWaitlist({ data: { email } });

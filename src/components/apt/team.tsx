@@ -28,7 +28,10 @@ function ContactRow({ c }: { c: ContactLink }) {
       rel={c.url.startsWith("mailto:") ? undefined : "noopener noreferrer"}
       className="group flex items-center gap-2.5 text-[14px] leading-[1.4]"
     >
-      <Icon size={15} className="shrink-0 text-secondary-foreground transition-colors group-hover:text-signal" />
+      <Icon
+        size={15}
+        className="shrink-0 text-secondary-foreground transition-colors group-hover:text-signal"
+      />
       <span className="font-medium text-foreground transition-colors group-hover:text-signal">
         {c.handle}
       </span>
@@ -45,9 +48,12 @@ export function Team() {
         <Wordmark className="lowercase! text-[1.35em]!" /> TEAM
       </Eyebrow>
       <h2 className="mt-4 text-[clamp(1.5rem,1.15rem+1.6vw,2.75rem)] text-balance leading-[1.18] font-semibold tracking-[var(--tracking-heading)]">
-        Built by people who hate <span className="text-signal line-through decoration-signal decoration-[3px] underline-offset-2">online</span> bad shopping
+        Built by people who hate{" "}
+        <span className="text-signal line-through decoration-signal decoration-[3px] underline-offset-2">
+          online
+        </span>{" "}
+        bad shopping
       </h2>
-
 
       <div className="mt-8 grid w-full gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6">
         {team.map((member) => (
@@ -64,9 +70,7 @@ export function Team() {
               className="aspect-square w-full object-cover"
             />
             <div className="p-4 sm:p-5">
-              <h3 className="text-[17px] font-semibold tracking-[-0.012em]">
-                {member.name}
-              </h3>
+              <h3 className="text-[17px] font-semibold tracking-[-0.012em]">{member.name}</h3>
               <p className="mt-0.5 text-[13px] text-signal-ink">{member.role}</p>
               <div className="mt-4 flex flex-col gap-2.5">
                 {member.contact.map((c) => (

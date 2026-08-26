@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as TeamRouteImport } from './routes/team'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as AdminLoginRouteImport } from './routes/admin_.login'
 import { Route as AdminAuthCallbackRouteImport } from './routes/admin_.auth.callback'
@@ -29,6 +30,11 @@ const AdminRoute = AdminRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TeamRoute = TeamRouteImport.update({
+  id: '/team',
+  path: '/team',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/privacy': typeof PrivacyRoute
+  '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/privacy': typeof PrivacyRoute
+  '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/auth/callback': typeof AdminAuthCallbackRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/privacy': typeof PrivacyRoute
+  '/team': typeof TeamRoute
   '/terms': typeof TermsRoute
   '/admin_/login': typeof AdminLoginRoute
   '/admin_/auth/callback': typeof AdminAuthCallbackRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/privacy'
+    | '/team'
     | '/terms'
     | '/admin/login'
     | '/admin/auth/callback'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/privacy'
+    | '/team'
     | '/terms'
     | '/admin/login'
     | '/admin/auth/callback'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/privacy'
+    | '/team'
     | '/terms'
     | '/admin_/login'
     | '/admin_/auth/callback'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   PrivacyRoute: typeof PrivacyRoute
+  TeamRoute: typeof TeamRoute
   TermsRoute: typeof TermsRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminAuthCallbackRoute: typeof AdminAuthCallbackRoute
@@ -129,6 +142,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   PrivacyRoute: PrivacyRoute,
+  TeamRoute: TeamRoute,
   TermsRoute: TermsRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminAuthCallbackRoute: AdminAuthCallbackRoute,
