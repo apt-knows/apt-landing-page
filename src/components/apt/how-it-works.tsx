@@ -158,10 +158,27 @@ export function HowItWorks() {
         ))}
       </div>
 
-      <div className="mt-6 rounded-2xl border border-border bg-background p-4 sm:rounded-3xl sm:p-6 lg:p-8">
+      {/* Before a situation is picked the panel hugs its content; it opens
+          to full width once the conversation starts. */}
+      <div
+        className={cn(
+          "mt-6 rounded-2xl border border-border bg-background p-4 sm:rounded-3xl sm:p-6 lg:p-8",
+          step === "ask" && !situation && "mx-auto max-w-2xl",
+        )}
+      >
         {step === "ask" ? (
           <div>
-            <div className="flex flex-wrap gap-2" role="group" aria-label="Pick a situation">
+            {!situation ? (
+              <p className="mb-4 text-center text-[15px] text-muted-foreground">
+                Pick one. Your assistant does the rest.
+              </p>
+            ) : null}
+
+            <div
+              className="flex flex-wrap justify-center gap-2"
+              role="group"
+              aria-label="Pick a situation"
+            >
               {situations.map((option) => (
                 <button
                   key={option.id}
@@ -175,11 +192,7 @@ export function HowItWorks() {
               ))}
             </div>
 
-            {!situation ? (
-              <p className="mt-6 pb-2 text-[15px] text-muted-foreground">
-                Pick one. Your assistant does the rest.
-              </p>
-            ) : (
+            {situation ? (
               <div className="mt-6 flex flex-col gap-4" aria-live="polite">
                 <p className="max-w-[36ch] self-end rounded-2xl rounded-br-md bg-sunken px-4 py-2.5 text-[15px] leading-[1.5]">
                   {situation.userLine}
@@ -249,7 +262,7 @@ export function HowItWorks() {
                   </>
                 ) : null}
               </div>
-            )}
+            ) : null}
           </div>
         ) : null}
 
