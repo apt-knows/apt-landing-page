@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-import { Button, Wordmark } from "./kit";
+import { Button, requestJoin, Wordmark } from "./kit";
 
 const nav = [{ href: "/#how", label: "How it works" }];
 
@@ -11,6 +11,17 @@ export function SiteHeader() {
   // The one CTA lives in the hero. The header only offers a way back to it
   // once the hero form has scrolled away (or on pages without it).
   const [showJoin, setShowJoin] = useState(false);
+
+  // The scrim, blur, and hairline only appear once content scrolls under
+  // the header — at the top of the page there is nothing to separate.
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const target = document.getElementById("join");
@@ -29,7 +40,7 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-[var(--scrim-chrome)] backdrop-blur-[14px] backdrop-saturate-150">
+    <header className="site-chrome sticky top-0 z-50" data-scrolled={scrolled}>
       <div className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-3 px-5 sm:h-16 sm:px-8 lg:px-10 xl:max-w-7xl">
         <Link to="/" className="shrink-0 text-[18px] sm:text-[20px]">
           <Wordmark />
@@ -59,15 +70,7 @@ export function SiteHeader() {
             variant="agent"
             aria-hidden={!showJoin}
             tabIndex={showJoin ? undefined : -1}
-            onClick={() => {
-              const anchor = document.getElementById("join");
-              if (!anchor) {
-                window.location.href = "/#join";
-                return;
-              }
-              window.dispatchEvent(new CustomEvent("apt:join"));
-              anchor.scrollIntoView({ behavior: "smooth", block: "center" });
-            }}
+            onClick={requestJoin}
             className={cn(
               "min-h-9 px-4 text-[13px] transition-opacity duration-[240ms]",
               !showJoin && "pointer-events-none opacity-0",

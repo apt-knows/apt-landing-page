@@ -18,7 +18,10 @@ export function WaitlistForm({
 
   if (state.status === "success") {
     return (
-      <div className="rounded-full border border-border-agent bg-agent px-5 py-3.5 text-[15px] text-agent-foreground">
+      <div
+        role="status"
+        className="rounded-full border border-border-agent bg-agent px-5 py-3.5 text-[15px] text-agent-foreground"
+      >
         You're on the list — we'll email {state.email} when <Wordmark /> opens up.
       </div>
     );
