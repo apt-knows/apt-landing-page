@@ -214,11 +214,37 @@
 
 /* Small-caps tracked label used across sections */
 @utility eyebrow {
-  font-size: clamp(11px, 0.6rem + 0.45vw, 16px);
+  font-size: clamp(11px, 0.55rem + 0.25vw, 13px);
   font-weight: 600;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   color: var(--text-muted);
+}
+
+/*
+ * Sticky-header chrome. Bare while the page is at rest at the top; the
+ * scrim, blur, and hairline appear only once content actually scrolls
+ * underneath. Frosts to a solid surface under reduced transparency.
+ */
+@utility site-chrome {
+  border-bottom: 1px solid transparent;
+  backdrop-filter: blur(14px) saturate(1.5);
+  transition:
+    background-color var(--duration-base) var(--ease-out),
+    border-color var(--duration-base) var(--ease-out);
+
+  &[data-scrolled="true"] {
+    background-color: var(--scrim-chrome);
+    border-color: var(--border-subtle);
+  }
+
+  @media (prefers-reduced-transparency: reduce) {
+    backdrop-filter: none;
+
+    &[data-scrolled="true"] {
+      background-color: var(--background);
+    }
+  }
 }
 
 /* Entry for the hero's rotating phrase — short rise, no bounce */
@@ -265,11 +291,41 @@
 }
 
 @utility pulse-ring {
-  animation: pulse-ring 2.6s var(--ease-out) infinite;
+  /* Three pulses, then rest — a nudge, not a siren. */
+  animation: pulse-ring 2.6s var(--ease-out) 3;
 
   &:focus-visible {
     animation: none;
   }
+}
+
+/* Product sheet enter — materializes up from the board that opened it */
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility sheet-in {
+  animation: sheet-in var(--duration-base) var(--ease-out) both;
+}
+
+@keyframes fade-in-soft {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@utility fade-in-soft {
+  animation: fade-in-soft var(--duration-base) var(--ease-out) both;
 }
 
 /* Scroll reveal — opt-in, respects reduced motion */
@@ -296,7 +352,9 @@
     transition: none;
   }
   .rise-in,
-  .img-fade {
+  .img-fade,
+  .sheet-in,
+  .fade-in-soft {
     animation: none;
   }
   .pulse-ring {

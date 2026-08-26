@@ -4,6 +4,23 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { assets } from "@/content/assets";
 import { cn } from "@/lib/utils";
 
+/* ---------- join ---------- */
+
+/**
+ * Routes any "join" affordance to the single waitlist form in the hero:
+ * opens the inline form and scrolls it into view. Falls back to a full
+ * navigation on pages without the hero.
+ */
+export function requestJoin() {
+  const anchor = document.getElementById("join");
+  if (!anchor) {
+    window.location.href = "/#join";
+    return;
+  }
+  window.dispatchEvent(new CustomEvent("apt:join"));
+  anchor.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
 /* ---------- wordmark ---------- */
 
 export function Wordmark({ className, dot = true }: { className?: string; dot?: boolean }) {

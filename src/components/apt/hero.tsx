@@ -51,9 +51,10 @@ export function Hero() {
   const active = heroMoments[moment]!;
 
   // Rotate the headline phrase and the fan together. Preload the next
-  // moment's images during the dwell so the swap never flashes.
+  // moment's images during the dwell so the swap never flashes. The
+  // rotation rests while the email form is open — no motion behind typing.
   useEffect(() => {
-    if (reducedMotion()) return;
+    if (reducedMotion() || joinOpen) return;
     const next = (moment + 1) % heroMoments.length;
     for (const id of heroMoments[next]!.productIds) {
       new Image().src = getProduct(id).image;
@@ -61,7 +62,7 @@ export function Hero() {
     const dwell = moment === 0 ? 3600 : 2400;
     const timer = setTimeout(() => setMoment(next), dwell);
     return () => clearTimeout(timer);
-  }, [moment]);
+  }, [moment, joinOpen]);
 
   // The header's Join button (and /#join links) open the inline form.
   useEffect(() => {
@@ -85,8 +86,7 @@ export function Hero() {
         </h1>
 
         <p className="mt-8 max-w-[44ch] text-[clamp(1rem,0.95rem+0.35vw,1.1875rem)] leading-[1.6] text-secondary-foreground">
-          <Wordmark /> is your personal shopping assistant. It learns your taste — and your people —
-          then brings back the things that fit.
+          <Wordmark /> is your personal shopping assistant. It learns what you like, your people, and then brings back the things that fit.
         </p>
 
         <div id="join" className="mt-7 w-full scroll-mt-24 sm:mt-8">
