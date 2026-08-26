@@ -1,4 +1,9 @@
 import { createHash } from "node:crypto";
+import type { LookupAddress } from "node:dns";
+import { lookup } from "node:dns/promises";
+import { isIP } from "node:net";
+import ipaddr from "ipaddr.js";
+import { stableJson } from "./admin-policy";
 import { requireAdmin, serviceSupabaseClient } from "./supabase.server";
 
 export type HarnessJson =
@@ -129,6 +134,25 @@ export interface AdminHarnessProposal {
   created_at: string;
 }
 
+export type AdminShoppingRow = Record<string, HarnessJson>;
+
+export interface AdminShoppingState {
+  hash: string;
+  lastChangedAt: string | null;
+  safeLinks: AdminShoppingLink[];
+  items: AdminShoppingRow[];
+  listEntries: AdminShoppingRow[];
+  boards: AdminShoppingRow[];
+  boardItems: AdminShoppingRow[];
+}
+
+export interface AdminShoppingLink {
+  itemId: string;
+  itemName: string;
+  field: "canonical_url" | "source_url" | "image_url";
+  url: string;
+}
+
 export interface AdminUserHarness {
   user: AdminUserSummary;
   profile: AdminHarnessProfile | null;
@@ -139,6 +163,7 @@ export interface AdminUserHarness {
   runs: AdminHarnessRun[];
   hunts: AdminHarnessHunt[];
   proposals: AdminHarnessProposal[];
+  shopping: AdminShoppingState;
 }
 
 export function buildHarnessFiles(
@@ -264,6 +289,58 @@ export async function loadUserHarness(userId: string): Promise<AdminUserHarness>
   }
   if (!instance.data) throw new Error("This user does not have a provisioned Claw profile.");
 
+  const [shoppingItems, shoppingListEntries, shoppingBoards, shoppingBoardItems] =
+    await Promise.all([
+      collectPages<AdminShoppingRow>(
+        (from, to) =>
+          service
+            .from("shopping_items")
+            .select(
+              "id,source_kind,source_hunt_id,source_candidate_id,feed_fixture_id,vertical,candidate_kind,item_name,merchant_name,canonical_url,source_url,variant_or_size,image_url,current_price,currency,price_qualifier,availability,fulfillment_or_store_context,verification_status,observed_at,metadata,created_at,updated_at",
+            )
+            .eq("user_id", userId)
+            .order("id")
+            .range(from, to) as unknown as PromiseLike<PageResult<AdminShoppingRow>>,
+      ),
+      collectPages<AdminShoppingRow>(
+        (from, to) =>
+          service
+            .from("shopping_list_entries")
+            .select("shopping_item_id,list_kind,quantity,created_at,updated_at")
+            .eq("user_id", userId)
+            .order("shopping_item_id")
+            .range(from, to) as unknown as PromiseLike<PageResult<AdminShoppingRow>>,
+      ),
+      collectPages<AdminShoppingRow>(
+        (from, to) =>
+          service
+            .from("shopping_boards")
+            .select("id,title,description,context_summary,created_at,updated_at")
+            .eq("user_id", userId)
+            .order("id")
+            .range(from, to) as unknown as PromiseLike<PageResult<AdminShoppingRow>>,
+      ),
+      collectPages<AdminShoppingRow>(
+        (from, to) =>
+          service
+            .from("shopping_board_items")
+            .select("board_id,shopping_item_id,created_at")
+            .eq("user_id", userId)
+            .order("board_id")
+            .order("shopping_item_id")
+            .range(from, to) as unknown as PromiseLike<PageResult<AdminShoppingRow>>,
+      ),
+    ]);
+  const shopping = {
+    ...buildShoppingState({
+      items: shoppingItems,
+      listEntries: shoppingListEntries,
+      boards: shoppingBoards,
+      boardItems: shoppingBoardItems,
+    }),
+    safeLinks: await buildSafeShoppingLinks(shoppingItems),
+  } satisfies AdminShoppingState;
+
   const profileData = (profile.data ?? null) as AdminHarnessProfile | null;
   const skillData = (skills.data ?? []) as AdminHarnessSkill[];
   const user: AdminUserSummary = {
@@ -287,7 +364,127 @@ export async function loadUserHarness(userId: string): Promise<AdminUserHarness>
     runs: (runs.data ?? []) as AdminHarnessRun[],
     hunts: (hunts.data ?? []) as AdminHarnessHunt[],
     proposals: (proposals.data ?? []) as AdminHarnessProposal[],
+    shopping,
   };
+}
+
+export function buildShoppingState(
+  input: Omit<AdminShoppingState, "hash" | "lastChangedAt" | "safeLinks">,
+) {
+  const canonical = {
+    items: input.items,
+    listEntries: input.listEntries,
+    boards: input.boards,
+    boardItems: input.boardItems,
+  };
+  const timestamps = [
+    ...input.items.flatMap(rowTimestamps),
+    ...input.listEntries.flatMap(rowTimestamps),
+    ...input.boards.flatMap(rowTimestamps),
+    ...input.boardItems.flatMap(rowTimestamps),
+  ].filter((value) => Number.isFinite(Date.parse(value)));
+  timestamps.sort((left, right) => Date.parse(right) - Date.parse(left));
+  return {
+    ...canonical,
+    hash: checksum(stableJson(canonical)),
+    lastChangedAt: timestamps[0] ?? null,
+  } satisfies Omit<AdminShoppingState, "safeLinks">;
+}
+
+export async function buildSafeShoppingLinks(items: AdminShoppingRow[]) {
+  const hostChecks = new Map<string, Promise<boolean>>();
+  const candidates = items.flatMap((row) => {
+    const itemId = typeof row["id"] === "string" ? row["id"] : "unknown item";
+    const itemName = typeof row["item_name"] === "string" ? row["item_name"] : "Unnamed item";
+    return (["canonical_url", "source_url", "image_url"] as const).flatMap((field) => {
+      const url = row[field];
+      return typeof url === "string" ? [{ itemId, itemName, field, url }] : [];
+    });
+  });
+  const checked = await Promise.all(
+    candidates.map(async (candidate) =>
+      (await isSafePublicHttpUrl(candidate.url, hostChecks)) ? candidate : null,
+    ),
+  );
+  return checked.filter((candidate): candidate is AdminShoppingLink => candidate !== null);
+}
+
+async function isSafePublicHttpUrl(rawUrl: string, hostChecks: Map<string, Promise<boolean>>) {
+  try {
+    const url = new URL(rawUrl);
+    if (
+      !(["http:", "https:"] as const).includes(url.protocol as "http:" | "https:") ||
+      url.username ||
+      url.password
+    ) {
+      return false;
+    }
+    const hostname = url.hostname
+      .toLowerCase()
+      .replace(/\.$/, "")
+      .replace(/^\[|\]$/g, "");
+    if (
+      hostname === "localhost" ||
+      hostname.endsWith(".localhost") ||
+      hostname.endsWith(".local")
+    ) {
+      return false;
+    }
+    let hostCheck = hostChecks.get(hostname);
+    if (!hostCheck) {
+      hostCheck = resolvePublicHost(hostname);
+      hostChecks.set(hostname, hostCheck);
+    }
+    return await hostCheck;
+  } catch {
+    return false;
+  }
+}
+
+async function resolvePublicHost(hostname: string) {
+  try {
+    const literalFamily = isIP(hostname);
+    const addresses: LookupAddress[] = literalFamily
+      ? [{ address: hostname, family: literalFamily }]
+      : await lookup(hostname, { all: true, verbatim: true });
+    return addresses.length > 0 && addresses.every(({ address }) => !isPrivateAddress(address));
+  } catch {
+    return false;
+  }
+}
+
+function isPrivateAddress(address: string) {
+  const normalized =
+    address
+      .toLowerCase()
+      .replace(/^\[|\]$/g, "")
+      .split("%", 1)[0] ?? "";
+  if (!ipaddr.isValid(normalized)) return false;
+  return ipaddr.process(normalized).range() !== "unicast";
+}
+
+interface PageResult<T> {
+  data: T[] | null;
+  error: { message: string } | null;
+}
+
+async function collectPages<T>(query: (from: number, to: number) => PromiseLike<PageResult<T>>) {
+  const pageSize = 1_000;
+  const rows: T[] = [];
+  for (let page = 0; page < 20; page += 1) {
+    const result = await query(page * pageSize, (page + 1) * pageSize - 1);
+    if (result.error) throw new Error("Unable to load this user’s shopping state.");
+    const batch = result.data ?? [];
+    rows.push(...batch);
+    if (batch.length < pageSize) return rows;
+  }
+  throw new Error("Shopping state exceeds the founder-console safety bound.");
+}
+
+function rowTimestamps(row: AdminShoppingRow) {
+  return [row["updated_at"], row["created_at"]].filter(
+    (value): value is string => typeof value === "string",
+  );
 }
 
 function checksum(content: string) {

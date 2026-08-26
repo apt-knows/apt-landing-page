@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Eye, FileText, RefreshCw, ShieldCheck, Users } from "lucide-react";
+import { Eye, FileText, RefreshCw, ShieldCheck, ShoppingBag, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -177,6 +177,7 @@ function HarnessDetails({
               ["changes", `Changes ${harness.learningEvents.length}`],
               ["runs", `Runs ${harness.runs.length}`],
               ["hunts", `Hunts ${harness.hunts.length}`],
+              ["shopping", `Shopping ${harness.shopping.items.length}`],
               ["proposals", `Proposals ${harness.proposals.length}`],
             ] satisfies Array<[string, string]>
           ).map(([value, label]) => (
@@ -200,10 +201,81 @@ function HarnessDetails({
         <TabsContent value="hunts">
           <HuntList harness={harness} />
         </TabsContent>
+        <TabsContent value="shopping">
+          <ShoppingState harness={harness} />
+        </TabsContent>
         <TabsContent value="proposals">
           <ProposalHistory harness={harness} />
         </TabsContent>
       </Tabs>
+    </div>
+  );
+}
+
+function ShoppingState({ harness }: { harness: AdminUserHarness }) {
+  const state = harness.shopping;
+  return (
+    <div className="space-y-4">
+      <Card className="border-border bg-card shadow-card">
+        <CardHeader>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <ShoppingBag className="size-5 text-agent-foreground" /> Shopping state
+              </CardTitle>
+              <CardDescription className="mt-2">
+                Canonical, founder-only, read-only Cart, Wishlist, and Board rows.
+              </CardDescription>
+            </div>
+            <Badge variant="outline">Read only</Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <Fact label="Items" value={String(state.items.length)} />
+          <Fact label="List entries" value={String(state.listEntries.length)} />
+          <Fact label="Boards" value={String(state.boards.length)} />
+          <Fact label="Board memberships" value={String(state.boardItems.length)} />
+          <div className="sm:col-span-2 lg:col-span-3">
+            <Fact label="State sha256" value={state.hash} />
+          </div>
+          <Fact label="Last changed" value={formatDate(state.lastChangedAt)} />
+        </CardContent>
+      </Card>
+      <div className="grid gap-4 lg:grid-cols-2">
+        <JsonPanel label="Shopping items" value={state.items} />
+        <JsonPanel label="Cart and Wishlist entries" value={state.listEntries} />
+        <JsonPanel label="Boards" value={state.boards} />
+        <JsonPanel label="Board memberships" value={state.boardItems} />
+      </div>
+      <Card className="border-border bg-card shadow-card">
+        <CardHeader>
+          <CardTitle className="text-base">Validated public links</CardTitle>
+          <CardDescription>
+            Only credential-free HTTP(S) URLs that currently resolve outside private, loopback,
+            link-local, and metadata networks are clickable.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {state.safeLinks.length ? (
+            <ul className="space-y-2 text-sm">
+              {state.safeLinks.map((link) => (
+                <li key={`${link.itemId}:${link.field}`} className="break-all">
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="font-medium text-agent-foreground underline underline-offset-4"
+                  >
+                    {link.itemName} · {shoppingLinkLabel(link.field)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-muted-foreground">No validated public links.</p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
@@ -425,4 +497,10 @@ function formatDate(value: string | null | undefined) {
   if (!value) return "—";
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? value : date.toISOString().replace(".000Z", "Z");
+}
+
+function shoppingLinkLabel(field: "canonical_url" | "source_url" | "image_url") {
+  if (field === "canonical_url") return "Product page";
+  if (field === "source_url") return "Evidence source";
+  return "Image";
 }
