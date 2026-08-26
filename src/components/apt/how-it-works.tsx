@@ -1,5 +1,5 @@
 import { ArrowRight, Check, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { pickProduct, situations, type Pick, type Situation } from "@/content/situations";
 import { cn } from "@/lib/utils";
@@ -43,6 +43,13 @@ const chipClass = (on: boolean) =>
 export function HowItWorks() {
   const [step, setStep] = useState<StepId>("ask");
 
+  // Sheet
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [sheetClosing, setSheetClosing] = useState(false);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const closingRef = useRef(false);
+  const afterCloseRef = useRef<(() => void) | null>(null);
+
   // Ask
   const [situation, setSituation] = useState<Situation | null>(null);
   const [phase, setPhase] = useState<Phase>("user");
@@ -54,6 +61,76 @@ export function HowItWorks() {
   // Checkout
   const [paid, setPaid] = useState(false);
   const [doneSteps, setDoneSteps] = useState(0);
+
+  // The product detail dialog stacks above the sheet with its own key
+  // handling; the sheet's handler reads this to stand down while it's open.
+  const detailOpenRef = useRef(false);
+  useEffect(() => {
+    detailOpenRef.current = detail !== null;
+  }, [detail]);
+
+  const finishClose = () => {
+    closingRef.current = false;
+    setSheetClosing(false);
+    setSheetOpen(false);
+    // Unlock scroll before the after-close action — requestJoin scrolls.
+    document.body.style.overflow = "";
+    const after = afterCloseRef.current;
+    afterCloseRef.current = null;
+    after?.();
+  };
+
+  const closeSheet = (after?: () => void) => {
+    if (closingRef.current) return;
+    afterCloseRef.current = after ?? null;
+    if (reducedMotion()) {
+      finishClose();
+      return;
+    }
+    closingRef.current = true;
+    setSheetClosing(true);
+    window.setTimeout(finishClose, 180);
+  };
+
+  useEffect(() => {
+    if (!sheetOpen) return;
+    const opener = document.activeElement as HTMLElement | null;
+    sheetRef.current?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (detailOpenRef.current) return;
+      if (event.key === "Escape") {
+        closeSheet();
+        return;
+      }
+      if (event.key !== "Tab") return;
+      const panel = sheetRef.current;
+      if (!panel) return;
+      const focusables = panel.querySelectorAll<HTMLElement>(
+        "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])",
+      );
+      if (focusables.length === 0) return;
+      const first = focusables[0]!;
+      const last = focusables[focusables.length - 1]!;
+      const active = document.activeElement;
+      if (event.shiftKey && (active === first || active === panel)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+      // preventScroll: closing may hand the scroll to requestJoin.
+      opener?.focus({ preventScroll: true });
+    };
+    // closeSheet is stable for the sheet's lifetime.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sheetOpen]);
 
   useEffect(() => {
     if (!situation) return;
@@ -128,335 +205,398 @@ export function HowItWorks() {
           The whole flow, from ask to arrival.
         </h2>
         <p className="mx-auto mt-4 max-w-[54ch] text-[clamp(1rem,0.95rem+0.3vw,1.125rem)] leading-[1.6] text-secondary-foreground">
-          Try it: tell your assistant what you're looking for, shape the board, check out once — and
-          see what it learns about you along the way.
+          Tell your assistant what you're looking for and it will shape your board, organize your cart, 
+          and learn about you along the way.
         </p>
+        <Button
+          variant="agent"
+          size="lg"
+          className="mt-8"
+          onClick={() => setSheetOpen(true)}
+          aria-haspopup="dialog"
+        >
+          Try it
+        </Button>
       </div>
 
-      <div className="mt-8 flex flex-wrap justify-center gap-2" aria-label="Flow steps">
-        {flowSteps.map((flowStep, index) => (
+      {/* The whole demo lives in a center-peek modal (Notion-style): a
+          squarish panel floating over a blurred page, never full-screen. */}
+      {sheetOpen ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
           <button
-            key={flowStep.id}
             type="button"
-            onClick={() => setStep(flowStep.id)}
-            aria-current={step === flowStep.id ? "step" : undefined}
-            className={chipClass(step === flowStep.id)}
-          >
-            {stepDone[flowStep.id] && step !== flowStep.id ? (
-              <>
-                <Check size={13} className="text-signal-ink" aria-hidden />
-                <span className="sr-only">done,</span>
-              </>
-            ) : (
-              <span className="text-muted-foreground tabular-nums">{index + 1}</span>
+            aria-label="Close the demo"
+            onClick={() => closeSheet()}
+            className={cn(
+              "absolute inset-0 cursor-pointer bg-grey-10/40 backdrop-blur-md transition-opacity duration-[180ms] ease-[var(--ease-out)]",
+              // The entry animation's fill would pin opacity, so it leaves with the class.
+              sheetClosing ? "opacity-0" : "fade-in-soft",
             )}
-            {flowStep.label}
-            {flowStep.id === "cart" && cart.size > 0 ? (
-              <span className="text-muted-foreground tabular-nums">({cart.size})</span>
-            ) : null}
-          </button>
-        ))}
-      </div>
-
-      {/* Before a situation is picked the panel hugs its content; it opens
-          to full width once the conversation starts. */}
-      <div
-        className={cn(
-          "mt-6 rounded-2xl border border-border bg-background p-4 sm:rounded-3xl sm:p-6 lg:p-8",
-          step === "ask" && !situation && "mx-auto max-w-2xl",
-        )}
-      >
-        {step === "ask" ? (
-          <div>
-            {!situation ? (
-              <p className="mb-4 text-center text-[15px] text-muted-foreground">
-                Pick one. Your assistant does the rest.
-              </p>
-            ) : null}
-
+          />
+          <div
+            ref={sheetRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Try the apt flow"
+            tabIndex={-1}
+            className={cn(
+              "relative flex h-[min(76svh,44rem)] w-full max-w-2xl flex-col overflow-hidden rounded-[28px] border border-border bg-background shadow-[var(--shadow-sheet)] transition-[opacity,transform] duration-[180ms] ease-[var(--ease-out)] focus-visible:outline-none",
+              sheetClosing ? "scale-[0.97] opacity-0" : "sheet-in",
+            )}
+          >
             <div
-              className="flex flex-wrap justify-center gap-2"
-              role="group"
-              aria-label="Pick a situation"
+              className="relative flex flex-wrap items-center justify-center gap-2 border-b border-border px-12 py-3"
+              aria-label="Flow steps"
             >
-              {situations.map((option) => (
+              {flowSteps.map((flowStep, index) => (
                 <button
-                  key={option.id}
+                  key={flowStep.id}
                   type="button"
-                  onClick={() => setSituation(option)}
-                  aria-pressed={situation?.id === option.id}
-                  className={chipClass(situation?.id === option.id)}
+                  onClick={() => setStep(flowStep.id)}
+                  aria-current={step === flowStep.id ? "step" : undefined}
+                  className={chipClass(step === flowStep.id)}
                 >
-                  {option.label}
+                  {stepDone[flowStep.id] && step !== flowStep.id ? (
+                    <>
+                      <Check size={13} className="text-signal-ink" aria-hidden />
+                      <span className="sr-only">done,</span>
+                    </>
+                  ) : (
+                    <span className="text-muted-foreground tabular-nums">{index + 1}</span>
+                  )}
+                  {flowStep.label}
+                  {flowStep.id === "cart" && cart.size > 0 ? (
+                    <span className="text-muted-foreground tabular-nums">({cart.size})</span>
+                  ) : null}
                 </button>
               ))}
-            </div>
-
-            {situation ? (
-              <div className="mt-6 flex flex-col gap-4" aria-live="polite">
-                <p className="max-w-[36ch] self-end rounded-2xl rounded-br-md bg-sunken px-4 py-2.5 text-[15px] leading-[1.5]">
-                  {situation.userLine}
-                </p>
-
-                {phase === "thinking" ? (
-                  <p className="flex items-center gap-2 text-[13px] text-muted-foreground">
-                    <AgentMark size={14} /> apt is thinking…
-                  </p>
-                ) : null}
-
-                {answered ? (
-                  <>
-                    <p className="flex max-w-[52ch] items-start gap-2.5 self-start rounded-2xl rounded-bl-md border border-border-agent bg-agent px-4 py-2.5 text-[15px] leading-[1.5] text-agent-foreground">
-                      <AgentMark size={16} className="mt-1 shrink-0" />
-                      <span>{situation.aptLine}</span>
-                    </p>
-
-                    <ul className="grid gap-3 sm:grid-cols-3">
-                      {situation.picks.map((pick, index) => {
-                        const product = pickProduct(pick);
-                        return (
-                          <li
-                            key={product.id}
-                            data-shown={answered}
-                            style={{ transitionDelay: `${index * 120}ms` }}
-                            className="reveal overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-card)]"
-                          >
-                            <img
-                              src={product.image}
-                              alt={product.alt}
-                              width={800}
-                              height={1066}
-                              loading="lazy"
-                              className="aspect-[4/3] w-full object-cover"
-                            />
-                            <div className="p-3 sm:p-4">
-                              <p className="text-[14px] font-medium tracking-[-0.012em]">
-                                {product.name}
-                              </p>
-                              <p className="mt-0.5 text-[12px] text-muted-foreground tabular-nums">
-                                {product.store} · ${product.price}
-                              </p>
-                              <p className="mt-2 text-[13px] leading-[1.5] text-secondary-foreground">
-                                {pick.reason}
-                              </p>
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
-
-                    <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-                      <div className="min-w-0 flex-1">
-                        <AgentNote label="saved">
-                          All three are on your “{situation.board}” board.
-                        </AgentNote>
-                      </div>
-                      <Button
-                        variant="agent"
-                        className="pulse-ring shrink-0"
-                        onClick={() => setStep("boards")}
-                      >
-                        Open your boards <ArrowRight size={15} aria-hidden />
-                      </Button>
-                    </div>
-                  </>
-                ) : null}
-              </div>
-            ) : null}
-          </div>
-        ) : null}
-
-        {step === "boards" ? (
-          <div>
-            <p className="text-[15px] text-secondary-foreground">
-              Boards hold what your assistant finds. Hover a folder, open a pick, and add what you
-              actually want.
-            </p>
-            <div className="mt-5 grid gap-4 sm:grid-cols-3">
-              {situations.map((option) => (
-                <BoardFolder
-                  key={option.id}
-                  title={option.board}
-                  picks={option.picks}
-                  cartIds={cart}
-                  onSelect={(index) => setDetail({ situation: option, index })}
-                />
-              ))}
-            </div>
-            <div className="mt-5 flex items-center justify-between gap-3">
-              <p className="text-[13px] text-muted-foreground">
-                Nothing is bought from a board. Carts are for deciding.
-              </p>
-              <Button
-                variant={cart.size > 0 ? "agent" : "outline"}
-                className={cn("shrink-0", cart.size > 0 && "pulse-ring")}
-                onClick={() => setStep("cart")}
+              <button
+                type="button"
+                aria-label="Close"
+                onClick={() => closeSheet()}
+                className="absolute top-1/2 right-3 flex h-9 w-9 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-sunken hover:text-foreground"
               >
-                View cart ({cart.size}) <ArrowRight size={15} aria-hidden />
-              </Button>
+                <X size={16} aria-hidden />
+              </button>
             </div>
-          </div>
-        ) : null}
 
-        {step === "cart" ? (
-          <div className="mx-auto max-w-xl">
-            {cartPicks.length === 0 ? (
-              <div className="py-4 text-center">
-                <p className="text-[15px] text-secondary-foreground">
-                  Your cart is empty. Add a pick or two from your boards first.
-                </p>
-                <Button variant="outline" className="mt-4" onClick={() => setStep("boards")}>
-                  Back to boards
-                </Button>
-              </div>
-            ) : (
-              <>
-                <ul className="flex flex-col divide-y divide-border">
-                  {cartPicks.map((pick) => {
-                    const product = pickProduct(pick);
-                    return (
-                      <li key={product.id} className="flex items-center gap-3.5 py-3">
-                        <img
-                          src={product.image}
-                          alt={product.alt}
-                          width={112}
-                          height={112}
-                          className="h-14 w-14 shrink-0 rounded-md border border-border object-cover"
-                        />
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-[15px] font-medium tracking-[-0.012em]">
-                            {product.name}
-                          </p>
-                          <p className="mt-0.5 text-[13px] text-muted-foreground">
-                            {product.store}
-                          </p>
-                        </div>
-                        <p className="text-[15px] text-secondary-foreground tabular-nums">
-                          ${product.price}
-                        </p>
-                        <button
-                          type="button"
-                          aria-label={`Remove ${product.name} from cart`}
-                          onClick={() => toggleCart(product.id)}
-                          className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-sunken hover:text-foreground"
-                        >
-                          <X size={15} aria-hidden />
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-
-                <div className="mt-1 flex items-baseline justify-between border-t border-border-strong pt-3">
-                  <p className="text-[15px] font-medium">Total</p>
-                  <p className="text-[17px] font-semibold tabular-nums">${total}</p>
-                </div>
-
-                {!paid ? (
-                  <div className="mt-5 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-                    <p className="text-[13px] leading-[1.5] text-muted-foreground">
-                      One approval. <Wordmark /> handles payments for you.
+            <div
+              className={cn(
+                "flex-1 overflow-y-auto p-4 sm:p-6",
+                // The resting ask step is three chips; center them in the frame.
+                step === "ask" && !situation && "flex flex-col justify-center",
+              )}
+            >
+              {step === "ask" ? (
+                <div>
+                  {!situation ? (
+                    <p className="mb-4 text-center text-[15px] text-muted-foreground">
+                      Pick one. Your assistant does the rest.
                     </p>
-                    <Button variant="agent" onClick={() => setPaid(true)}>
-                      Approve & check out
+                  ) : null}
+
+                  <div
+                    className="flex flex-wrap justify-center gap-2"
+                    role="group"
+                    aria-label="Pick a situation"
+                  >
+                    {situations.map((option) => (
+                      <button
+                        key={option.id}
+                        type="button"
+                        onClick={() => setSituation(option)}
+                        aria-pressed={situation?.id === option.id}
+                        className={chipClass(situation?.id === option.id)}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {situation ? (
+                    <div className="mt-6 flex flex-col gap-4" aria-live="polite">
+                      <p className="max-w-[36ch] self-end rounded-2xl rounded-br-md bg-sunken px-4 py-2.5 text-[15px] leading-[1.5]">
+                        {situation.userLine}
+                      </p>
+
+                      {phase === "thinking" ? (
+                        <p className="flex items-center gap-2 text-[13px] text-muted-foreground">
+                          <AgentMark size={14} /> apt is thinking…
+                        </p>
+                      ) : null}
+
+                      {answered ? (
+                        <>
+                          <p className="flex max-w-[52ch] items-start gap-2.5 self-start rounded-2xl rounded-bl-md border border-border-agent bg-agent px-4 py-2.5 text-[15px] leading-[1.5] text-agent-foreground">
+                            <AgentMark size={16} className="mt-1 shrink-0" />
+                            <span>{situation.aptLine}</span>
+                          </p>
+
+                          <ul className="grid gap-3 sm:grid-cols-3">
+                            {situation.picks.map((pick, index) => {
+                              const product = pickProduct(pick);
+                              return (
+                                <li
+                                  key={product.id}
+                                  data-shown={answered}
+                                  style={{ transitionDelay: `${index * 120}ms` }}
+                                  className="reveal overflow-hidden rounded-lg border border-border bg-card shadow-[var(--shadow-card)]"
+                                >
+                                  <img
+                                    src={product.image}
+                                    alt={product.alt}
+                                    width={800}
+                                    height={1066}
+                                    loading="lazy"
+                                    className="aspect-[4/3] w-full object-cover"
+                                  />
+                                  <div className="p-3 sm:p-4">
+                                    <p className="text-[14px] font-medium tracking-[-0.012em]">
+                                      {product.name}
+                                    </p>
+                                    <p className="mt-0.5 text-[12px] text-muted-foreground tabular-nums">
+                                      {product.store} · ${product.price}
+                                    </p>
+                                    <p className="mt-2 text-[13px] leading-[1.5] text-secondary-foreground">
+                                      {pick.reason}
+                                    </p>
+                                  </div>
+                                </li>
+                              );
+                            })}
+                          </ul>
+
+                          <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+                            <div className="min-w-0 flex-1">
+                              <AgentNote label="saved">
+                                All three are on your “{situation.board}” board.
+                              </AgentNote>
+                            </div>
+                            <Button
+                              variant="agent"
+                              className="pulse-ring shrink-0"
+                              onClick={() => setStep("boards")}
+                            >
+                              Open your boards <ArrowRight size={15} aria-hidden />
+                            </Button>
+                          </div>
+                        </>
+                      ) : null}
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+
+              {step === "boards" ? (
+                <div>
+                  <p className="text-[15px] text-secondary-foreground">
+                    Boards hold what your assistant finds. Hover a folder, open a pick, and add what
+                    you actually want.
+                  </p>
+                  <div className="mt-5 grid gap-4 sm:grid-cols-3">
+                    {situations.map((option) => (
+                      <BoardFolder
+                        key={option.id}
+                        title={option.board}
+                        picks={option.picks}
+                        cartIds={cart}
+                        onSelect={(index) => setDetail({ situation: option, index })}
+                      />
+                    ))}
+                  </div>
+                  <div className="mt-5 flex items-center justify-between gap-3">
+                    <p className="text-[13px] text-muted-foreground">
+                      Nothing is bought from a board. Carts are for deciding.
+                    </p>
+                    <Button
+                      variant={cart.size > 0 ? "agent" : "outline"}
+                      className={cn("shrink-0", cart.size > 0 && "pulse-ring")}
+                      onClick={() => setStep("cart")}
+                    >
+                      View cart ({cart.size}) <ArrowRight size={15} aria-hidden />
                     </Button>
                   </div>
-                ) : (
-                  <div className="mt-5 rounded-xl border border-border-strong bg-card p-4 sm:p-5">
-                    <ul className="flex flex-col gap-2.5">
-                      {checkoutSteps.map((checkoutStep, index) => {
-                        const done = index < doneSteps;
-                        return (
-                          <li
-                            key={checkoutStep}
-                            className={cn(
-                              "flex items-center gap-2.5 text-[14px] transition-colors duration-[240ms]",
-                              done ? "text-foreground" : "text-muted-foreground",
-                            )}
-                          >
-                            {done ? (
-                              <Check size={15} className="shrink-0 text-signal-ink" aria-hidden />
-                            ) : (
-                              <span
-                                className="h-[15px] w-[15px] shrink-0 rounded-full border border-border-strong"
-                                aria-hidden
+                </div>
+              ) : null}
+
+              {step === "cart" ? (
+                <div className="mx-auto max-w-xl">
+                  {cartPicks.length === 0 ? (
+                    <div className="py-4 text-center">
+                      <p className="text-[15px] text-secondary-foreground">
+                        Your cart is empty. Add a pick or two from your boards first.
+                      </p>
+                      <Button variant="outline" className="mt-4" onClick={() => setStep("boards")}>
+                        Back to boards
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <ul className="flex flex-col divide-y divide-border">
+                        {cartPicks.map((pick) => {
+                          const product = pickProduct(pick);
+                          return (
+                            <li key={product.id} className="flex items-center gap-3.5 py-3">
+                              <img
+                                src={product.image}
+                                alt={product.alt}
+                                width={112}
+                                height={112}
+                                className="h-14 w-14 shrink-0 rounded-md border border-border object-cover"
                               />
-                            )}
-                            {checkoutStep}
-                          </li>
-                        );
-                      })}
-                    </ul>
-                    {doneSteps === checkoutSteps.length ? (
-                      <div className="mt-4 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-                        <div className="min-w-0 flex-1">
-                          <AgentNote label="learned">
-                            Every yes in this cart just sharpened your taste file.
-                          </AgentNote>
-                        </div>
-                        <Button
-                          variant="agent"
-                          className="pulse-ring shrink-0"
-                          onClick={() => setStep("you")}
-                        >
-                          See your profile <ArrowRight size={15} aria-hidden />
-                        </Button>
+                              <div className="min-w-0 flex-1">
+                                <p className="truncate text-[15px] font-medium tracking-[-0.012em]">
+                                  {product.name}
+                                </p>
+                                <p className="mt-0.5 text-[13px] text-muted-foreground">
+                                  {product.store}
+                                </p>
+                              </div>
+                              <p className="text-[15px] text-secondary-foreground tabular-nums">
+                                ${product.price}
+                              </p>
+                              <button
+                                type="button"
+                                aria-label={`Remove ${product.name} from cart`}
+                                onClick={() => toggleCart(product.id)}
+                                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-sunken hover:text-foreground"
+                              >
+                                <X size={15} aria-hidden />
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+
+                      <div className="mt-1 flex items-baseline justify-between border-t border-border-strong pt-3">
+                        <p className="text-[15px] font-medium">Total</p>
+                        <p className="text-[17px] font-semibold tabular-nums">${total}</p>
                       </div>
-                    ) : null}
+
+                      {!paid ? (
+                        <div className="mt-5 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+                          <p className="text-[13px] leading-[1.5] text-muted-foreground">
+                            One approval. <Wordmark /> handles payments for you.
+                          </p>
+                          <Button variant="agent" onClick={() => setPaid(true)}>
+                            Approve & check out
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="mt-5 rounded-xl border border-border-strong bg-card p-4 sm:p-5">
+                          <ul className="flex flex-col gap-2.5">
+                            {checkoutSteps.map((checkoutStep, index) => {
+                              const done = index < doneSteps;
+                              return (
+                                <li
+                                  key={checkoutStep}
+                                  className={cn(
+                                    "flex items-center gap-2.5 text-[14px] transition-colors duration-[240ms]",
+                                    done ? "text-foreground" : "text-muted-foreground",
+                                  )}
+                                >
+                                  {done ? (
+                                    <Check
+                                      size={15}
+                                      className="shrink-0 text-signal-ink"
+                                      aria-hidden
+                                    />
+                                  ) : (
+                                    <span
+                                      className="h-[15px] w-[15px] shrink-0 rounded-full border border-border-strong"
+                                      aria-hidden
+                                    />
+                                  )}
+                                  {checkoutStep}
+                                </li>
+                              );
+                            })}
+                          </ul>
+                          {doneSteps === checkoutSteps.length ? (
+                            <div className="mt-4 flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+                              <div className="min-w-0 flex-1">
+                                <AgentNote label="learned">
+                                  Every yes in this cart just sharpened your taste file.
+                                </AgentNote>
+                              </div>
+                              <Button
+                                variant="agent"
+                                className="pulse-ring shrink-0"
+                                onClick={() => setStep("you")}
+                              >
+                                See your profile <ArrowRight size={15} aria-hidden />
+                              </Button>
+                            </div>
+                          ) : null}
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              ) : null}
+
+              {step === "you" ? (
+                <div className="mx-auto max-w-xl">
+                  <p className="flex items-center gap-2 text-[15px] font-semibold tracking-[-0.012em]">
+                    <AgentMark size={18} /> Your profile
+                  </p>
+                  <p className="mt-1 text-[13px] text-muted-foreground">
+                    Everything <Wordmark className="text-[1.1em]!" /> learns lands here — in the
+                    open.
+                  </p>
+
+                  <ul className="mt-3 flex flex-col divide-y divide-border">
+                    {tasteRows.map((row) => (
+                      <li key={row.note} className="flex items-baseline gap-3 py-3">
+                        <span
+                          className={cn(
+                            "eyebrow w-20 shrink-0 text-[11px]!",
+                            row.tone === "agent" && "text-agent-foreground",
+                          )}
+                        >
+                          {row.label}
+                        </span>
+                        <span className="text-[15px] leading-[1.45]">{row.note}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[13px] text-secondary-foreground tabular-nums">
+                    <span>
+                      <span className="font-semibold text-agent-foreground">Sizes</span> · M / 9.5
+                    </span>
+                    <span>
+                      <span className="font-semibold text-agent-foreground">Budget</span> · $80–$300
+                    </span>
+                    <span>
+                      <span className="font-semibold text-agent-foreground">Boards</span> · Snow
+                      trip, Dan's birthday, New place
+                    </span>
                   </div>
-                )}
-              </>
-            )}
-          </div>
-        ) : null}
 
-        {step === "you" ? (
-          <div className="mx-auto max-w-xl">
-            <p className="flex items-center gap-2 text-[15px] font-semibold tracking-[-0.012em]">
-              <AgentMark size={18} /> Your profile
-            </p>
-            <p className="mt-1 text-[13px] text-muted-foreground">
-              Everything <Wordmark className="text-[1.1em]!" /> learns lands here — in the open.
-            </p>
+                  <p className="mt-4 border-t border-border pt-4 text-[13px] leading-[1.5] text-muted-foreground">
+                    You can read, correct, or erase any of it. Your taste file is yours — it also
+                    remembers the people you shop for, so gifts stop being guesses.
+                  </p>
 
-            <ul className="mt-3 flex flex-col divide-y divide-border">
-              {tasteRows.map((row) => (
-                <li key={row.note} className="flex items-baseline gap-3 py-3">
-                  <span
-                    className={cn(
-                      "eyebrow w-20 shrink-0 text-[11px]!",
-                      row.tone === "agent" && "text-agent-foreground",
-                    )}
-                  >
-                    {row.label}
-                  </span>
-                  <span className="text-[15px] leading-[1.45]">{row.note}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-[13px] text-secondary-foreground tabular-nums">
-              <span>Sizes · M / 9.5</span>
-              <span>Budget · $80–$300</span>
-              <span>Boards · Snow trip, Dan's birthday, New place</span>
-            </div>
-
-            <p className="mt-4 border-t border-border pt-4 text-[13px] leading-[1.5] text-muted-foreground">
-              You can read, correct, or erase any of it. Your taste file is yours — it also
-              remembers the people you shop for, so gifts stop being guesses.
-            </p>
-
-            <div className="mt-6 flex flex-col items-start justify-between gap-3 border-t border-border pt-5 sm:flex-row sm:items-center">
-              <p className="text-[15px] text-secondary-foreground">
-                That's the whole loop — ask to arrival.
-              </p>
-              <Button variant="agent" className="shrink-0" onClick={requestJoin}>
-                Join the waitlist <ArrowRight size={15} aria-hidden />
-              </Button>
+                  <div className="mt-6 flex flex-col items-start justify-between gap-3 border-t border-border pt-5 sm:flex-row sm:items-center">
+                    <p className="text-[15px] text-secondary-foreground">
+                      That's the whole loop — ask to arrival.
+                    </p>
+                    <Button
+                      variant="agent"
+                      className="shrink-0"
+                      onClick={() => closeSheet(requestJoin)}
+                    >
+                      Join the waitlist <ArrowRight size={15} aria-hidden />
+                    </Button>
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
 
       {detail ? (
         <ProductDetail

@@ -86,8 +86,7 @@ export function Hero() {
         </h1>
 
         <p className="mt-8 max-w-[44ch] text-[clamp(1rem,0.95rem+0.35vw,1.1875rem)] leading-[1.6] text-secondary-foreground">
-          <Wordmark /> is your personal shopping assistant. It learns your taste — and your people —
-          then brings back the things that fit.
+          <Wordmark /> is your personal shopping assistant. It learns what you like, your people, and then brings back the things that fit.
         </p>
 
         <div id="join" className="mt-7 w-full scroll-mt-24 sm:mt-8">

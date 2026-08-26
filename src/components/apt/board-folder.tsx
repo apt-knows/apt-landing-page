@@ -196,10 +196,12 @@ export function ProductDetail({
       }
     };
     window.addEventListener("keydown", onKey);
+    // Restore, not clear: the try-it sheet underneath holds its own lock.
+    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = "";
+      document.body.style.overflow = prevOverflow;
       opener?.focus();
     };
     // requestClose is stable for the dialog's lifetime.
