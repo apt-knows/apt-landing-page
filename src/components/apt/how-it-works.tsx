@@ -5,7 +5,7 @@ import { pickProduct, situations, type Pick, type Situation } from "@/content/si
 import { cn } from "@/lib/utils";
 
 import { BoardFolder, ProductDetail } from "./board-folder";
-import { AgentMark, AgentNote, Button, Eyebrow, Section, Wordmark } from "./kit";
+import { AgentMark, AgentNote, Button, Eyebrow, requestJoin, Section, Wordmark } from "./kit";
 
 type StepId = "ask" | "boards" | "cart" | "you";
 type Phase = "user" | "thinking" | "answer";
@@ -110,6 +110,14 @@ export function HowItWorks() {
 
   const answered = phase === "answer";
 
+  // A step is "done" once its outcome exists; the stepper reflects it.
+  const stepDone: Record<StepId, boolean> = {
+    ask: situation !== null,
+    boards: cart.size > 0,
+    cart: paid,
+    you: false,
+  };
+
   return (
     <Section id="how" className="bg-card">
       <div className="text-center">
@@ -134,7 +142,14 @@ export function HowItWorks() {
             aria-current={step === flowStep.id ? "step" : undefined}
             className={chipClass(step === flowStep.id)}
           >
-            <span className="text-muted-foreground tabular-nums">{index + 1}</span>
+            {stepDone[flowStep.id] && step !== flowStep.id ? (
+              <>
+                <Check size={13} className="text-signal-ink" aria-hidden />
+                <span className="sr-only">done,</span>
+              </>
+            ) : (
+              <span className="text-muted-foreground tabular-nums">{index + 1}</span>
+            )}
             {flowStep.label}
             {flowStep.id === "cart" && cart.size > 0 ? (
               <span className="text-muted-foreground tabular-nums">({cart.size})</span>
@@ -260,7 +275,7 @@ export function HowItWorks() {
                 Nothing is bought from a board. Carts are for deciding.
               </p>
               <Button
-                variant="agent"
+                variant={cart.size > 0 ? "agent" : "outline"}
                 className={cn("shrink-0", cart.size > 0 && "pulse-ring")}
                 onClick={() => setStep("cart")}
               >
@@ -417,6 +432,15 @@ export function HowItWorks() {
               You can read, correct, or erase any of it. Your taste file is yours — it also
               remembers the people you shop for, so gifts stop being guesses.
             </p>
+
+            <div className="mt-6 flex flex-col items-start justify-between gap-3 border-t border-border pt-5 sm:flex-row sm:items-center">
+              <p className="text-[15px] text-secondary-foreground">
+                That's the whole loop — ask to arrival.
+              </p>
+              <Button variant="agent" className="shrink-0" onClick={requestJoin}>
+                Join the waitlist <ArrowRight size={15} aria-hidden />
+              </Button>
+            </div>
           </div>
         ) : null}
       </div>

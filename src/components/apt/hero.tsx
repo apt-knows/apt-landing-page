@@ -51,9 +51,10 @@ export function Hero() {
   const active = heroMoments[moment]!;
 
   // Rotate the headline phrase and the fan together. Preload the next
-  // moment's images during the dwell so the swap never flashes.
+  // moment's images during the dwell so the swap never flashes. The
+  // rotation rests while the email form is open — no motion behind typing.
   useEffect(() => {
-    if (reducedMotion()) return;
+    if (reducedMotion() || joinOpen) return;
     const next = (moment + 1) % heroMoments.length;
     for (const id of heroMoments[next]!.productIds) {
       new Image().src = getProduct(id).image;
@@ -61,7 +62,7 @@ export function Hero() {
     const dwell = moment === 0 ? 3600 : 2400;
     const timer = setTimeout(() => setMoment(next), dwell);
     return () => clearTimeout(timer);
-  }, [moment]);
+  }, [moment, joinOpen]);
 
   // The header's Join button (and /#join links) open the inline form.
   useEffect(() => {
