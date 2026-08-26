@@ -247,6 +247,35 @@ function ShoppingState({ harness }: { harness: AdminUserHarness }) {
         <JsonPanel label="Boards" value={state.boards} />
         <JsonPanel label="Board memberships" value={state.boardItems} />
       </div>
+      <Card className="border-border bg-card shadow-card">
+        <CardHeader>
+          <CardTitle className="text-base">Validated public links</CardTitle>
+          <CardDescription>
+            Only credential-free HTTP(S) URLs that currently resolve outside private, loopback,
+            link-local, and metadata networks are clickable.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {state.safeLinks.length ? (
+            <ul className="space-y-2 text-sm">
+              {state.safeLinks.map((link) => (
+                <li key={`${link.itemId}:${link.field}`} className="break-all">
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="font-medium text-agent-foreground underline underline-offset-4"
+                  >
+                    {link.itemName} · {shoppingLinkLabel(link.field)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm text-muted-foreground">No validated public links.</p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
@@ -468,4 +497,10 @@ function formatDate(value: string | null | undefined) {
   if (!value) return "—";
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? value : date.toISOString().replace(".000Z", "Z");
+}
+
+function shoppingLinkLabel(field: "canonical_url" | "source_url" | "image_url") {
+  if (field === "canonical_url") return "Product page";
+  if (field === "source_url") return "Evidence source";
+  return "Image";
 }

@@ -1,7 +1,12 @@
 import { createHash } from "node:crypto";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AdminHarnessProfile, AdminHarnessSkill } from "./user-harness.server";
-import { buildHarnessFiles, buildShoppingState, loadUserHarness } from "./user-harness.server";
+import {
+  buildHarnessFiles,
+  buildSafeShoppingLinks,
+  buildShoppingState,
+  loadUserHarness,
+} from "./user-harness.server";
 
 const founderBoundary = vi.hoisted(() => ({ authorized: true }));
 const serviceSupabaseClient = vi.hoisted(() => vi.fn());
@@ -118,6 +123,26 @@ describe("read-only user harness projection", () => {
       buildShoppingState({ ...input, listEntries: [{ ...input.listEntries[0], quantity: 2 }] })
         .hash,
     ).not.toBe(first.hash);
+  });
+
+  it("exposes only credential-free public Shopping URLs as clickable founder links", async () => {
+    const links = await buildSafeShoppingLinks([
+      {
+        id: "item-1",
+        item_name: "Jacket",
+        canonical_url: "https://8.8.8.8/product",
+        source_url: "http://127.0.0.1/private",
+        image_url: "https://user:password@example.com/image",
+      },
+    ]);
+    expect(links).toEqual([
+      {
+        itemId: "item-1",
+        itemName: "Jacket",
+        field: "canonical_url",
+        url: "https://8.8.8.8/product",
+      },
+    ]);
   });
 });
 

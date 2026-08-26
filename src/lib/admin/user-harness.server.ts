@@ -1,4 +1,8 @@
 import { createHash } from "node:crypto";
+import type { LookupAddress } from "node:dns";
+import { lookup } from "node:dns/promises";
+import { isIP } from "node:net";
+import ipaddr from "ipaddr.js";
 import { stableJson } from "./admin-policy";
 import { requireAdmin, serviceSupabaseClient } from "./supabase.server";
 
@@ -135,10 +139,18 @@ export type AdminShoppingRow = Record<string, HarnessJson>;
 export interface AdminShoppingState {
   hash: string;
   lastChangedAt: string | null;
+  safeLinks: AdminShoppingLink[];
   items: AdminShoppingRow[];
   listEntries: AdminShoppingRow[];
   boards: AdminShoppingRow[];
   boardItems: AdminShoppingRow[];
+}
+
+export interface AdminShoppingLink {
+  itemId: string;
+  itemName: string;
+  field: "canonical_url" | "source_url" | "image_url";
+  url: string;
 }
 
 export interface AdminUserHarness {
@@ -319,12 +331,15 @@ export async function loadUserHarness(userId: string): Promise<AdminUserHarness>
             .range(from, to) as unknown as PromiseLike<PageResult<AdminShoppingRow>>,
       ),
     ]);
-  const shopping = buildShoppingState({
-    items: shoppingItems,
-    listEntries: shoppingListEntries,
-    boards: shoppingBoards,
-    boardItems: shoppingBoardItems,
-  });
+  const shopping = {
+    ...buildShoppingState({
+      items: shoppingItems,
+      listEntries: shoppingListEntries,
+      boards: shoppingBoards,
+      boardItems: shoppingBoardItems,
+    }),
+    safeLinks: await buildSafeShoppingLinks(shoppingItems),
+  } satisfies AdminShoppingState;
 
   const profileData = (profile.data ?? null) as AdminHarnessProfile | null;
   const skillData = (skills.data ?? []) as AdminHarnessSkill[];
@@ -353,7 +368,9 @@ export async function loadUserHarness(userId: string): Promise<AdminUserHarness>
   };
 }
 
-export function buildShoppingState(input: Omit<AdminShoppingState, "hash" | "lastChangedAt">) {
+export function buildShoppingState(
+  input: Omit<AdminShoppingState, "hash" | "lastChangedAt" | "safeLinks">,
+) {
   const canonical = {
     items: input.items,
     listEntries: input.listEntries,
@@ -371,7 +388,79 @@ export function buildShoppingState(input: Omit<AdminShoppingState, "hash" | "las
     ...canonical,
     hash: checksum(stableJson(canonical)),
     lastChangedAt: timestamps[0] ?? null,
-  } satisfies AdminShoppingState;
+  } satisfies Omit<AdminShoppingState, "safeLinks">;
+}
+
+export async function buildSafeShoppingLinks(items: AdminShoppingRow[]) {
+  const hostChecks = new Map<string, Promise<boolean>>();
+  const candidates = items.flatMap((row) => {
+    const itemId = typeof row["id"] === "string" ? row["id"] : "unknown item";
+    const itemName = typeof row["item_name"] === "string" ? row["item_name"] : "Unnamed item";
+    return (["canonical_url", "source_url", "image_url"] as const).flatMap((field) => {
+      const url = row[field];
+      return typeof url === "string" ? [{ itemId, itemName, field, url }] : [];
+    });
+  });
+  const checked = await Promise.all(
+    candidates.map(async (candidate) =>
+      (await isSafePublicHttpUrl(candidate.url, hostChecks)) ? candidate : null,
+    ),
+  );
+  return checked.filter((candidate): candidate is AdminShoppingLink => candidate !== null);
+}
+
+async function isSafePublicHttpUrl(rawUrl: string, hostChecks: Map<string, Promise<boolean>>) {
+  try {
+    const url = new URL(rawUrl);
+    if (
+      !(["http:", "https:"] as const).includes(url.protocol as "http:" | "https:") ||
+      url.username ||
+      url.password
+    ) {
+      return false;
+    }
+    const hostname = url.hostname
+      .toLowerCase()
+      .replace(/\.$/, "")
+      .replace(/^\[|\]$/g, "");
+    if (
+      hostname === "localhost" ||
+      hostname.endsWith(".localhost") ||
+      hostname.endsWith(".local")
+    ) {
+      return false;
+    }
+    let hostCheck = hostChecks.get(hostname);
+    if (!hostCheck) {
+      hostCheck = resolvePublicHost(hostname);
+      hostChecks.set(hostname, hostCheck);
+    }
+    return await hostCheck;
+  } catch {
+    return false;
+  }
+}
+
+async function resolvePublicHost(hostname: string) {
+  try {
+    const literalFamily = isIP(hostname);
+    const addresses: LookupAddress[] = literalFamily
+      ? [{ address: hostname, family: literalFamily }]
+      : await lookup(hostname, { all: true, verbatim: true });
+    return addresses.length > 0 && addresses.every(({ address }) => !isPrivateAddress(address));
+  } catch {
+    return false;
+  }
+}
+
+function isPrivateAddress(address: string) {
+  const normalized =
+    address
+      .toLowerCase()
+      .replace(/^\[|\]$/g, "")
+      .split("%", 1)[0] ?? "";
+  if (!ipaddr.isValid(normalized)) return false;
+  return ipaddr.process(normalized).range() !== "unicast";
 }
 
 interface PageResult<T> {
