@@ -1,66 +1,37 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
+import { assets } from "@/content/assets";
 import { cn } from "@/lib/utils";
-
 
 /* ---------- wordmark ---------- */
 
-export function Wordmark({
-  className,
-  dot = true,
-}: {
-  className?: string;
-  dot?: boolean;
-}) {
+export function Wordmark({ className, dot = true }: { className?: string; dot?: boolean }) {
   return (
-    <span
-      className={cn(
-        "font-semibold lowercase tracking-[-0.045em] text-signal",
-        className,
-      )}
-    >
+    <span className={cn("font-semibold lowercase tracking-[-0.045em] text-signal", className)}>
       apt{dot ? <span className="text-signal">.</span> : null}
     </span>
   );
 }
 
-export function AgentMark({
-  className,
-  size = 24,
-  active = true,
-}: {
-  className?: string;
-  size?: number;
-  active?: boolean;
-}) {
+/**
+ * The apt assistant mark, rendered from `src/assets/assistant-icon.svg`.
+ * To change the icon everywhere it appears, overwrite that file and keep
+ * the name — no code changes needed.
+ */
+export function AgentMark({ className, size = 24 }: { className?: string; size?: number }) {
   return (
-    <svg
-      viewBox="0 0 100 100"
+    <img
+      src={assets.brand.assistantIcon}
+      alt=""
+      aria-hidden="true"
       width={size}
       height={size}
-      aria-hidden="true"
       className={cn("shrink-0 select-none", className)}
       style={{ width: size, height: size }}
-    >
-      {/* cyan tip between the twin peaks */}
-      <path
-        d="M50 6 L56 36 L50 56 L44 36 Z"
-        className={active ? "fill-signal" : "fill-grey-5"}
-      />
-      {/* twin-peak delta outline */}
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M46 16 L50 52 L54 16 L97 97 L50 62 L3 97 Z
-           M47 41 L50 59 L53 41 L85 92 L50 70 L15 92 Z"
-        fill="currentColor"
-      />
-
-    </svg>
+    />
   );
 }
-
 
 /* ---------- button ---------- */
 
@@ -72,8 +43,7 @@ const button = cva(
         solid: "bg-grey-10 text-inverse-foreground hover:bg-signal hover:text-grey-10",
         agent:
           "bg-signal text-signal-deep shadow-[0_1px_0_var(--signal-soft)] hover:bg-signal-press hover:shadow-[0_2px_12px_-4px_var(--signal-ink)] focus-visible:ring-2 focus-visible:ring-signal-soft focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none active:bg-signal-ink active:text-card disabled:bg-signal-soft disabled:text-signal-ink disabled:opacity-100",
-        outline:
-          "border border-border-strong bg-card text-foreground hover:border-grey-5",
+        outline: "border border-border-strong bg-card text-foreground hover:border-grey-5",
         ghost: "text-foreground hover:bg-sunken",
       },
       size: {
@@ -85,8 +55,7 @@ const button = cva(
   },
 );
 
-export type ButtonProps = ComponentPropsWithoutRef<"button"> &
-  VariantProps<typeof button>;
+export type ButtonProps = ComponentPropsWithoutRef<"button"> & VariantProps<typeof button>;
 
 export function Button({ className, variant, size, ...props }: ButtonProps) {
   return <button className={cn(button({ variant, size }), className)} {...props} />;
@@ -163,9 +132,7 @@ export function AgentNote({
     <div
       className={cn(
         "rounded-md border px-4 py-3",
-        tone === "agent"
-          ? "border-border-agent bg-agent"
-          : "border-border bg-sunken",
+        tone === "agent" ? "border-border-agent bg-agent" : "border-border bg-sunken",
       )}
     >
       <div
@@ -203,14 +170,9 @@ export function Section({
   return (
     <section
       id={id}
-      className={cn(
-        "scroll-mt-16 border-t border-border py-14 sm:py-20 lg:py-28",
-        className,
-      )}
+      className={cn("scroll-mt-16 border-t border-border py-14 sm:py-20 lg:py-28", className)}
     >
-      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8 lg:px-10 xl:max-w-7xl">
-        {children}
-      </div>
+      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8 lg:px-10 xl:max-w-7xl">{children}</div>
     </section>
   );
 }

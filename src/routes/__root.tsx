@@ -77,11 +77,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "apt — shopping that's about you" },
+      { title: "apt — shopping that's for you" },
       {
         name: "description",
         content:
-          "apt is a personal shopping agent that shows you how every piece looks on you before you buy.",
+          "apt is a personal shopping assistant that learns your taste and brings back the few products that fit.",
       },
       { name: "author", content: "apt" },
       { property: "og:site_name", content: "apt" },
@@ -100,7 +100,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap",
       },
-      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "icon", href: "/apt.svg", type: "image/svg+xml" },
     ],
   }),
 

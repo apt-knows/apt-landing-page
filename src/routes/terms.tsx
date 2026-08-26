@@ -4,8 +4,7 @@ import { LegalPage } from "@/components/apt/legal-page";
 import { Wordmark } from "@/components/apt/kit";
 
 const title = "Terms — apt";
-const description =
-  "The terms that apply to the apt early-access list and private beta.";
+const description = "The terms that apply to the apt early-access list and private beta.";
 
 export const Route = createFileRoute("/terms")({
   head: () => ({
@@ -25,19 +24,18 @@ function Terms() {
   return (
     <LegalPage title="Terms" updated="August 2026">
       <p>
-        These terms cover the <Wordmark /> website and the early-access list. Fuller terms
-        will apply when the app itself launches.
+        These terms cover the <Wordmark /> website and the early-access list. Fuller terms will
+        apply when the app itself launches.
       </p>
       <h2>Early access</h2>
       <p>
-        Joining the list does not guarantee a spot in the beta. We invite people
-        gradually and may change or discontinue the beta at any time.
+        Joining the list does not guarantee a spot in the beta. We invite people gradually and may
+        change or discontinue the beta at any time.
       </p>
       <h2>Your content</h2>
       <p>
-        You keep ownership of anything you upload. You grant <Wordmark /> permission to
-        process it for the purpose of generating your recommendations and try-on
-        imagery.
+        You keep ownership of anything you upload. You grant <Wordmark /> permission to process it
+        for the purpose of generating your recommendations.
       </p>
       <h2>Contact</h2>
       <p>Questions about these terms? Reply to any email from us and we'll answer.</p>

@@ -13,9 +13,9 @@ import { assets } from "./assets";
 export const site = {
   /** Product name, always rendered lowercase. */
   name: "apt",
-  tagline: "Shopping that's about you.",
+  tagline: "Shopping for you.",
   description:
-    "apt is a personal shopping agent that learns your taste and shows you how every piece looks on you before you buy.",
+    "apt is your personal shopping assistant that learns your taste, searches across your stores, and brings back the few products that fit.",
   /** Absolute production origin, no trailing slash. */
   url: "https://aptknows.com",
 } as const;
@@ -60,7 +60,7 @@ export const team: TeamMember[] = [
     name: "Robel Kebede",
     role: "Co-founder & CTO",
     image: assets.team.cto,
-    blurb: "Ranking, try-on generation, and the systems that learn from every scroll.",
+    blurb: "Ranking, search, and the systems that learn from every yes and no.",
     contact: [
       { label: "Email", handle: "robiemelaku@gmail.com", url: "mailto:robiemelaku@gmail.com" },
       {

@@ -34,9 +34,9 @@ const templates = {
   confirmation: {
     subject: "You're on the apt waitlist",
     html: `<p>Thanks for joining the apt waitlist.</p>
-<p>apt is a personal shopping agent that learns your taste and shows you how
-every piece looks on you before you buy. We're letting people in slowly — we'll
-email you when your invite is ready.</p>
+<p>apt is a personal shopping assistant that learns your taste and brings back
+the few products that fit. We're letting people in slowly — we'll email you when
+your invite is ready.</p>
 <p>— the apt team</p>`,
   },
   notification: (email: string) => ({
@@ -55,9 +55,7 @@ async function resend(apiKey: string, path: string, body: unknown) {
     body: JSON.stringify(body),
   });
   if (!res.ok) {
-    throw new Error(
-      `Resend ${path} failed (${res.status}): ${await res.text()}`,
-    );
+    throw new Error(`Resend ${path} failed (${res.status}): ${await res.text()}`);
   }
   return res.json();
 }
