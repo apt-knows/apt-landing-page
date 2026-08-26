@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AdminHarnessProfile, AdminHarnessSkill } from "./user-harness.server";
-import { buildHarnessFiles, loadUserHarness } from "./user-harness.server";
+import { buildHarnessFiles, buildShoppingState, loadUserHarness } from "./user-harness.server";
 
 const founderBoundary = vi.hoisted(() => ({ authorized: true }));
 const serviceSupabaseClient = vi.hoisted(() => vi.fn());
@@ -92,6 +92,32 @@ describe("read-only user harness projection", () => {
       "Founder authorization is required.",
     );
     expect(serviceSupabaseClient).not.toHaveBeenCalled();
+  });
+
+  it("hashes the full canonical shopping projection and reports its latest row change", () => {
+    const input = {
+      items: [{ id: "item-1", item_name: "Jacket", updated_at: "2026-08-25T20:00:00Z" }],
+      listEntries: [
+        {
+          shopping_item_id: "item-1",
+          list_kind: "cart",
+          quantity: 1,
+          updated_at: "2026-08-25T21:00:00Z",
+        },
+      ],
+      boards: [{ id: "board-1", title: "Trip", updated_at: "2026-08-25T19:00:00Z" }],
+      boardItems: [
+        { board_id: "board-1", shopping_item_id: "item-1", created_at: "2026-08-25T22:00:00Z" },
+      ],
+    };
+    const first = buildShoppingState(input);
+    expect(buildShoppingState(input)).toEqual(first);
+    expect(first.hash).toMatch(/^[a-f0-9]{64}$/);
+    expect(first.lastChangedAt).toBe("2026-08-25T22:00:00Z");
+    expect(
+      buildShoppingState({ ...input, listEntries: [{ ...input.listEntries[0], quantity: 2 }] })
+        .hash,
+    ).not.toBe(first.hash);
   });
 });
 

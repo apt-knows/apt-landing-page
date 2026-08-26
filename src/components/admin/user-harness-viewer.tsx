@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Eye, FileText, RefreshCw, ShieldCheck, Users } from "lucide-react";
+import { Eye, FileText, RefreshCw, ShieldCheck, ShoppingBag, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -177,6 +177,7 @@ function HarnessDetails({
               ["changes", `Changes ${harness.learningEvents.length}`],
               ["runs", `Runs ${harness.runs.length}`],
               ["hunts", `Hunts ${harness.hunts.length}`],
+              ["shopping", `Shopping ${harness.shopping.items.length}`],
               ["proposals", `Proposals ${harness.proposals.length}`],
             ] satisfies Array<[string, string]>
           ).map(([value, label]) => (
@@ -200,10 +201,52 @@ function HarnessDetails({
         <TabsContent value="hunts">
           <HuntList harness={harness} />
         </TabsContent>
+        <TabsContent value="shopping">
+          <ShoppingState harness={harness} />
+        </TabsContent>
         <TabsContent value="proposals">
           <ProposalHistory harness={harness} />
         </TabsContent>
       </Tabs>
+    </div>
+  );
+}
+
+function ShoppingState({ harness }: { harness: AdminUserHarness }) {
+  const state = harness.shopping;
+  return (
+    <div className="space-y-4">
+      <Card className="border-border bg-card shadow-card">
+        <CardHeader>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <ShoppingBag className="size-5 text-agent-foreground" /> Shopping state
+              </CardTitle>
+              <CardDescription className="mt-2">
+                Canonical, founder-only, read-only Cart, Wishlist, and Board rows.
+              </CardDescription>
+            </div>
+            <Badge variant="outline">Read only</Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <Fact label="Items" value={String(state.items.length)} />
+          <Fact label="List entries" value={String(state.listEntries.length)} />
+          <Fact label="Boards" value={String(state.boards.length)} />
+          <Fact label="Board memberships" value={String(state.boardItems.length)} />
+          <div className="sm:col-span-2 lg:col-span-3">
+            <Fact label="State sha256" value={state.hash} />
+          </div>
+          <Fact label="Last changed" value={formatDate(state.lastChangedAt)} />
+        </CardContent>
+      </Card>
+      <div className="grid gap-4 lg:grid-cols-2">
+        <JsonPanel label="Shopping items" value={state.items} />
+        <JsonPanel label="Cart and Wishlist entries" value={state.listEntries} />
+        <JsonPanel label="Boards" value={state.boards} />
+        <JsonPanel label="Board memberships" value={state.boardItems} />
+      </div>
     </div>
   );
 }
